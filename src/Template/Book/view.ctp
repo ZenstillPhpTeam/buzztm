@@ -100,12 +100,16 @@
                         <div class="swiper-slide">
                             <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p['template_attributes']['background']['value']; ?>">
                                 <?php foreach($p['template_attributes']['text'] as $t){?>
-                                    <span class="draggable_text" style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>">
+                                    <span style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>">
                                         <abbr><?= $t['value']; ?></abbr>
                                     </span>
                                 <?php } foreach($p['template_attributes']['image'] as $t){?>
-                                    <span class="draggable_image" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>">
-                                        <img width="100" src="<?= $t['value']; ?>" >
+                                    <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>">
+                                        <img width="100%"  height="100%" src="<?= $t['value']; ?>" >
+                                    </span>
+                                <?php } foreach($p['template_attributes']['video'] as $t){?>
+                                    <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
+                                        <iframe width="100%"  height="100%" src="<?= $t['value']; ?>" ></iframe>
                                     </span>
                                 <?php }?>
                             </div>
@@ -114,12 +118,16 @@
                         <div class="swiper-slide">
                             <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p1['template_attributes']['background']['value']; ?>">
                                 <?php foreach($p['template_attributes']['text'] as $t){?>
-                                    <span class="draggable_text" style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>">
+                                    <span style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>">
                                         <abbr><?= $t['value']; ?></abbr>
                                     </span>
                                 <?php } foreach($p['template_attributes']['image'] as $t){?>
-                                    <span class="draggable_image" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>">
-                                        <img width="100" src="<?= $t['value']; ?>" >
+                                    <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
+                                        <img width="100%" height="100%" src="<?= $t['value']; ?>" >
+                                    </span>
+                                <?php }foreach($p['template_attributes']['video'] as $t){?>
+                                    <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
+                                        <iframe width="100%"  height="100%" src="<?= $t['value']; ?>" ></iframe>
                                     </span>
                                 <?php }?>
                             </div>
@@ -131,12 +139,16 @@
                 <?php }else{?>
                 <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p['template_attributes']['background']['value']; ?>">
                     <?php foreach($p['template_attributes']['text'] as $t){?>
-                        <span class="draggable_text" style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>">
+                        <span style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>">
                             <abbr><?= $t['value']; ?></abbr>
                         </span>
                     <?php } foreach($p['template_attributes']['image'] as $t){?>
-                        <span class="draggable_image" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>">
-                            <img width="100" src="<?= $t['value']; ?>" >
+                        <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>;">
+                            <img width="100%" height="100%" src="<?= $t['value']; ?>" >
+                        </span>
+                    <?php } foreach($p['template_attributes']['video'] as $t){?>
+                        <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>">
+                            <iframe width="100%"  height="100%" src="<?= $t['value']; ?>" ></iframe>
                         </span>
                     <?php }?>
                 </div>

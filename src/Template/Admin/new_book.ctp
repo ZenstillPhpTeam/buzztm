@@ -424,16 +424,16 @@ buzztm.directive('ngEnterVideo', function() {
                             if(scope.active_sub_page == -1)
                             {
                             	ttop = (ui.position.top / preview_height) * 100;
-                            	scope.page[scope.active_page]['template_attributes']['text'][ind]['top'] = ttop+'%';
+                            	scope.page[scope.active_page]['template_attributes']['text'][ind]['top'] = ttop.toFixed(2)+'%';
                             	lleft = (ui.position.left / preview_width) * 100;
-                            	scope.page[scope.active_page]['template_attributes']['text'][ind]['left'] = lleft+'%';
+                            	scope.page[scope.active_page]['template_attributes']['text'][ind]['left'] = lleft.toFixed(2)+'%';
                             }
                             else
                             {
                             	ttop = (ui.position.top / preview_height) * 100;
-                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['text'][ind]['top'] = ttop+'%';
+                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['text'][ind]['top'] = ttop.toFixed(2)+'%';
                             	lleft = (ui.position.left / preview_width) * 100;
-                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['text'][ind]['left'] = lleft+'%';
+                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['text'][ind]['left'] = lleft.toFixed(2)+'%';
                             }
                           });
                         }  
@@ -460,16 +460,16 @@ buzztm.directive('ngEnterVideo', function() {
                             if(scope.active_sub_page == -1)
                             {
                             	ttop = (ui.position.top / preview_height) * 100;
-                            	scope.page[scope.active_page]['template_attributes']['image'][ind]['top'] = ttop+'%';
+                            	scope.page[scope.active_page]['template_attributes']['image'][ind]['top'] = ttop.toFixed(2)+'%';
                             	lleft = (ui.position.left / preview_width) * 100;
-                            	scope.page[scope.active_page]['template_attributes']['image'][ind]['left'] = lleft+'%';
+                            	scope.page[scope.active_page]['template_attributes']['image'][ind]['left'] = lleft.toFixed(2)+'%';
                             }
                             else
                             {
                             	ttop = (ui.position.top / preview_height) * 100;
-                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['image'][ind]['top'] = ttop+'%';
+                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['image'][ind]['top'] = ttop.toFixed(2)+'%';
                             	lleft = (ui.position.left / preview_width) * 100;
-                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['image'][ind]['left'] = lleft+'%';
+                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['image'][ind]['left'] = lleft.toFixed(2)+'%';
                             }
                           });
                         }
@@ -496,16 +496,16 @@ buzztm.directive('ngEnterVideo', function() {
                             if(scope.active_sub_page == -1)
                             {
                             	ttop = (ui.position.top / preview_height) * 100;
-                            	scope.page[scope.active_page]['template_attributes']['video'][ind]['top'] = ttop+'%';
+                            	scope.page[scope.active_page]['template_attributes']['video'][ind]['top'] = ttop.toFixed(2)+'%';
                             	lleft = (ui.position.left / preview_width) * 100;
-                            	scope.page[scope.active_page]['template_attributes']['video'][ind]['left'] = lleft+'%';
+                            	scope.page[scope.active_page]['template_attributes']['video'][ind]['left'] = lleft.toFixed(2)+'%';
                             }
                             else
                             {
                             	ttop = (ui.position.top / preview_height) * 100;
-                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['video'][ind]['top'] = ttop+'%';
+                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['video'][ind]['top'] = ttop.toFixed(2)+'%';
                             	lleft = (ui.position.left / preview_width) * 100;
-                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['video'][ind]['left'] = lleft+'%';
+                            	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['video'][ind]['left'] = lleft.toFixed(2)+'%';
                             }
                           });
                         }

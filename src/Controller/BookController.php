@@ -66,7 +66,7 @@ class BookController extends AppController
             $template = $this->Templates->get($tmp['template']);
             $template = array_values($this->objectToArray($template))[0];
 
-            $attrlist = array('text' => [], 'image' => [], 'template' => $template);
+            $attrlist = array('text' => [], 'image' => [], 'video' => [], 'template' => $template);
             foreach($templateattr as $attr)
             {
                 $attr->top = $attr->pos_top;
@@ -77,6 +77,9 @@ class BookController extends AppController
 
                 if($attr->field_type == 'image')
                     $attrlist['image'][] = array_values($this->objectToArray($attr))[0];
+
+                if($attr->field_type == 'video')
+                    $attrlist['video'][] = array_values($this->objectToArray($attr))[0];
 
                 if($attr->field_type == 'background')
                     $attrlist['background'] = array_values($this->objectToArray($attr))[0];
