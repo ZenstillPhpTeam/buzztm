@@ -517,17 +517,22 @@ class AdminController extends UsersController
             $attr->top = $attr->pos_top;
             $attr->left = $attr->pos_left;
 
+            $atttr = array_values($this->objectToArray($attr))[0];
+            $atttr['width'] = $atttr['width'] ? $atttr['width'] : '20%';
+            $atttr['text_align'] = $atttr['text_align'] ? $atttr['text_align'] : 'left';
+            
             if($attr->field_type == 'text')
-                $attrlist['text'][] = array_values($this->objectToArray($attr))[0];
+                $attrlist['text'][] = $atttr;
 
             if($attr->field_type == 'image')
-                $attrlist['image'][] = array_values($this->objectToArray($attr))[0];
+                $attrlist['image'][] = $atttr;
 
             if($attr->field_type == 'video')
-                $attrlist['video'][] = array_values($this->objectToArray($attr))[0];
+                $attrlist['video'][] = $atttr;
 
             if($attr->field_type == 'background')
-                $attrlist['background'] = array_values($this->objectToArray($attr))[0];
+                $attrlist['background'] = $atttr;
+            
         }
 
         echo json_encode($attrlist);
@@ -799,17 +804,21 @@ class AdminController extends UsersController
                 $attr->top = $attr->pos_top;
                 $attr->left = $attr->pos_left;
 
+                $atttr = array_values($this->objectToArray($attr))[0];
+                $atttr['width'] = $atttr['width'] ? $atttr['width'] : '20%';
+                $atttr['text_align'] = $atttr['text_align'] ? $atttr['text_align'] : 'left';
+                
                 if($attr->field_type == 'text')
-                    $attrlist['text'][] = array_values($this->objectToArray($attr))[0];
+                    $attrlist['text'][] = $atttr;
 
                 if($attr->field_type == 'image')
-                    $attrlist['image'][] = array_values($this->objectToArray($attr))[0];
+                    $attrlist['image'][] = $atttr;
 
                 if($attr->field_type == 'video')
-                    $attrlist['video'][] = array_values($this->objectToArray($attr))[0];
+                    $attrlist['video'][] = $atttr;
 
                 if($attr->field_type == 'background')
-                    $attrlist['background'] = array_values($this->objectToArray($attr))[0];
+                    $attrlist['background'] = $atttr;
             }
 
             $tmp['template_attributes'] = $attrlist;

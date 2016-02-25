@@ -117,15 +117,15 @@
                         <?php foreach($p['sub_products'] as $p1){?>
                         <div class="swiper-slide">
                             <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p1['template_attributes']['background']['value']; ?>">
-                                <?php foreach($p['template_attributes']['text'] as $t){?>
+                                <?php foreach($p1['template_attributes']['text'] as $t){?>
                                     <span style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>">
                                         <abbr><?= $t['value']; ?></abbr>
                                     </span>
-                                <?php } foreach($p['template_attributes']['image'] as $t){?>
+                                <?php } foreach($p1['template_attributes']['image'] as $t){?>
                                     <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
                                         <img width="100%" height="100%" src="<?= $t['value']; ?>" >
                                     </span>
-                                <?php }foreach($p['template_attributes']['video'] as $t){?>
+                                <?php }foreach($p1['template_attributes']['video'] as $t){?>
                                     <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
                                         <iframe width="100%"  height="100%" src="<?= $t['value']; ?>" ></iframe>
                                     </span>
@@ -166,10 +166,15 @@
     <!-- Initialize Swiper -->
     <script>
     $(document).ready(function(){
-        $(".page_templates").height($("body").height());
-        reswidth = ($("body").height() * 400) / 500;
-        $(".page_templates").width(reswidth);
-        $("body").width(reswidth);
+        <?php if(!$is_mobile){?>
+            $(".page_templates").height($("body").height());
+            reswidth = ($("body").height() * 400) / 500;
+            $(".page_templates").width(reswidth);
+            $("body").width(reswidth);
+        <?php }else{?>
+            $(".page_templates").height('100%');
+            $(".page_templates").width('100%');
+        <?php }?>
 
         var swiperH = new Swiper('.swiper-container-h', {
             pagination: '.swiper-pagination-h',
