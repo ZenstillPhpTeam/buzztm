@@ -18,7 +18,7 @@ class AdminController extends UsersController
 	public function beforeFilter(Event $event)
 	{
 		parent::beforeFilter($event);
-		$this->viewBuilder()->layout('admin');
+		$this->viewBuilder()->layout('buzztm_admin');
 		$this->set('loggedInUser', $this->Auth->user());
 	}
 
@@ -567,6 +567,8 @@ class AdminController extends UsersController
 
                 for($i=0; $i<count($data['page']); $i++)
                 {
+                    if(isset($data['page'][$i]['id'])) unset($data['page'][$i]['id']);
+
                     $data['page'][$i]['book_id'] = $book_id;
                     $template = $this->BookTemplates->newEntity();
                     $template = $this->BookTemplates->patchEntity($template, $data['page'][$i]);
@@ -795,8 +797,7 @@ class AdminController extends UsersController
 
             $templateattr = $this->TemplateAttributes->find('all', ['conditions' => ['TemplateAttributes.book_template_id' => $tmp['id'], 'TemplateAttributes.book_id' => $id]])->all();
 
-            $template = $this->Templates->get($tmp['template']);
-            $template = array_values($this->objectToArray($template))[0];
+            $template = [];
 
             $attrlist = array('text' => [], 'image' => [], 'video' => [], 'template' => $template);
             foreach($templateattr as $attr)
@@ -964,5 +965,18 @@ class AdminController extends UsersController
         $res = $this->Themes->save($template);
 
         echo $res ? "success" : 'error';
+    }
+
+    public function newBookTemplate()
+    {
+        $this->viewBuilder()->layout('buzztm_admin');
+
+        $this->Books = TableRegistry::get('Books');
+        $this->Categories = TableRegistry::get('Categories');
+
+        $categories = $this->Categories->find('all')->all();
+        $books = $this->Books->find('all')->all();
+
+        $this->set(compact('categories', 'books'));
     }
 }

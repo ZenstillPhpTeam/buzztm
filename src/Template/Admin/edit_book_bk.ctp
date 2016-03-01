@@ -32,10 +32,10 @@
 								<input type="text" class="form-control" ng-model="company.book_name" value="Book Name Here" />
 							</div>
 							<div class="col-sm-6">
-								<select class="form-control" name="company" ng-model="company.category" >
-			                        <option value="">Select Category</option>
-			                        <?php foreach($categories as $cat){?>
-			                        <option value="<?= $cat->id; ?>"><?= $cat->name; ?></option>
+								<select class="form-control" name="company" ng-model="company.company" >
+			                        <option value="">Select Company</option>
+			                        <?php foreach($company as $cat){?>
+			                        <option value="<?= $cat->id; ?>"><?= $cat->username; ?></option>
 			                        <?php }?>
 			                    </select>
 							</div>
@@ -75,8 +75,7 @@
 					<span ng-if="pa.page == 4 && page.length != 5" ng-click="remove_page($index)" class="live-page-id trash_icon"><i class="fa fa-trash"></i></span>
 					<span ng-if="pa.template" ng-click="remove_page_template($index)" class="live-page-id remove_icon"><i class="fa fa-times"></i></span>
 					<span class="live-page-caption">{{pa.name}}</span>
-					<img ng-if="pa.template && pa.template != -1 && pa.template_image == undefined" width="100" src="<?= $this->Url->build('/upload/template_image/template_');?>{{pa.template}}.png" >
-					<img ng-if="pa.template == -1 || pa.template_image != undefined" width="100" src="{{pa.template_image}}" >
+					<img ng-if="pa.template" width="100" src="<?= $this->Url->build('/upload/template_image/template_');?>{{pa.template}}.png" >
 				</a>
 				
 				<!-- <a href="#" class="page-btn empty-page"></a>
@@ -384,26 +383,6 @@
 	      </div>
 	    </div>
 
-	    <div id="templateconfirmationModal" class="modal fade" role="dialog">
-	      <div class="modal-dialog">
-
-	        <!-- Modal content-->
-	        <div class="modal-content">
-	          <div class="modal-header">
-	            <button type="button" class="close" data-dismiss="modal">&times;</button>
-	            <h4 class="modal-title">Choose Template</h4>
-	          </div>
-	          <div class="modal-body">
-	            <button class="btn btn-primary" ng-click="create_new_template()">Create New Template</button>
-	            &nbsp;&nbsp;&nbsp;&nbsp;
-	            <button class="btn btn-danger">Filter from existing Template</button>
-	          </div>
-	          
-	        </div>
-
-	      </div>
-	    </div>
-
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js" type="text/javascript"></script>
 
@@ -591,13 +570,6 @@ buzztm.directive('ngEnterVideo', function() {
   buzztm.controller('AddController', ['$scope', '$http', '$timeout',
     function($scope, $http, $timeout) {
         
-    	$('#templateconfirmationModal').on('hidden.bs.modal', function () {
-            if($scope.page[$scope.active_page]['template'] == 0)
-	        {
-	          	$('#templateconfirmationModal').modal('show');
-	        }
-        });
-
     	$( "#wslider" ).slider({
 			change : function (e, ui)
 			{
@@ -763,8 +735,14 @@ buzztm.directive('ngEnterVideo', function() {
 
         $scope.views = {'mobile': {width: 200, height:300}, 'desktop': {width: 400, height: 500}};
         $scope.default_view = 'desktop';
-        $scope.page = [];
-        $scope.company = {book_name: 'Book new', no_of_page:1, page_type: ""};
+        <?php if($clone){?>
+        	post_url = '<?= $this->Url->build(["controller" => "admin", "action" => "create_book"]);?>';
+        <?php }else{?>
+        	post_url = '<?= $this->Url->build(["controller" => "admin", "action" => "update_book", $id]);?>';
+        <?php }?>
+
+        $scope.page = <?= json_encode($page); ?>;
+        $scope.company = <?= json_encode($book); ?>;
         $scope.tab = 1;
         $scope.clicked = false;
         $scope.attribute_tab = 1;
@@ -776,31 +754,10 @@ buzztm.directive('ngEnterVideo', function() {
         $scope.active_sub_page = -1;
         $scope.selectcategory = '';
         $scope.defaultproductpage = {template: 0,  template_attributes: []};
-        $scope.themes = []; //<?= json_encode($themes);?>;
+        $scope.themes = [];
         $scope.selected_theme = {};
 
         var formData = 0;
-        $i = 0;
-
-        $scope.page[$i++] = {name: 'Home Page', template: 0, template_attributes: [], page: 1};
-        $scope.page[$i++] = {name: 'About us', template: 0, template_attributes: [], page: 2};
-                
-        if($scope.company.no_of_page == 1)
-            $scope.page[$i++] = {name: 'Product Page 1', template: 0, template_attributes: [], page: 4, sub_products: []};
-        else
-        {
-            $scope.page[$i++] = {name: 'Navigation', template: 0, template_attributes: [], page: 3};
-
-            for(j=0;j<$scope.company.no_of_page;j++)
-            {
-
-                $scope.page[$i++] = {name: 'Product Page ' + (j+1), template: 0, template_attributes: [], page: 4, sub_products: []};
-                    
-            }
-        }
-
-        $scope.page[$i++] = {name: 'Social Wall', template: 0, template_attributes: [], page: 5};
-        $scope.page[$i++] = {name: 'Contact us', template: 0, template_attributes: [], page: 6};
 
         $scope.create_new_page = function(e){
         	e.preventDefault();
@@ -924,43 +881,12 @@ buzztm.directive('ngEnterVideo', function() {
         };
 
         $scope.select_active_page = function(id, e){
-          	e.preventDefault();
-          
-          	if($scope.active_page != -1)
-          	{
-          		html2canvas([$(".book-preview")[0]], {
-                    onrendered: function (canvas) {
-                          $scope.$apply(function(){
-                          	  $scope.page[$scope.active_page]['template_image'] = canvas.toDataURL('image/png');
-	                          $scope.active_page = id;
-					          $scope.active_sub_page = -1;
-					          $scope.selectcategory = $scope.page[$scope.active_page]['category'] === undefined ? '' : $scope.page[$scope.active_page]['category'];
-					          $scope.company.page_type = $scope.page[$scope.active_page]['page'].toString();
-					          $scope.reset();
-
-					          if($scope.page[$scope.active_page]['template'] == 0)
-					          {
-					          	$('#templateconfirmationModal').modal('show');
-					          }
-                          });
-                    }
-           		});
-          	}
-          	else
-          	{
-          		$scope.active_page = id;
-				$scope.active_sub_page = -1;
-				$scope.selectcategory = $scope.page[$scope.active_page]['category'] === undefined ? '' : $scope.page[$scope.active_page]['category'];
-				$scope.company.page_type = $scope.page[$scope.active_page]['page'].toString();
-				$scope.reset();
-
-				if($scope.page[$scope.active_page]['template'] == 0)
-				{
-				    $('#templateconfirmationModal').modal('show');
-				}
-          	}
-
-          
+          e.preventDefault();
+          $scope.active_page = id;
+          $scope.active_sub_page = -1;
+          $scope.selectcategory = $scope.page[$scope.active_page]['category'] === undefined ? '' : $scope.page[$scope.active_page]['category'];
+          $scope.company.page_type = $scope.page[$scope.active_page]['page'].toString();
+          $scope.reset();
         };
 
         $scope.select_active_sub_page = function(id, e){
@@ -1016,30 +942,21 @@ buzztm.directive('ngEnterVideo', function() {
 
         $scope.save = function()
         {
-        	html2canvas([$(".book-preview")[0]], {
-                    onrendered: function (canvas) {
-			        	
-                    	$scope.$apply(function(){
-                          	$scope.page[$scope.active_page]['template_image'] = canvas.toDataURL('image/png');
-                        });
+        	book_data = {book: $scope.company, page: $scope.page};
 
-                    	book_data = {book: $scope.company, page: $scope.page};
+        	$http.post(post_url, book_data)
 
-			        	$http.post('<?= $this->Url->build(["controller" => "admin", "action" => "create_book"]);?>', book_data)
-
-			              .then(function(res){
-			                if(res['data'] != 'error')
-			                {
-			                  window.location.assign('<?= $this->Url->build(["controller" => "admin", "action" => "new-book-template"]);?>');
-			                }
-			                else
-			                {
-			                  $(".dashboard_section .message").remove();
-			                  $(".dashboard_section").prepend('<div onclick="this.classList.add(\'hidden\')" class="message error">Error While Creating Book. Try Again!!.</div>');
-			                }
-			              });
-			          }
-			      });
+              .then(function(res){
+                if(res['data'] != 'error')
+                {
+                  window.location.assign('<?= $this->Url->build(["controller" => "admin", "action" => "book"]);?>');
+                }
+                else
+                {
+                  $(".dashboard_section .message").remove();
+                  $(".dashboard_section").prepend('<div onclick="this.classList.add(\'hidden\')" class="message error">Error While Creating Book. Try Again!!.</div>');
+                }
+              });
         };
 
         $scope.nextletter = function(){
@@ -1191,12 +1108,6 @@ buzztm.directive('ngEnterVideo', function() {
 				$scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['text_align'] = pos;
 			else
 				$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['text'][$scope.data['active_text']]['text_align'] = pos;
-		};
-
-		$scope.create_new_template = function(){
-			$scope.page[$scope.active_page]['template'] = -1;
-			$scope.page[$scope.active_page]['template_attributes'] = {'text': [], 'image': [], 'video': [], 'background': {'value': '#fff'}};
-			$('#templateconfirmationModal').modal('hide');
 		};
     }
   ]);

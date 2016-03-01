@@ -10,7 +10,7 @@
             <tr>
               <th width="5%">#</th>
               <th width="15%">Book Name</th>
-              <th width="10%">Company</th>
+              <th width="10%">Category</th>
               <th width="10%">Created by</th>
               <th width="10%">Created on</th>
               <th width="5%">Actions</th>
@@ -21,7 +21,7 @@
             <tr>
               <td><?= $key+1; ?></td>
               <td><?= $tmp->book_name; ?></td>
-              <td><?= $this->Custom->getBusinessName($tmp->company); ?></td>
+              <td><?= $this->Custom->getCategoryName($tmp->category); ?></td>
               <td><?= $this->Custom->getUserName($tmp->created_by); ?></td>
               <td><?= $tmp->created; ?></td>
               <td>

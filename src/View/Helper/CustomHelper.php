@@ -51,4 +51,15 @@ class CustomHelper extends Helper
         $this->Users = TableRegistry::get('Users');
         return $this->Users->get($id)->username;
     }
+
+    public function getBookPreview($id)
+    {
+        if(!$id) return;
+        
+        $this->BookTemplates = TableRegistry::get('BookTemplates');
+
+        $template = $this->BookTemplates->find('all', ['conditions' => ['BookTemplates.book_id' => $id, 'BookTemplates.parent' => 0], 'order' => ['BookTemplates.page' => 'asc']])->first();
+
+        return $template->template_image;
+    }
 }
