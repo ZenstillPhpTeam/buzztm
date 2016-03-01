@@ -9,7 +9,7 @@
     </title>
     <?= $this->Html->meta('icon') ?>
 
-    <?= $this->Html->css(array('bootstrap.min', 'styles', 'font-awesome.min', 'updates')) ?>
+    <?= $this->Html->css(array('bootstrap.min', 'buzztm_styles', 'font-awesome.min', 'updates')) ?>
     <?= $this->Html->script(array('jquery.min', 'bootstrap.min')) ?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>

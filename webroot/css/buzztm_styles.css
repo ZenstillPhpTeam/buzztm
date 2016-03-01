@@ -575,3 +575,70 @@ input#rememberme {
 p.forgetmenot {
     float: left;
 }
+
+.header_section-login{ background:url(../images/bg.jpg);}
+.login{ background:#fff; border-radius:10px;}
+.mrg-top{margin-top:80px; margin-bottom:60px;}
+.mrg-top1{ margin-top:20x !important;}
+.top-logo{ margin:30px 0;}
+.brand_logo1{padding:20px;}
+.fa-angle-double-right{ font-size:40px !important; color:#8BDA02;}
+.btn-default{background:#262626; padding-top:20px; padding-bottom:20px; }
+.padd-rgt{ padding-right:0;}
+.padd-lft{padding-left:0;}
+.form-control1 {
+    display:block;
+    width:100%;
+    height:57px;
+    padding:8px 12px;
+    font-size:14px;
+    line-height:1.42857143;
+    color:#555;
+    background:#E7E7E7;
+    background-image:none;
+    border:1px solid #E7E7E7;
+    border-radius:0px;
+}
+.form-control1:focus {
+    border-color:#66afe9;
+    outline:0;
+    -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow:inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
+}
+.form-control1{
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1e5799+0,e7e7e7+0,cdcdcd+100,210513+100 */
+background: #1e5799; /* Old browsers */
+background: -moz-linear-gradient(top, #1e5799 0%, #e7e7e7 0%, #cdcdcd 100%, #210513 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, #1e5799 0%,#e7e7e7 0%,#cdcdcd 100%,#210513 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, #1e5799 0%,#e7e7e7 0%,#cdcdcd 100%,#210513 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#210513',GradientType=0 ); /* IE6-9 */
+}
+.btn-default{padding: 40px 12px 32px !important;}
+.btn1 {
+    display:inline-block;
+    padding:6px 12px;
+    margin-bottom:0;
+    font-size:14px;
+    font-weight:400;
+    line-height:1.42857143;
+    text-align:center;
+    white-space:nowrap;
+    vertical-align:middle;
+    -ms-touch-action:manipulation;
+    touch-action:manipulation;
+    cursor:pointer;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    background-image:none;
+    border:1px solid transparent;
+    border-radius:0 10px 10px 0;
+}
+.mar-bottm{ margin-bottom:10px;}
+.bor-rad{border-radius:10px 0 0 0 !important;}
+.bor-rad1{border-radius:0px 0px 0px 10px !important;}
+.puzztm p{font-size:24px; line-height: 30px; color: #484848; margin-top:30px;}
+.forget-password a{color:#444;}
+.sigup a{color:#EB7302; text-transform: uppercase; font-weight:400}
+.portal{color:#FE2120 !important; padding-bottom:40px;}
