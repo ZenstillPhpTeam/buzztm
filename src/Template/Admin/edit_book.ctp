@@ -1201,8 +1201,9 @@ buzztm.directive('ngEnterPos', function() {
 			      });
         };
 
-        $scope.nextletter = function(){
-		    return $scope.tmp_letter.replace(/([a-zA-Z])[^a-zA-Z]*$/, function(a){
+        $scope.nextletter = function(str){
+        	str = str === undefined ? $scope.tmp_letter : str;
+		    return str.replace(/([a-zA-Z])[^a-zA-Z]*$/, function(a){
 		        var c= a.charCodeAt(0);
 		        switch(c){
 		            case 90: return 'A';

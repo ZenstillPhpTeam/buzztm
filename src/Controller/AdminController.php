@@ -789,7 +789,9 @@ class AdminController extends UsersController
             $page[$k] = $tmp;
         }
 
-        $this->set(compact('id', 'clone', 'company', 'categories', 'book', 'page'));
+        $books = $this->Books->find('all')->all();
+
+        $this->set(compact('id', 'clone', 'company', 'categories', 'book', 'page', 'books'));
     }
 
     public function getpagetemplates($tmp, $id)

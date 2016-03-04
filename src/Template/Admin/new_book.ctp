@@ -416,6 +416,33 @@
 	      </div>
 	    </div>
 
+	    <div id="NavigationModal" class="modal fade" role="dialog">
+	      <div class="modal-dialog">
+
+	        <!-- Modal content-->
+	        <div class="modal-content">
+	          <div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal">&times;</button>
+	            <h4 class="modal-title">Image Library</h4>
+	          </div>
+	          <div class="modal-body">
+	            
+		          <label>Link To</label>
+		          <select ng-model="linkto" ng-init="linkto=''; linklist = list_page();">
+		          		<option value="">No link</option>
+		          		<option ng-repeat="pa in linklist" value="{{pa.id}}">{{pa.name}} - {{pa.id}}</option>
+		          		</option>
+		          </select>
+	          </div>
+	          <div class="modal-footer">
+	            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="seelcted_template_image()">Select</button>
+        		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	          </div>
+	        </div>
+
+	      </div>
+	    </div>
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js" type="text/javascript"></script>
 
@@ -937,6 +964,8 @@ buzztm.directive('ngEnterPos', function() {
         	{
         		$scope.page.splice((3 + page_cnt), 0, {name: 'Product Page '+(page_cnt + 1), template: $scope.defaultproductpage['template'], template_attributes: $scope.defaultproductpage['template_attributes'], page: 4, sub_products: []});
         	}
+
+        	$scope.linklist = $scope.list_page();
         };
 
         $scope.remove_page = function(ind){
@@ -958,6 +987,8 @@ buzztm.directive('ngEnterPos', function() {
         	}
 
         	$scope.active_page = -1;
+
+        	$scope.linklist = $scope.list_page();
         };
 
         $scope.remove_product = function(ind){
@@ -965,6 +996,8 @@ buzztm.directive('ngEnterPos', function() {
 			$scope.page[$scope.active_page]['sub_products'].splice(ind, 1);
 
         	$scope.active_sub_page = -1;
+
+        	$scope.linklist = $scope.list_page();
         };
 
 
@@ -1212,8 +1245,9 @@ buzztm.directive('ngEnterPos', function() {
 			      });
         };
 
-        $scope.nextletter = function(){
-		    return $scope.tmp_letter.replace(/([a-zA-Z])[^a-zA-Z]*$/, function(a){
+        $scope.nextletter = function(str){
+        	str = str === undefined ? $scope.tmp_letter : str;
+		    return str.replace(/([a-zA-Z])[^a-zA-Z]*$/, function(a){
 		        var c= a.charCodeAt(0);
 		        switch(c){
 		            case 90: return 'A';
@@ -1228,6 +1262,8 @@ buzztm.directive('ngEnterPos', function() {
 
 			//$scope.page[$scope.active_page].sub_products.push({name: 'Sub Page', template: $scope.page[$scope.active_page]['template'], template_attributes: $scope.page[$scope.active_page]['template_attributes']});
 			$scope.page[$scope.active_page].sub_products.push({name: 'Sub Page', template: 0, template_attributes: []});
+
+			$scope.linklist = $scope.list_page();
 		};
 
 		$scope.remove_page_template = function(ind){
@@ -1443,6 +1479,25 @@ buzztm.directive('ngEnterPos', function() {
 		          then(function(res){
 		            $scope.image_library = res['data'];
 		          });
+	    };
+
+	    $scope.list_page = function(){
+
+	    	arr = [];
+	    	angular.forEach($scope.page, function(value, key) {
+			  arr.push({'id': (key+1)+'a', 'name': value.name, pos_x: key});
+			  if(value.page == 4)
+			  {
+			  	sub_page_length += value.sub_products.length;
+			  	startchar = 'b';
+			  	angular.forEach(value.sub_products, function(v1, k1) {
+			  		arr.push({'id': (key+1)+startchar, 'name': v1.name, pos_x: key, pos_y: k1});
+			  		startchar = $scope.nextletter(startchar);
+			  	});
+			  }
+			});
+
+			return arr;
 	    };
     }
   ]);
