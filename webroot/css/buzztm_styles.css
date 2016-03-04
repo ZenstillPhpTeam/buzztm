@@ -200,6 +200,9 @@ ul{
 }
 .app_templates ul{
 	padding:0;
+    transition:all 1s ease 0s;
+    max-height:120px;
+    overflow: hidden;
 }
 .app_templates li{
 	float:left;
@@ -268,20 +271,20 @@ ul{
 	position:absolute;
 	top: 0;
 }
+.hover_selecton .btn{margin: 8px 0; padding: 2px 5px;}
 .hover_selecton .btn_use{
 	    width: 90px;
     background: #00bb4b;
     color: #fff;
-    margin: 10px 0;
     text-align: center;
 }
 .hover_selecton .btn_preview{
 	    width: 90px;
     background: #006abb;
     color: #fff;
-    margin: 10px 0;
     text-align: center;
 }
+.theme_preview .theme_list img{background: #fff; position: absolute; left: 0px; top: 0px; border-radius: 9px; width: 95%; height: 95%; right: 0px; bottom: 0px; margin: auto;}
 @media (max-width:430px){
 .theme_preview .theme_list{
 		min-width:90% !important;
@@ -569,6 +572,10 @@ span.theme_label_creation {
     padding: 8px;
     border-radius: 5px;
 }
+#loginform .submit_btn{
+    background: none;
+    border: none;
+}
 input#rememberme {
     width: 15px !important;
 }
@@ -578,7 +585,7 @@ p.forgetmenot {
 
 .header_section-login{ background:url(../images/bg.jpg);}
 .login{ background:#fff; border-radius:10px;}
-.mrg-top{margin-top:80px; margin-bottom:60px;}
+.mrg-top{margin:135px 0;}
 .mrg-top1{ margin-top:20x !important;}
 .top-logo{ margin:30px 0;}
 .brand_logo1{padding:20px;}
@@ -642,3 +649,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', end
 .forget-password a{color:#444;}
 .sigup a{color:#EB7302; text-transform: uppercase; font-weight:400}
 .portal{color:#FE2120 !important; padding-bottom:40px;}
+/*signup*/
+.bg-color{background:#000; border-radius:10px 10px 0 0; margin-bottom:20px;}
+.bg-color  h3{color:#FEC000; font-weight:600; text-transform:uppercase;}
+.heading h4{ color:#484848 !important; font-weight:300 !important; margin-bottom:10px;}
+.new_book_template .app_templates{position: relative;}
+.new_book_template .app_templates .show_hide_category{position: absolute; cursor: pointer; width: 30px; height: 30px; right: 20px; bottom: 20px;}
+.new_book_template .app_templates .show_hide_category i{font-size: 30px; color: #E9A400}
+.new_book_template .app_templates ul.auto_height{max-height: none;}

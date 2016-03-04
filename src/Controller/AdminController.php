@@ -471,19 +471,23 @@ class AdminController extends UsersController
     {
         $this->viewBuilder()->layout(false);
 
-        $this->Users = TableRegistry::get('Users');
+        //$this->Users = TableRegistry::get('Users');
 
-        $company = $this->Users->find('all', ['conditions' => ['Users.role' => 'company']])->all();
+        //$company = $this->Users->find('all', ['conditions' => ['Users.role' => 'company']])->all();
 
         $this->Categories = TableRegistry::get('Categories');
 
         $categories = $this->Categories->find('all')->all();
 
-        $this->Themes = TableRegistry::get('Themes');
+        //$this->Themes = TableRegistry::get('Themes');
 
-        $themes = $this->Themes->find('all')->all();
+        //$themes = $this->Themes->find('all')->all();
 
-        $this->set(compact('company', 'categories', 'themes'));
+        $this->Books = TableRegistry::get('Books');
+
+        $books = $this->Books->find('all')->all();
+
+        $this->set(compact('company', 'categories', 'books'));
     }
 
     public function getTemplates($category, $page)
@@ -851,7 +855,7 @@ class AdminController extends UsersController
         $this->TemplateAttributes->deleteAll(['book_id' => $id]);
 
         $this->Flash->success(__('Selected Book Deleted successfully!!'));
-        return $this->redirect(array('controller' => 'admin', 'action' => 'book'));
+        return $this->redirect(array('controller' => 'admin', 'action' => 'new-book-template'));
     }
 
     public function newTheme()
@@ -979,4 +983,57 @@ class AdminController extends UsersController
 
         $this->set(compact('categories', 'books'));
     }
+
+    public function imageLibrary($book = 0)
+    {
+        $this->autoRender = false;
+        $files = [];
+        
+        if($book)
+        {
+            $this->TemplateAttributes = TableRegistry::get('TemplateAttributes');
+
+            $templates = $this->TemplateAttributes->find('all', ['conditions' => ['TemplateAttributes.book_id' => $book, 'TemplateAttributes.field_type' => 'image']])->all();
+            foreach($templates as $tmp)
+            {
+                $exp = explode("template/", $tmp->value);
+                if(count($exp) == 2)
+                {
+                    $files[] = $exp[1];
+                }
+            }
+
+            $templates = $this->TemplateAttributes->find('all', ['conditions' => ['TemplateAttributes.book_id' => $book, 'TemplateAttributes.field_type' => 'background']])->all();
+            foreach($templates as $tmp)
+            {
+                $exp = explode("template/", $tmp->value);
+                if(count($exp) == 2)
+                {
+                    $exp = explode("')", $exp[1]);
+                    if(count($exp) == 2)
+                    {
+                        $files[] = $exp[0];
+                    }
+                }
+            }
+        }
+        else
+        {
+            $dir = WWW_ROOT.'upload/template/';
+            $i = 0;
+            if (is_dir($dir)){
+              if ($dh = opendir($dir)){
+                while (($file = readdir($dh)) !== false){
+                  if($i > 1)
+                  $files[] = $file;
+                  $i++;
+                }
+                closedir($dh);
+              }
+            }
+        }
+
+        echo json_encode($files);
+    }
+
 }

@@ -63,8 +63,7 @@ class BookController extends AppController
 
             $templateattr = $this->TemplateAttributes->find('all', ['conditions' => ['TemplateAttributes.book_template_id' => $tmp['id'], 'TemplateAttributes.book_id' => $id]])->all();
 
-            $template = $this->Templates->get($tmp['template']);
-            $template = array_values($this->objectToArray($template))[0];
+            $template = [];
 
             $attrlist = array('text' => [], 'image' => [], 'video' => [], 'template' => $template);
             foreach($templateattr as $attr)

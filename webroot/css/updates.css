@@ -93,3 +93,8 @@ div.message.hidden {
 .book_page .content .tools-box .tools-box-content .tools-box-content-left ul li.pull-left a{color: green;}
 .book_page .content .tools-box .tools-box-content .tools-box-content-left ul li.pull-right a{color: red;}
 .book_page .template_video_attributes li iframe, .book-preview iframe{pointer-events: none;}
+#imageLibraryModal .modal-dialog{width: 80%;}
+#imageLibraryModal .modal-dialog .image_library_list li{width: 18%; height: 200px; overflow: hidden; margin: 5px; display: inline-block;}
+#imageLibraryModal .modal-dialog .image_library_list li img{width: 100%; height: auto; }
+#imageLibraryModal .modal-dialog .modal-body{max-height: 450px; overflow: auto;}
+#imageLibraryModal .modal-dialog .image_library_list li.selected{border: 2px solid #286090;}

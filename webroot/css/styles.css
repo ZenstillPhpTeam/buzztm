@@ -602,3 +602,44 @@ body.book_page{ background:#282828; }
 .book_page .content .tools-box .tools-box-content .tools-box-content-left ul li{}
 .book_page .content .tools-box .tools-box-content .tools-box-content-left ul li a { border-bottom: 1px solid #464646; color: #464646; display: block; font-size: 15px; padding: 15px;  text-transform: uppercase;}
 .book_page .content .tools-box .tools-box-content .tools-box-content-left ul li.active a { background:#525252; color:#FFF; }
+
+/*Tool bar*/
+.panel-bg{ background:#222;}
+.border{ border-bottom:2px solid #888;}
+.page-menu-part{text-align:center;}
+.view-switcher  a{ }
+.view-switcher  a  .fa-mobile{ font-size:56px;background:#282828; color:#888; box-shadow:0 0 2px 0 #000; border-radius:4px; padding: 5px 21px; margin-right: 4px;}
+.page-menu-part h4{color: #888;
+    margin: 0;
+    padding: 10px 0;}
+.view-switcher  a  .fa-television{ font-size:44px;background:#282828; color:#888; box-shadow:0 0 2px 0 #000; border-radius:4px; padding: 15px 10px 7px; margin-bottom:10px;}
+.page-menu a, .page-menu select, .page-menu input{ background:#282828; border:none; color:#888; box-shadow:0 0 1px 1px #000; text-align:right; text-transform:uppercase; margin-bottom: 12px;}
+.page-menu select.form-control{border-radius: 4px; padding: 5px; background:#282828; text-align: left;}
+.page-menu a:hover{ color:#888;}
+.page-menu-part .ui-slider{margin-bottom: 10px;}
+.page-menu p{ text-transform:uppercase; color:#888;} 
+.page-menu p a{ border: 1px dotted #888; box-shadow:none;}
+.fa-caret-right{ font-size:18px;}
+.fa-caret-down{ font-size:18px; padding-left:3px;} 
+.profile{ background: #292929 none repeat scroll 0 0;
+    border: medium none;
+    color: #888;
+    float: left;
+    margin-left: 14px;
+    max-width: 50px !important ;
+  border:1px solid #888; margin:10px 0; border-radius:4px; padding-left:6px;}
+
+.box{ float:left; color:#888; margin:10px 5px; 0 0px;}
+.align-icon li a{ color:#888; font-size:30px;} 
+.align-btn a{ font-size:30px !important;
+    max-height: 80px;
+    padding: 16px 20px;
+    text-align: center;
+    max-width: 80px;}
+  .padd0{ padding:6px !important;}
+  @media screen and (max-width:1280px){
+  .page-menu a{font-size: 11px;}
+  .align-btn a{ font-size: 22px !important;
+    padding: 10px 17px 6px;}
+    } 
+.text_tools .page-menu.list select, .text_tools .page-menu.list input{padding: 10px; vertical-align: top; margin-right: 5px; border-radius: 4px; text-align: left;}

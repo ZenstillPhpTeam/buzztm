@@ -99,7 +99,8 @@
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
                             <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p['template_attributes']['background']['value']; ?>">
-                                <?php foreach($p['template_attributes']['text'] as $t){?>
+                                <img src="<?= $p['template_image']; ?>">
+                                <?php /*foreach($p['template_attributes']['text'] as $t){?>
                                     <span style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= $t['font_size']; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;">
                                         <abbr><?= $t['value']; ?></abbr>
                                     </span>
@@ -107,7 +108,7 @@
                                     <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>">
                                         <img width="100%"  height="100%" src="<?= $t['value']; ?>" >
                                     </span>
-                                <?php } foreach($p['template_attributes']['video'] as $t){?>
+                                <?php }*/ foreach($p['template_attributes']['video'] as $t){?>
                                     <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
                                         <iframe width="100%"  height="100%" src="<?= $t['value']; ?>" ></iframe>
                                     </span>
@@ -117,7 +118,8 @@
                         <?php foreach($p['sub_products'] as $p1){?>
                         <div class="swiper-slide">
                             <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p1['template_attributes']['background']['value']; ?>">
-                                <?php foreach($p1['template_attributes']['text'] as $t){?>
+                                <img src="<?= $p1['template_image']; ?>">
+                                <?php /*foreach($p1['template_attributes']['text'] as $t){?>
                                     <span style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= $t['font_size']; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;">
                                         <abbr><?= $t['value']; ?></abbr>
                                     </span>
@@ -125,7 +127,7 @@
                                     <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
                                         <img width="100%" height="100%" src="<?= $t['value']; ?>" >
                                     </span>
-                                <?php }foreach($p1['template_attributes']['video'] as $t){?>
+                                <?php }*/ foreach($p1['template_attributes']['video'] as $t){?>
                                     <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
                                         <iframe width="100%"  height="100%" src="<?= $t['value']; ?>" ></iframe>
                                     </span>
@@ -138,7 +140,8 @@
                 </div>
                 <?php }else{?>
                 <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p['template_attributes']['background']['value']; ?>">
-                    <?php foreach($p['template_attributes']['text'] as $t){?>
+                    <img src="<?= $p['template_image']; ?>">
+                    <?php /*foreach($p['template_attributes']['text'] as $t){?>
                         <span style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= $t['font_size']; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;">
                             <abbr><?= $t['value']; ?></abbr>
                         </span>
@@ -146,7 +149,7 @@
                         <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>;">
                             <img width="100%" height="100%" src="<?= $t['value']; ?>" >
                         </span>
-                    <?php } foreach($p['template_attributes']['video'] as $t){?>
+                    <?php }*/ foreach($p['template_attributes']['video'] as $t){?>
                         <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>">
                             <iframe width="100%"  height="100%" src="<?= $t['value']; ?>" ></iframe>
                         </span>
