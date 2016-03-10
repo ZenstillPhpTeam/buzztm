@@ -12,24 +12,27 @@ $('.carousel-sync').on('slid.bs.carousel', function(ev) {
           <h3 class="welcome_title">WELCOME <span>Name</span></h3>
           <div class="product_list_slider">
             <div class="my_app">My App</div>
-            <div class="col-lg-4 col-xs-12 col-md-4 col-sm-4"> <a href="#" class="producttheme_list"> <span class="theme_label_creation"><i class="fa fa-plus create_plus"></i>Create New Book</span> </a> </div>
+            <div class="col-lg-3 col-xs-12 col-md-4 col-sm-4"> <a href="<?= $this->Url->build(["controller" => "admin", "action" => "new-book-template"]);?>" class="producttheme_list"> <span class="theme_label_creation"><i class="fa fa-plus create_plus"></i>Create New Book</span> </a> </div>
             <div id="myCarousel" class="carousel slide col-lg-8 col-xs-12 col-md-8 col-sm-8" data-ride="carousel"> 
               <!-- Wrapper for slides -->
               <div class="carousel-inner product_slider" role="listbox">
-                <div class="item active">
-                  <div class="span4" style="padding-left: 18px;"> <img src="<?= $this->Url->build('/images/product_view.jpg'); ?>" class="img-thumbnail col-lg-4 col-xs-12 col-md-4 col-sm-4"> <img src="<?= $this->Url->build('/images/product_view.jpg'); ?>" class="img-thumbnail col-lg-4 col-xs-12 col-md-4 col-sm-4"> <img src="<?= $this->Url->build('/images/product_view.jpg'); ?>" class="img-thumbnail col-lg-4 col-xs-12 col-md-4 col-sm-4"> </div>
+                <?php $cnt = count($books); foreach($books as $k=>$bk){ if($k%3 == 0){?>
+                <div class="item <?php echo $k == 0 ? 'active' : '';?> ">
+                  <div class="span4" style="padding-left: 18px;"> 
+                  <?php }?>
+                    <img src="<?= $this->Custom->getBookPreview($bk->id); ?>" class="img-thumbnail col-lg-4 col-xs-12 col-md-4 col-sm-4">
+                  <?php if($k%3 == 2 || $cnt == $k+1){?>
+                  </div>
                 </div>
-                <div class="item">
-                  <div class="span4" style="padding-left: 18px;"> <img src="<?= $this->Url->build('/images/product_view.jpg'); ?>" class="img-thumbnail col-lg-4 col-xs-12 col-md-4 col-sm-4"> <img src="<?= $this->Url->build('/images/product_view.jpg'); ?>" class="img-thumbnail col-lg-4 col-xs-12 col-md-4 col-sm-4"> <img src="<?= $this->Url->build('/images/product_view.jpg'); ?>" class="img-thumbnail col-lg-4 col-xs-12 col-md-4 col-sm-4"> </div>
-                </div>
+                <?php }}?>
               </div>
-              <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <span class="sr-only">Next</span> </a> <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">Next</span> </a> </div>
+              <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <span class="sr-only">Next</span> </a> 
+              <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">Next</span> </a> </div>
           </div>
         </div>
-        <div class="product_list_slider">
+        <!-- <div class="product_list_slider">
           <div class="my_app">Unpublished APPs</div>
           <div id="carousel-a" class="carousel slide col-lg-12 col-xs-12 col-md-12 col-sm-12" data-ride="carousel"> 
-            <!-- Wrapper for slides -->
             <div class="carousel-inner product_slider" role="listbox">
               <div class="item active">
                 <div class="span4" style="padding-left: 18px;"> 
@@ -56,4 +59,4 @@ $('.carousel-sync').on('slid.bs.carousel', function(ev) {
             <li class="view_all"></li>
             <li class="view_empty"></li>
           </ul>
-        </div>
+        </div> -->

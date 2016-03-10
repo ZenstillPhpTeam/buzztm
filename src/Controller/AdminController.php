@@ -25,7 +25,11 @@ class AdminController extends UsersController
 
 	public function dashboard()
 	{
-		
+		$this->Books = TableRegistry::get('Books');
+
+        $books = $this->Books->find('all', ['order' => ['Books.id' => 'desc']])->all();
+
+        $this->set(compact('books'));
 	}
 
 	public function company()

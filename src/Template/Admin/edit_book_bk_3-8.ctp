@@ -18,14 +18,9 @@
 	</head>
 
     <body class="book_page" ng-app="buzztm" ng-controller="AddController">
-	
-    <div ng-init="preloader = true;" class="preloader" ng-show="preloader"></div>
-    <div class="preloader_image" ng-show="preloader">
-    	<?= $this->Html->image('preloader.gif');?>
-    </div>
-
+		
     <div class="hide" style="background: #fff;">
-    {{attribute_changes}}
+    {{page}}
     </div>
 
 		<header>
@@ -58,9 +53,9 @@
 									<li><a href='<?= $this->Url->build(["controller" => "admin", "action" => "dashboard"]);?>' class="btn btn-1">Dashboard</a></li>
 									<li><a href="#" ng-disabled="progress() != 100" ng-click="save(false);" class="btn btn-2">Save</a></li>
 									<li><a href="#" ng-disabled="progress() != 100" ng-click="save(true);" class="btn btn-4">Save & Exit</a></li>
-									<li><a target="_blank" href="<?= $this->Url->build(["controller" => "book", "action" => "view", base64_encode(base64_encode($book['id'])), $book['slug']]);?>" class="btn btn-3">Preview
-									</a></li>
-									<!-- <li><a href="#" class="btn btn-4">Publish</a></li> -->
+									<li><a target="_blank" href="<?= $this->Url->build(["controller" => "book", "action" => "view", base64_encode(base64_encode($book['id'])), $book['slug']]);?>" class="btn btn-3">Preview</a></li>
+									<!-- <li><a href="#" class="btn btn-3">Preview</a></li>
+									<li><a href="#" class="btn btn-4">Publish</a></li> -->
 								</ul>
 							</div>
 						</div>
@@ -122,7 +117,7 @@
 										<h2>Page Items</h2>
 									</div>
 									<div class="col-sm-6 text-right">
-										<a ng-if="attribute_tab == 2 || attribute_tab == 3" class="btn btn-5" data-toggle="modal" data-target="#imageLibraryModal">Image Library</a>
+										<a ng-if="attribute_tab == 2 || attribute_tab == 3" class="btn btn-5" data-toggle="modal" data-target="#imageLibraryModal" class="btn btn-5">Image Library</a>
 									</div>
 								</div>
 							</div>
@@ -261,15 +256,8 @@
 										<i class="fa fa-bold"></i>
 									</a>
 									<input type="text" maxlength="6" size="6" id="colorpicker" value="00ff00" />
-									<a ng-disabled="current_position == 0" ng-click="undo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-left"></i></a>
-									<a ng-disabled="max_position == current_position" ng-click="redo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-right"></i></a>
-								</div>
-							</div>
-
-							<div class="page-menu-part text_tools col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="data['active_image'] != -1 || data['active_video'] != -1" style="padding-top: 20px;">
-								<div class="page-menu list">
-									<a ng-disabled="current_position == 0" ng-click="undo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-left"></i></a>
-									<a ng-disabled="max_position == current_position" ng-click="redo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-right"></i></a>
+									<!-- <a href="#" class="btn btn-6"><i class="fa fa-rotate-left"></i></a>
+									<a href="#" class="btn btn-6"><i class="fa fa-rotate-right"></i></a> -->
 								</div>
 							</div>
 							<div class="page-menu-part col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="data['active_text'] != -1 || data['active_image'] != -1 || data['active_video'] != -1">
@@ -429,34 +417,6 @@
 
 	      </div>
 	    </div>
-
-	    <div id="NavigationModal" class="modal fade" role="dialog">
-	      <div class="modal-dialog">
-
-	        <!-- Modal content-->
-	        <div class="modal-content">
-	          <div class="modal-header">
-	            <button type="button" class="close" data-dismiss="modal">&times;</button>
-	            <h4 class="modal-title">Image Library</h4>
-	          </div>
-	          <div class="modal-body">
-	            
-		          <label>Link To</label>
-		          <select ng-model="linkto" ng-init="linkto=''; linklist = list_page();">
-		          		<option value="">No link</option>
-		          		<option ng-repeat="pa in linklist" value="{{pa.id}}">{{pa.name}} - {{pa.id}}</option>
-		          		</option>
-		          </select>
-	          </div>
-	          <div class="modal-footer">
-	            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="seelcted_template_image()">Select</button>
-        		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-	          </div>
-	        </div>
-
-	      </div>
-	    </div>
-
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js" type="text/javascript"></script>
 
@@ -478,7 +438,6 @@ buzztm.directive('ngEnter', function() {
             element.bind("keydown keypress", function(event) {
                 if(event.which === 13) {
                         scope.$apply(function(){
-                                scope.track_first_changes('text', scope.data['active_text']);
                                 if(scope.active_sub_page == -1)
                                 {
                                 	scope.page[scope.active_page]['template_attributes']['text'][scope.data['active_text']]['value'] = element.val();
@@ -490,8 +449,6 @@ buzztm.directive('ngEnter', function() {
                                 scope.data['active_text'] = -1;
                                 scope.data['active_video'] = -1;
                                 scope.data['background_st'] = 0;
-
-                                scope.track_changes();
                         });
                         
                         event.preventDefault();
@@ -505,7 +462,6 @@ buzztm.directive('ngEnterVideo', function() {
             element.bind("keydown keypress", function(event) {
                 if(event.which === 13) {
                         scope.$apply(function(){
-                                scope.track_first_changes('video', scope.data['active_video']);
                                 if(scope.active_sub_page == -1)
                                 {
                                 	scope.page[scope.active_page]['template_attributes']['video'][scope.data['active_video']]['value'] = element.val();
@@ -517,8 +473,6 @@ buzztm.directive('ngEnterVideo', function() {
                                 scope.data['active_text'] = -1;
                                 scope.data['active_video'] = -1;
                                 scope.data['background_st'] = 0;
-
-                                scope.track_changes();
                         });
                         
                         event.preventDefault();
@@ -549,7 +503,7 @@ buzztm.directive('ngEnterPos', function() {
 									ind = scope.data['active_text'];
 									ttype = 'text';
 								}
-								scope.track_first_changes(ttype, ind);
+
                                 if(scope.active_sub_page == -1)
                                 {
                                 	scope.page[scope.active_page]['template_attributes'][ttype][ind][pos] = element.val();
@@ -558,8 +512,6 @@ buzztm.directive('ngEnterPos', function() {
                                 {
                                 	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes'][ttype][ind][pos] = element.val();
                                 }
-
-                                scope.track_changes();
                         });
                 }
             });
@@ -580,7 +532,6 @@ buzztm.directive('ngEnterPos', function() {
                         stop: function( event, ui ) { 
                           ind = $(this).data("index");
                           scope.$apply(function(){
-                            scope.track_first_changes('text', ind);
                             if(scope.active_sub_page == -1)
                             {
                             	ttop = (ui.position.top / preview_height) * 100;
@@ -599,8 +550,6 @@ buzztm.directive('ngEnterPos', function() {
 
                             	scope.change_active_text(ind, scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['text'][ind]['value']);
                             }
-
-                            scope.track_changes();
                           });
                         }  
                       }
@@ -623,7 +572,6 @@ buzztm.directive('ngEnterPos', function() {
                         stop: function( event, ui ) { 
                           ind = $(this).data("index");
                           scope.$apply(function(){
-                            scope.track_first_changes('image', ind);
                             if(scope.active_sub_page == -1)
                             {
                             	ttop = (ui.position.top / preview_height) * 100;
@@ -642,8 +590,6 @@ buzztm.directive('ngEnterPos', function() {
 
                             	scope.change_active_image(ind);
                             }
-
-                            scope.track_changes();
                           });
                         }
                       }
@@ -666,7 +612,6 @@ buzztm.directive('ngEnterPos', function() {
                         stop: function( event, ui ) { 
                           ind = $(this).data("index");
                           scope.$apply(function(){
-                            scope.track_first_changes('video', ind);
                             if(scope.active_sub_page == -1)
                             {
                             	ttop = (ui.position.top / preview_height) * 100;
@@ -685,8 +630,6 @@ buzztm.directive('ngEnterPos', function() {
 
                             	scope.change_active_video(ind, scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['video'][ind]['value']);
                             }
-
-                            scope.track_changes();
                           });
                         }
                       }
@@ -700,10 +643,6 @@ buzztm.directive('ngEnterPos', function() {
   buzztm.controller('AddController', ['$scope', '$http', '$timeout',
     function($scope, $http, $timeout) {
         
-    	$timeout(function(){
-    		$scope.preloader = false;
-    	}, 2000);
-
     	$('#colorpicker').ColorPicker({
 			onSubmit: function(hsb, hex, rgb, el) {
 				$(el).val(hex);
@@ -716,7 +655,6 @@ buzztm.directive('ngEnterPos', function() {
 				$('#colorpicker').val(hex);
 
 				$scope.$apply(function(){
-					$scope.track_first_changes('text', $scope.data['active_text']);
 					if($scope.active_sub_page == -1)
 		            {
 		                $scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['color'] = hex;
@@ -725,8 +663,6 @@ buzztm.directive('ngEnterPos', function() {
 		            {
 		                $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['color'][$scope.data['active_text']]['width'] = hex;
 		            }
-
-		            $scope.track_changes();
 		        });
 			}
 		})
@@ -763,7 +699,6 @@ buzztm.directive('ngEnterPos', function() {
 				}
 
 				$scope.$apply(function(){
-					$scope.track_first_changes(ttype, ind);
 					if($scope.active_sub_page == -1)
 	                {
 	                    $scope.page[$scope.active_page]['template_attributes'][ttype][ind]['width'] = wwidth+'%';
@@ -774,8 +709,6 @@ buzztm.directive('ngEnterPos', function() {
 	                }
 
 	                $scope.position.w = $scope.active_sub_page == -1 ? $scope.page[$scope.active_page]['template_attributes'][ttype][$scope.data['active_'+ttype]]['width'] : $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][$scope.data['active_'+ttype]]['width'];
-
-	                $scope.track_changes();
 				});
 			}
 		});
@@ -797,7 +730,6 @@ buzztm.directive('ngEnterPos', function() {
 				}
 
 				$scope.$apply(function(){
-					$scope.track_first_changes(ttype, ind);
 					if($scope.active_sub_page == -1)
 	                {
 	                    $scope.page[$scope.active_page]['template_attributes'][ttype][ind]['height'] = wwidth ? wwidth+'%' : 'auto';
@@ -808,8 +740,6 @@ buzztm.directive('ngEnterPos', function() {
 	                }
 
 	                $scope.position.h = $scope.active_sub_page == -1 ? $scope.page[$scope.active_page]['template_attributes'][ttype][$scope.data['active_'+ttype]]['height'] : $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][$scope.data['active_'+ttype]]['height'];
-
-	                $scope.track_changes();
 				});
 			}
 		});
@@ -954,13 +884,13 @@ buzztm.directive('ngEnterPos', function() {
         $scope.active_sub_page = -1;
         $scope.selectcategory = '';
         $scope.defaultproductpage = {template: 0,  template_attributes: []};
-        $scope.themes = []; 
+        $scope.themes = [];
         $scope.selected_theme = {};
         $scope.position = {t:0, l:0, w:0, h:0};
 
 
         var formData = 0;
-        
+
         $scope.create_new_page = function(e){
         	e.preventDefault();
 
@@ -993,8 +923,6 @@ buzztm.directive('ngEnterPos', function() {
         	{
         		$scope.page.splice((3 + page_cnt), 0, {name: 'Product Page '+(page_cnt + 1), template: $scope.defaultproductpage['template'], template_attributes: $scope.defaultproductpage['template_attributes'], page: 4, sub_products: []});
         	}
-
-        	$scope.linklist = $scope.list_page();
         };
 
         $scope.remove_page = function(ind){
@@ -1016,8 +944,6 @@ buzztm.directive('ngEnterPos', function() {
         	}
 
         	$scope.active_page = -1;
-
-        	$scope.linklist = $scope.list_page();
         };
 
         $scope.remove_product = function(ind){
@@ -1025,8 +951,6 @@ buzztm.directive('ngEnterPos', function() {
 			$scope.page[$scope.active_page]['sub_products'].splice(ind, 1);
 
         	$scope.active_sub_page = -1;
-
-        	$scope.linklist = $scope.list_page();
         };
 
 
@@ -1093,11 +1017,9 @@ buzztm.directive('ngEnterPos', function() {
           
           	if($scope.active_page != -1 && $scope.active_sub_page != -1)
           	{
-          		$scope.preloader = true;
           		html2canvas([$(".book-preview")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
-                          	  $scope.preloader = false;
                           	  $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_image'] = canvas.toDataURL('image/png');
 	                          $scope.active_page = id;
 					          $scope.active_sub_page = -1;
@@ -1115,11 +1037,9 @@ buzztm.directive('ngEnterPos', function() {
           	}
           	else if($scope.active_page != -1)
           	{
-          		$scope.preloader = true;
           		html2canvas([$(".book-preview")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
-                          	  $scope.preloader = false;
                           	  $scope.page[$scope.active_page]['template_image'] = canvas.toDataURL('image/png');
 	                          $scope.active_page = id;
 					          $scope.active_sub_page = -1;
@@ -1157,11 +1077,9 @@ buzztm.directive('ngEnterPos', function() {
           
           if($scope.active_sub_page == -1)
           	{
-          		$scope.preloader = true;
           		html2canvas([$(".book-preview")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
-                          	  $scope.preloader = false;
                           	  $scope.page[$scope.active_page]['template_image'] = canvas.toDataURL('image/png');
 	                          $scope.active_sub_page = id;
 						      $scope.selectcategory = $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['category'] === undefined ? '' : $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['category'];
@@ -1178,11 +1096,9 @@ buzztm.directive('ngEnterPos', function() {
           	}
             else if($scope.active_sub_page != -1)
           	{
-          		$scope.preloader = true;
           		html2canvas([$(".book-preview")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
-                          	  $scope.preloader = false;
                           	  $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_image'] = canvas.toDataURL('image/png');
 	                          $scope.active_sub_page = id;
 						      $scope.selectcategory = $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['category'] === undefined ? '' : $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['category'];
@@ -1256,8 +1172,6 @@ buzztm.directive('ngEnterPos', function() {
 
         $scope.save = function(st)
         {
-        	$scope.preloader = true;
-
         	html2canvas([$(".book-preview")[0]], {
                     onrendered: function (canvas) {
 			        	
@@ -1281,7 +1195,6 @@ buzztm.directive('ngEnterPos', function() {
 			                {
 			                  $(".dashboard_section .message").remove();
 			                  $(".dashboard_section").prepend('<div onclick="this.classList.add(\'hidden\')" class="message error">Error While Creating Book. Try Again!!.</div>');
-			                  $scope.preloader = false;
 			                }
 			              });
 			          }
@@ -1305,8 +1218,6 @@ buzztm.directive('ngEnterPos', function() {
 
 			//$scope.page[$scope.active_page].sub_products.push({name: 'Sub Page', template: $scope.page[$scope.active_page]['template'], template_attributes: $scope.page[$scope.active_page]['template_attributes']});
 			$scope.page[$scope.active_page].sub_products.push({name: 'Sub Page', template: 0, template_attributes: []});
-
-			$scope.linklist = $scope.list_page();
 		};
 
 		$scope.remove_page_template = function(ind){
@@ -1419,38 +1330,27 @@ buzztm.directive('ngEnterPos', function() {
 		};
 
 		$scope.change_font_size = function(){
-			$scope.track_first_changes('text', $scope.data['active_text']);
-
 			if($scope.active_sub_page == -1)
 				$scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['font_size'] = $scope.font_size+'px';
 			else
 				$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['text'][$scope.data['active_text']]['font_size'] = $scope.font_size+'px';
-
-			$scope.track_changes();
 		};
 
 		$scope.change_bold = function($e){
 			$e.preventDefault();
-			$scope.track_first_changes('text', $scope.data['active_text']);
-
+			console.log();
 			if($scope.active_sub_page == -1)
 				$scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['bold'] = $scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['bold'] ? 0 : 1;
 			else
 				$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['text'][$scope.data['active_text']]['bold'] = $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['text'][$scope.data['active_text']]['bold'] ? 0 : 1;
-
-			$scope.track_changes();
 		};
 
 		$scope.change_text_position = function($e, pos){
 			$e.preventDefault();
-			$scope.track_first_changes('text', $scope.data['active_text']);
-
 			if($scope.active_sub_page == -1)
 				$scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['text_align'] = pos;
 			else
 				$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['text'][$scope.data['active_text']]['text_align'] = pos;
-
-			$scope.track_changes();
 		};
 
 		$scope.create_new_template = function(){
@@ -1533,203 +1433,6 @@ buzztm.directive('ngEnterPos', function() {
 		          then(function(res){
 		            $scope.image_library = res['data'];
 		          });
-	    };
-
-	    $scope.list_page = function(){
-
-	    	arr = [];
-	    	angular.forEach($scope.page, function(value, key) {
-			  arr.push({'id': (key+1)+'a', 'name': value.name, pos_x: key});
-			  if(value.page == 4)
-			  {
-			  	sub_page_length += value.sub_products.length;
-			  	startchar = 'b';
-			  	angular.forEach(value.sub_products, function(v1, k1) {
-			  		arr.push({'id': (key+1)+startchar, 'name': v1.name, pos_x: key, pos_y: k1});
-			  		startchar = $scope.nextletter(startchar);
-			  	});
-			  }
-			});
-
-			return arr;
-	    };
-
-	    $scope.attribute_changes = [];
-	    localStorage.removeItem("attrchange");
-	    $scope.current_position = 0;
-	    $scope.max_position = 0;
-
-	    $scope.track_first_changes = function(ttype, ind){
-	    	
-	    	pars = localStorage.getItem("attrchange");
-	        pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
-
-	        if($scope.active_sub_page == -1)
-	        {
-	        	if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null || pars[$scope.active_page][ttype] === undefined || pars[$scope.active_page][ttype][ind] === undefined)
-	        	{
-	        		if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
-		            	pars[$scope.active_page] = {};
-		            if(pars[$scope.active_page][ttype] === undefined || pars[$scope.active_page][ttype] === null)
-		            	pars[$scope.active_page][ttype] =  [];
-		            if(pars[$scope.active_page][ttype][ind] === undefined || pars[$scope.active_page][ttype][ind] === null)
-		            	pars[$scope.active_page][ttype][ind] =  [];
-		            attrch = pars[$scope.active_page][ttype][ind].push($scope.page[$scope.active_page]['template_attributes'][ttype][ind])
-		            attrch = JSON.stringify(pars);
-		            localStorage.setItem("attrchange", attrch);
-
-		            $scope.current_position = pars[$scope.active_page][ttype][ind].length - 1;
-		            $scope.max_position = pars[$scope.active_page][ttype][ind].length - 1;
-	        	}
-				else
-					return;
-	        }
-	        else
-	        {
-	        	if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null || pars[$scope.active_page]['sub_products'] === undefined || pars[$scope.active_page]['sub_products'] === null || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === null || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === null || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === null)
-	        	{
-	        		if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
-		            	pars[$scope.active_page] = {};
-		            if(pars[$scope.active_page]['sub_products'] === undefined || pars[$scope.active_page] === null)
-		            	pars[$scope.active_page]['sub_products'] = [];
-		            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === null)
-		            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page] = {};
-		            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === null)
-		            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] =  [];
-		            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === null)
-		            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] =  [];
-		            attrch = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].push($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind])
-		            attrch = JSON.stringify(pars);
-		            localStorage.setItem("attrchange", attrch);
-
-		            $scope.current_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].length - 1;
-		            $scope.max_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].length - 1;
-	        	}
-				else
-					return;
-	        }
-	    };
-
-	    $scope.track_changes = function(){
-	    	if($scope.data['active_video'] != -1)
-			{
-				ind = $scope.data['active_video'];
-				ttype = 'video';
-			}
-			else if($scope.data['active_image'] != -1)
-			{
-				ind = $scope.data['active_image'];
-				ttype = 'image';
-			}
-			else if($scope.data['active_text'] != -1)
-			{
-				ind = $scope.data['active_text'];
-				ttype = 'text';
-			}
-
-			if($scope.active_sub_page == -1)
-	        {
-	            pars = localStorage.getItem("attrchange");
-	            pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
-	            if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
-	            	pars[$scope.active_page] = {};
-	            if(pars[$scope.active_page][ttype] === undefined || pars[$scope.active_page][ttype] === null)
-	            	pars[$scope.active_page][ttype] =  [];
-	            if(pars[$scope.active_page][ttype][ind] === undefined || pars[$scope.active_page][ttype][ind] === null)
-	            	pars[$scope.active_page][ttype][ind] =  [];
-	            attrch = pars[$scope.active_page][ttype][ind].push($scope.page[$scope.active_page]['template_attributes'][ttype][ind])
-	            attrch = JSON.stringify(pars);
-	            localStorage.setItem("attrchange", attrch);
-
-	            $scope.current_position = pars[$scope.active_page][ttype][ind].length - 1;
-	            $scope.max_position = pars[$scope.active_page][ttype][ind].length - 1;
-	        }
-	        else
-	        {
-	            pars = localStorage.getItem("attrchange");
-	            pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
-	            if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
-	            	pars[$scope.active_page] = {};
-	            if(pars[$scope.active_page]['sub_products'] === undefined || pars[$scope.active_page] === null)
-	            	pars[$scope.active_page]['sub_products'] = [];
-	            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === null)
-	            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page] = {};
-	            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === null)
-	            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] =  [];
-	            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === null)
-	            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] =  [];
-	            attrch = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].push($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind])
-	            attrch = JSON.stringify(pars);
-	            localStorage.setItem("attrchange", attrch);
-
-	            $scope.current_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].length - 1;
-	            $scope.max_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].length - 1;
-	            console.log(pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind]);
-	        }
-	    };
-
-	    $scope.undo = function(e){
-	    	e.preventDefault();
-
-	    	if($scope.data['active_video'] != -1)
-			{
-				ind = $scope.data['active_video'];
-				ttype = 'video';
-			}
-			else if($scope.data['active_image'] != -1)
-			{
-				ind = $scope.data['active_image'];
-				ttype = 'image';
-			}
-			else if($scope.data['active_text'] != -1)
-			{
-				ind = $scope.data['active_text'];
-				ttype = 'text';
-			}
-
-	    	$scope.current_position -= 1;
-	    	pars = localStorage.getItem("attrchange");
-	        pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
-	    	if($scope.active_sub_page == -1)
-	        {
-	    		$scope.page[$scope.active_page]['template_attributes'][ttype][ind] = pars[$scope.active_page][ttype][ind][$scope.current_position];
-	    	}
-	    	else
-	    	{
-	    		$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind] = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind][$scope.current_position];
-	    	}
-	    };
-
-	    $scope.redo = function(e){
-	    	e.preventDefault();
-
-	    	if($scope.data['active_video'] != -1)
-			{
-				ind = $scope.data['active_video'];
-				ttype = 'video';
-			}
-			else if($scope.data['active_image'] != -1)
-			{
-				ind = $scope.data['active_image'];
-				ttype = 'image';
-			}
-			else if($scope.data['active_text'] != -1)
-			{
-				ind = $scope.data['active_text'];
-				ttype = 'text';
-			}
-
-	    	$scope.current_position += 1;
-	    	pars = localStorage.getItem("attrchange");
-	        pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
-	    	if($scope.active_sub_page == -1)
-	        {
-	    		$scope.page[$scope.active_page]['template_attributes'][ttype][ind] = pars[$scope.active_page][ttype][ind][$scope.current_position];
-	    	}
-	    	else
-	    	{
-	    		$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind] = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind][$scope.current_position];
-	    	}
 	    };
     }
   ]);

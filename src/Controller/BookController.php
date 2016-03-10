@@ -7,6 +7,7 @@ use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Utility\Inflector;
+use Cake\Mailer\Email;
 
 class BookController extends AppController
 {
@@ -87,5 +88,16 @@ class BookController extends AppController
             $tmp['template_attributes'] = $attrlist;
 
             return $tmp;
+    }
+
+    public function sendLink()
+    {
+        $this->autoRender = false;
+
+        $email = new Email('default');
+        $email->from(['me@example.com' => 'My Site'])
+            ->to($_POST['mail'])
+            ->subject('Mybuzztm nook link')
+            ->send('You/Your friend shared a Buzztm book link . /n Book: '.$_POST['book_name'].' /n '.$_POST['link']);
     }
 }
