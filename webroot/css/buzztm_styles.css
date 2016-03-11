@@ -124,6 +124,7 @@ ul{
     color: #fff;
     display: inline-block;
     width: 100%;
+    letter-spacing: 2px;
 }
 .list_menu_tag ul li a .icon_menu {
     display: inline-block;
@@ -133,7 +134,7 @@ ul{
     position: relative;
     top: 6px;
 }
-.list_menu_tag ul li a:hover {
+.list_menu_tag ul li a:hover,.list_menu_tag ul li.active_menu a {
     background: #000;
     border-right: 5px solid #E6A200;
 	text-decoration:none;
@@ -176,18 +177,21 @@ ul{
 	border-bottom: 4px solid #FF9F00;
 }
 .header_creation{
-	padding:40px 0;
+	padding:5px 0;
 	text-align:center;
 }
 .header_creation .btn_creation{
 	background:#204e79;
 	color:#a5ff00;
+    position: absolute;
+    right: 25px;
+    top: 11px;
 }
 .rightsection_title {
     width: 100%;
     padding: 14px 10px 15px;
     text-align: center;
-    background: url(../images/menu.png) repeat-x;
+    /*background: url(../images/menu.png) repeat-x;*/
     color: #484848;
     font-size: 18px;
     font-weight: 700;
@@ -197,16 +201,17 @@ ul{
     padding: 20px;
     display: inline-block;
     width: 100%;
+    background: #fff;
+    box-shadow: 0 0 15px #b7b7b7;
 }
 .app_templates ul{
 	padding:0;
     transition:all 1s ease 0s;
-    max-height:120px;
     overflow: hidden;
 }
 .app_templates li{
 	float:left;
-	margin:10px;
+	margin:2px;
 }
 .app_templates li .btn_show {
     background: #f9f9f9;
@@ -244,13 +249,13 @@ ul{
     max-width: 110px;
     padding: 5px 5px;
     text-decoration: none;
+    overflow: hidden;
 }
 .theme_preview .theme_list:hover{
     border-color: #df8000;
 }
 .theme_preview .theme_list .theme_label {
     background: #656565;
-    border-radius: 0 0 10px 10px;
     bottom: 0;
     color: #fff;
     font-size: 13px;
@@ -273,18 +278,31 @@ ul{
 }
 .hover_selecton .btn{margin: 8px 0; padding: 2px 5px;}
 .hover_selecton .btn_use{
-	    width: 90px;
+	    width: 100px;
     background: #00bb4b;
     color: #fff;
     text-align: center;
 }
 .hover_selecton .btn_preview{
-	    width: 90px;
+	    width: 100px;
     background: #006abb;
     color: #fff;
     text-align: center;
 }
-.theme_preview .theme_list img{background: #fff; position: absolute; left: 0px; top: 0px; border-radius: 9px; width: 95%; height: 95%; right: 0px; bottom: 0px; margin: auto;}
+.hover_selecton .btn_publish{
+    width: 100px;
+    background: #d48a1f;
+    color: #fff;
+    text-align: center;
+}
+.hover_selecton .btn_delete{
+    width: 100px;
+    background: #ba3933;
+    color: #fff;
+    text-align: center;
+}
+.theme_preview .theme_list img{background: #fff; position: absolute; left: 0px; top: 0px; width: 95%; height: 95%; right: 0px; bottom: 0px; margin: auto;-moz-transform: scale(1.7);
+  -webkit-transform: scale(1.7);  transform: scale(1.7);}
 @media (max-width:430px){
 .theme_preview .theme_list{
 		min-width:90% !important;
@@ -318,7 +336,7 @@ ul{
     border-radius: 10px;
     display: block;
     float: left;
-    margin: 10px;
+    margin: 20px;
     min-height: 200px;
     min-width: 85%;
     position: relative;
@@ -345,7 +363,8 @@ ul{
     border-radius: 5px;
     text-transform: uppercase;
     font-size: 16px;
-	    display: inline-block;
+    display: inline-block;
+    letter-spacing: 2px;
 }
 .create_plus{
 	color:#669c00;
@@ -367,6 +386,7 @@ span.theme_label_creation {
 .total_view {
 	display:inline-block;
 	width:100%;
+    margin: 10px 0;
 }
 .total_view ul{
 	padding:0;
@@ -375,7 +395,7 @@ span.theme_label_creation {
 	width:48%;
 	float:left;
 	margin:1%;
-	height:80px;
+	height:150px;
     border-radius: 15px;
 }
 .total_view ul li.view_all{
@@ -573,7 +593,7 @@ span.theme_label_creation {
     border-radius: 5px;
 }
 #loginform .submit_btn{
-    background: none;
+   /* background: none;*/
     border: none;
 }
 input#rememberme {
@@ -654,6 +674,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', end
 .bg-color  h3{color:#FEC000; font-weight:600; text-transform:uppercase;}
 .heading h4{ color:#484848 !important; font-weight:300 !important; margin-bottom:10px;}
 .new_book_template .app_templates{position: relative;}
-.new_book_template .app_templates .show_hide_category{position: absolute; cursor: pointer; width: 30px; height: 30px; right: 20px; bottom: 20px;}
-.new_book_template .app_templates .show_hide_category i{font-size: 30px; color: #E9A400}
+.new_book_template .app_templates .show_hide_category{cursor: pointer; font-size: 13px; position: absolute; right: 25px; bottom: 5px;}
+.new_book_template .app_templates .show_hide_category i{font-size: 15px; vertical-align: -2px;}
 .new_book_template .app_templates ul.auto_height{max-height: none;}

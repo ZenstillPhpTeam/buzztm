@@ -1,6 +1,9 @@
 <div class="right_section new_book_template">
-  <div class="header_creation"> <a href="<?= $this->Url->build(['controller' =>'admin', 'action' => 'new-book']); ?>" class="btn btn_creation">CREATE NEW APP TEMPLATE</a> </div>
-          <h2 class="rightsection_title">APP TEMPLATES</h2>
+  <div class="header_creation"> 
+    <a href="<?= $this->Url->build(['controller' =>'admin', 'action' => 'new-book']); ?>" class="btn btn_creation">CREATE NEW APP TEMPLATE</a> 
+    <h2 class="rightsection_title">APP TEMPLATES</h2>
+  </div>
+          
           <div class="app_templates">
             <ul>
               <li><a href="#" class="btn btn_show show_all">Show All</a></li>
@@ -9,7 +12,7 @@
               <?php }?>
             </ul>
             <div class="show_hide_category">
-              <i class="fa fa-arrow-circle-o-down"></i>
+              <span><abbr>MORE CATEGORIES</abbr><abbr style="display:none;">LESS CATEGORIES</abbr> <i class="fa fa-angle-double-down"></i></span>
             </div>
           </div>
           <div class="theme_preview">
@@ -57,10 +60,10 @@
     click = 1;
     height = $(".new_book_template .app_templates ul").height();
     
-    if(height <= 120)
+    if(height <= 90)
       $(".show_hide_category").hide();
     else
-      $(".new_book_template .app_templates ul").height(120);
+      $(".new_book_template .app_templates ul").height(90);
     
     $(".show_hide_category").click(function(){
       
@@ -71,10 +74,10 @@
       }
       else
       {
-        $(".new_book_template .app_templates ul").height(120);
+        $(".new_book_template .app_templates ul").height(90);
       }
-
-      $(".new_book_template .app_templates .show_hide_category i").toggleClass('fa-arrow-circle-o-down').toggleClass('fa-arrow-circle-o-up');
+      $(".new_book_template .app_templates .show_hide_category abbr").toggle();
+      $(".new_book_template .app_templates .show_hide_category i").toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
 
       click++;
     });

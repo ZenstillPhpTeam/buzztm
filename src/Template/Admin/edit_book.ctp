@@ -19,7 +19,8 @@
 
     <body class="book_page" ng-app="buzztm" ng-controller="AddController">
 	
-    <div ng-init="preloader = true;" class="preloader" ng-show="preloader"></div>
+    <div ng-init="preloader = 1;" class="preloader" ng-show="preloader == 1"></div>
+    <div class="preloader preloader_light" ng-show="preloader == 2"></div>
     <div class="preloader_image" ng-show="preloader">
     	<?= $this->Html->image('preloader.gif');?>
     </div>
@@ -1093,7 +1094,7 @@ buzztm.directive('ngEnterPos', function() {
           
           	if($scope.active_page != -1 && $scope.active_sub_page != -1)
           	{
-          		$scope.preloader = true;
+          		$scope.preloader = 2;
           		html2canvas([$(".book-preview")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
@@ -1115,7 +1116,7 @@ buzztm.directive('ngEnterPos', function() {
           	}
           	else if($scope.active_page != -1)
           	{
-          		$scope.preloader = true;
+          		$scope.preloader = 2;
           		html2canvas([$(".book-preview")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
@@ -1157,7 +1158,7 @@ buzztm.directive('ngEnterPos', function() {
           
           if($scope.active_sub_page == -1)
           	{
-          		$scope.preloader = true;
+          		$scope.preloader = 2;
           		html2canvas([$(".book-preview")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
@@ -1178,7 +1179,7 @@ buzztm.directive('ngEnterPos', function() {
           	}
             else if($scope.active_sub_page != -1)
           	{
-          		$scope.preloader = true;
+          		$scope.preloader = 2;
           		html2canvas([$(".book-preview")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
@@ -1256,7 +1257,7 @@ buzztm.directive('ngEnterPos', function() {
 
         $scope.save = function(st)
         {
-        	$scope.preloader = true;
+        	$scope.preloader = 1;
 
         	html2canvas([$(".book-preview")[0]], {
                     onrendered: function (canvas) {

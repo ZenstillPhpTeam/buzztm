@@ -8,7 +8,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 </head>
 
-<body>
+<body class="<?= $this->request->params['action'];?>">
 <?= $this->element('Admin/buzztm_header');?>
 <section>
   <div class="container">

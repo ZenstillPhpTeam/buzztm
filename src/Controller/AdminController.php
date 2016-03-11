@@ -29,7 +29,9 @@ class AdminController extends UsersController
 
         $books = $this->Books->find('all', ['order' => ['Books.id' => 'desc']])->all();
 
-        $this->set(compact('books'));
+        $books2 = $this->Books->find('all', ['order' => ['Books.id' => 'asc']])->all();
+
+        $this->set(compact('books', 'books2'));
 	}
 
 	public function company()

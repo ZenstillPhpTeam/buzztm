@@ -23,6 +23,7 @@
         padding: 0;
         width: <?= ($is_mobile) ? 100 : 50; ?>%;
     }
+    iframe{border: none;}
     .menulist i, .home_icon i{font-size: 25px; cursor: pointer;color:#fff;}
     .swiper-container {
         width: 100%;
@@ -57,7 +58,7 @@
 
     .swiper-pagination.swiper-pagination-h {
         bottom: 0 !important;
-        height: 30px;
+        height: 20px;
         left: 0;
         width: 100%;
         background: #000;
@@ -67,10 +68,10 @@
         right:0;
         border-top-left-radius:10px;
         border-bottom-left-radius:10px;
-        padding: 8px;
+        padding: 8px 4px;
     }
     .swiper-container-horizontal > .swiper-pagination .swiper-pagination-bullet {
-        margin: -10px 5px;
+        margin: -6px 5px;
     }
     span.swiper-pagination-bullet.swiper-pagination-bullet-active {
         background: #fdb403 none repeat scroll 0 0 !important;
@@ -97,14 +98,16 @@
         margin:10px 0;
     }
     .swiper-wrapper{ background:#fff;}
-    .contact{padding:22px 12px;}
-
-    .fa-map-marker{ font-size:40px; color:#fff; padding-right:40px;}
-    .fa-phone{ font-size:40px; color:#fff; padding-right:20px;}
+    .contact_in{padding:<?= $is_mobile ? '20px' : '25px'; ?> 7px;}
+    .contact_out .contact_markers, .contact_out .redo_link{padding:<?= $is_mobile ? '18px' : '22px'; ?> 7px; display: inline-block;}
+    .contact_out .contact_markers{background: #175800;}
+    .fa-map-marker{ font-size:40px; color:#fff; padding:0 20px;}
+    .fa-phone{ font-size:40px; color:#fff; padding:0 20px;}
     .fa-caret-left, .fa-caret-right{  color: #fff;
     display: inline-block;
     font-size: 30px;
     margin-top: 5px;}
+    .fa-caret-left{vertical-align: 2px;}
     .home_icon{cursor: pointer;}
     .leftsocial {
         box-shadow: 0 0 15px #000;
@@ -128,6 +131,7 @@
     }
     .contact_floating_icon .contact_out{display: none;}
     .contact_floating_icon.out .contact_out{display: block;}
+    .contact_floating_icon.out .contact_out span.contact_markers{}
     .contact_floating_icon.out .contact_in{display: none;}
     ul.head_bar_icon {width: 100%; list-style: none;}
     .navbar_icon img{width: 35px; height: auto;}
@@ -138,19 +142,23 @@
     .mail_form{display: none;}
     </style>
 </head>
-<body>
+<body class="<?= $is_mobile ? 'mobile_view' : 'desktop_view'; ?> ">
     <!-- Swiper -->
-    <span class="menulist" style="position:absolute; top:4.00%;left:5%;z-index:10;">
+    <span class="menulist" style="position:absolute; top:<?= $is_mobile ? '2%' : '4%'; ?>;left:5%;z-index:10;">
         <i class="fa fa-bars"></i>
     </span>
-    <span class="home_icon" style="position:absolute; top:4.00%;left:90%;z-index:10;display:none;">
+    <span class="home_icon" style="position:absolute; top:<?= $is_mobile ? '2%' : '4%'; ?>;left:90%;z-index:10;">
         <i class="fa fa-th-large"></i>
     </span>
-    <span class="contact_floating_icon" style="position:absolute; top:72.00%;left:0%;background:rgb(36,138,0); border-radius: 0 3px 3px 0; z-index: 10">
+    <span class="contact_floating_icon" style="position:absolute; top:72.00%;left:0%;background:rgb(36,138,0); border-radius: 0 10px 10px 0; z-index: 10">
         <div class="contact contact_out">
-            <span><a href=""><i class="fa fa-map-marker"></i></a></span>
-            <span><a href=""><i class="fa fa-phone"></i> </a></span>
-            <span><a href="javascript:void(0);"><i class="fa fa-caret-left"></i></a></span>
+            <span class="contact_markers">
+                <span><a href=""><i class="fa fa-map-marker"></i></a></span>
+                <?php if($is_mobile){?>
+                <span><a href=""><i class="fa fa-phone"></i> </a></span>
+                <?php }?>
+            </span>
+            <span class="redo_link"><a href="javascript:void(0);"><i class="fa fa-caret-left"></i></a></span>
         </div>
         <div class="contact contact_in">
             <span><a href="javascript:void(0);"><i class="fa fa-caret-right"></i></a></span>
@@ -203,7 +211,7 @@
     <div class="swiper-container swiper-container-h">
         <div class="swiper-wrapper">
             <?php foreach($page as $k=>$p){?>
-            <div class="swiper-slide <?= $p['page'] == 5 ? 'social_wall' : ''; ?>">
+            <div class="swiper-slide page_<?= $p['page']; ?>">
                 <?php if(count($p['sub_products'])){?>
                 <div class="swiper-container swiper-container-v">
                     <div class="swiper-wrapper">
@@ -219,7 +227,7 @@
                                     </span>
                                 <?php } foreach($p['template_attributes']['video'] as $t){?>
                                     <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
-                                        <iframe width="100%"  height="100%" src="<?= $t['value']; ?>" ></iframe>
+                                        <iframe width="100%"  height="100%" src="<?= $t['value']; ?>?modestbranding=1&autohide=1&showinfo=0&controls=0" ></iframe>
                                     </span>
                                 <?php }?>
                             </div>
@@ -237,7 +245,7 @@
                                     </span>
                                 <?php }foreach($p1['template_attributes']['video'] as $t){?>
                                     <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
-                                        <iframe width="100%"  height="100%" src="<?= $t['value']; ?>" ></iframe>
+                                        <iframe width="100%"  height="100%" src="<?= $t['value']; ?>?modestbranding=1&autohide=1&showinfo=0&controls=0" ></iframe>
                                     </span>
                                 <?php }?>
                             </div>
@@ -258,7 +266,7 @@
                         </span>
                     <?php } foreach($p['template_attributes']['video'] as $t){?>
                         <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>">
-                            <iframe width="100%"  height="100%" src="<?= $t['value']; ?>" ></iframe>
+                            <iframe width="100%"  height="100%" src="<?= $t['value']; ?>?modestbranding=1&autohide=1&showinfo=0&controls=0" ></iframe>
                         </span>
                     <?php }?>
                 </div>
@@ -296,7 +304,7 @@
             keyboardControl: true,
             onSlideChangeEnd: function (swiper) {
                 console.log(swiper.activeIndex);
-                if(swiper.activeIndex)
+                if(swiper.activeIndex != 2)
                     $(".home_icon").show();
                 else
                     $(".home_icon").hide();
@@ -313,7 +321,7 @@
         });
 
         $(".home_icon").click(function(){
-            swiperH.slideTo(0, 1000, true);
+            swiperH.slideTo($(".page_3").index(), 1000, true);
         });
 
         $(".menulist").click(function(){
@@ -349,7 +357,7 @@
         });
         $(".social_wall_link").click(function(e){
             e.preventDefault();
-            swiperH.slideTo($(".social_wall").index(), 1000, true);
+            swiperH.slideTo($(".page_5").index(), 1000, true);
         });
     });
     </script>

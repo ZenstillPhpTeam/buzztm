@@ -20,7 +20,7 @@
 		  			</div>
 		  		</div>
 		  		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 padd-lft">
-		  			<div class="btn1 btn-default"><button class="submit_btn"><i class="fa fa-angle-double-right"></i></button></div>
+		  			<div class=""><button class="submit_btn btn1 btn-default"><i class="fa fa-angle-double-right"></i></button></div>
 		  		</div>
 		  		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-8 text-left mar-bottm mrg-top1">
 		  			<span class="forget-password"><a href="">Forget password?</a></span>
