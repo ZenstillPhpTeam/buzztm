@@ -17,7 +17,7 @@
     }
     body {
         font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-        font-size: 14px;
+        font-size: 100%;
         color:#000;
         margin: 0 auto;
         padding: 0;
@@ -98,8 +98,9 @@
         margin:10px 0;
     }
     .swiper-wrapper{ background:#fff;}
-    .contact_in{padding:<?= $is_mobile ? '20px' : '25px'; ?> 7px;}
+    .contact_in{padding:<?= $is_mobile ? '20px' : '25px'; ?> 7px; cursor: pointer;}
     .contact_out .contact_markers, .contact_out .redo_link{padding:<?= $is_mobile ? '18px' : '22px'; ?> 7px; display: inline-block;}
+    .contact_out .redo_link{cursor: pointer;}
     .contact_out .contact_markers{background: #175800;}
     .fa-map-marker{ font-size:40px; color:#fff; padding:0 20px;}
     .fa-phone{ font-size:40px; color:#fff; padding:0 20px;}
@@ -140,6 +141,8 @@
     ul.head_bar_icon ul li{display: inline-block;}
     ul.head_bar_icon ul.show_share_links{left:100%; opacity: 1;z-index: 9999;}
     .mail_form{display: none;}
+    .cp{cursor: pointer;}
+    .text2image img{max-width: 100%;}
     </style>
 </head>
 <body class="<?= $is_mobile ? 'mobile_view' : 'desktop_view'; ?> ">
@@ -166,7 +169,7 @@
     </span>
     <div style="position: absolute; top: 0px; z-index: 9999; transition-duration: 0.5s; background-color: rgb(255, 255, 255);" class="social_icon leftsocial">
       <div style="width:75px;" class="navbar_icon">
-        <button style="border: medium none; padding: 3px 20px; cursor: pointer; background-color: transparent; display: inline-block;" class="navbar_btn icon-bar btn_close" type="button"><img style="width: 35px;height: auto;" src="http://mybuzztm.com/wp-content/uploads/2015/12/btn_close1.png"></button>
+        <button style="border: medium none; padding: 3px 20px; cursor: pointer; background-color: transparent; display: inline-block; margin-top:15px;" class="navbar_btn icon-bar btn_close" type="button"><img style="width: 35px;height: auto;" src="http://mybuzztm.com/wp-content/uploads/2015/12/btn_close1.png"></button>
         <ul style="padding: 0px; text-align: center; position: absolute; top: 48px; display: block;" class="nav head_bar_icon">
           <li><a style="padding: 6px 0px;display:inline-block;" href="?id=mail"><?= $this->Html->image('btn_app.png');?>
            <span style="float: left;width: 100%;color: #222;margin: -5px 0 5px;text-align: center;">App</span>
@@ -211,23 +214,27 @@
     <div class="swiper-container swiper-container-h">
         <div class="swiper-wrapper">
             <?php foreach($page as $k=>$p){?>
-            <div class="swiper-slide page_<?= $p['page']; ?>">
+            <div class="swiper-slide page_<?= $p['page']; ?>" data-index="<?= $k;?>">
                 <?php if(count($p['sub_products'])){?>
                 <div class="swiper-container swiper-container-v">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
                             <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p['template_attributes']['background']['value']; ?>">
                                 <?php foreach($p['template_attributes']['text'] as $t){?>
-                                    <span style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= $t['font_size']; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;">
-                                        <abbr><?= $t['value']; ?></abbr>
+                                    <span class="text2image <?= ($t['link'] || $t['external_link']) ? 'cp' : ''; ?>" data-link="<?= $t['link']; ?>" data-external="<?= $t['external_link']; ?>" style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= ((int)$t['font_size'] * 6.25).'%'; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;width:<?= $t['width']; ?>;">
+                                        <img src="<?= $this->Url->build('/admin/text2image/');?>?text=<?= urlencode($t['value']); ?>&width=<?= $t['width']; ?>&color=<?= $t['color']; ?>&bold=<?= $t['bold']; ?>&size=<?= $t['font_size']; ?>&align=<?= $t['text_align']; ?>&lheight=<?= $t['line_height']; ?>" >
                                     </span>
                                 <?php } foreach($p['template_attributes']['image'] as $t){?>
-                                    <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>">
+                                    <span class="<?= ($t['link'] || $t['external_link']) ? 'cp' : ''; ?>" data-link="<?= $t['link']; ?>" data-external="<?= $t['external_link']; ?>" style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>">
                                         <img width="100%"  height="100%" src="<?= $t['value']; ?>" >
                                     </span>
                                 <?php } foreach($p['template_attributes']['video'] as $t){?>
                                     <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
                                         <iframe width="100%"  height="100%" src="<?= $t['value']; ?>?modestbranding=1&autohide=1&showinfo=0&controls=0" ></iframe>
+                                    </span>
+                                <?php } foreach($p['template_attributes']['map'] as $t){?>
+                                    <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
+                                        <iframe width="100%"  height="100%" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAj5h09edjQhvZCnTutWyo18UQpJvcR75U&q=<?= $t['value']; ?>" ></iframe>
                                     </span>
                                 <?php }?>
                             </div>
@@ -236,16 +243,20 @@
                         <div class="swiper-slide">
                             <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p1['template_attributes']['background']['value']; ?>">
                                 <?php foreach($p1['template_attributes']['text'] as $t){?>
-                                    <span style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= $t['font_size']; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;">
-                                        <abbr><?= $t['value']; ?></abbr>
+                                    <span class="text2image <?= ($t['link'] || $t['external_link']) ? 'cp' : ''; ?>" data-link="<?= $t['link']; ?>" data-external="<?= $t['external_link']; ?>" style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= ((int)$t['font_size'] * 6.25).'%'; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;width:<?= $t['width']; ?>;">
+                                        <img src="<?= $this->Url->build('/admin/text2image/');?>?text=<?= urlencode($t['value']); ?>&width=<?= $t['width']; ?>&color=<?= $t['color']; ?>&bold=<?= $t['bold']; ?>&size=<?= $t['font_size']; ?>&align=<?= $t['text_align']; ?>&lheight=<?= $t['line_height']; ?>" >
                                     </span>
                                 <?php } foreach($p1['template_attributes']['image'] as $t){?>
-                                    <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
+                                    <span class="<?= ($t['link'] || $t['external_link']) ? 'cp' : ''; ?>" data-link="<?= $t['link']; ?>" data-external="<?= $t['external_link']; ?>" style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
                                         <img width="100%" height="100%" src="<?= $t['value']; ?>" >
                                     </span>
                                 <?php }foreach($p1['template_attributes']['video'] as $t){?>
                                     <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
                                         <iframe width="100%"  height="100%" src="<?= $t['value']; ?>?modestbranding=1&autohide=1&showinfo=0&controls=0" ></iframe>
+                                    </span>
+                                <?php } foreach($p1['template_attributes']['map'] as $t){?>
+                                    <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height'];?>;">
+                                        <iframe width="100%"  height="100%" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAj5h09edjQhvZCnTutWyo18UQpJvcR75U&q=<?= $t['value']; ?>" ></iframe>
                                     </span>
                                 <?php }?>
                             </div>
@@ -257,18 +268,22 @@
                 <?php }else{?>
                 <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p['template_attributes']['background']['value']; ?>">
                     <?php foreach($p['template_attributes']['text'] as $t){?>
-                        <span style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= $t['font_size']; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;">
-                            <abbr><?= $t['value']; ?></abbr>
+                        <span class="text2image <?= ($t['link'] || $t['external_link']) ? 'cp' : ''; ?>" data-link="<?= $t['link']; ?>" data-external="<?= $t['external_link']; ?>" style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= $t['font_size'] ? ((int)$t['font_size'] * 6.25).'%' : '87.5%'; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;width:<?= $t['width']; ?>;">
+                            <img src="<?= $this->Url->build('/admin/text2image/');?>?text=<?= urlencode($t['value']); ?>&width=<?= $t['width']; ?>&color=<?= $t['color']; ?>&bold=<?= $t['bold']; ?>&size=<?= $t['font_size']; ?>&align=<?= $t['text_align']; ?>&lheight=<?= $t['line_height']; ?>" >
                         </span>
                     <?php } foreach($p['template_attributes']['image'] as $t){?>
-                        <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>;">
+                        <span class="<?= ($t['link'] || $t['external_link']) ? 'cp' : ''; ?>" data-link="<?= $t['link']; ?>" data-external="<?= $t['external_link']; ?>" style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>;">
                             <img width="100%" height="100%" src="<?= $t['value']; ?>" >
                         </span>
                     <?php } foreach($p['template_attributes']['video'] as $t){?>
                         <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>">
                             <iframe width="100%"  height="100%" src="<?= $t['value']; ?>?modestbranding=1&autohide=1&showinfo=0&controls=0" ></iframe>
                         </span>
-                    <?php }?>
+                    <?php } foreach($p['template_attributes']['map'] as $t){?>
+                        <span style="position:absolute; top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;width:<?= $t['width']; ?>;height:<?= $t['height']; ?>">
+                            <iframe width="100%"  height="100%" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAj5h09edjQhvZCnTutWyo18UQpJvcR75U&q=<?= $t['value']; ?>" ></iframe>
+                        </span>
+                    <?php } ?>
                 </div>
                 <?php }?>
             </div>
@@ -290,6 +305,9 @@
             reswidth = ($("body").height() * 400) / 500;
             $(".page_templates").width(reswidth);
             $("body").width(reswidth);
+            /*$(".text2image").each(function(){
+                $(this).find("img").attr("src", $(this).find("img").attr("src")+"&sw="+reswidth);
+            });*/
         <?php }else{?>
             $(".page_templates").height('100%');
             $(".page_templates").width('100%');
@@ -303,22 +321,40 @@
             prevButton: '.swiper-button-prev',
             keyboardControl: true,
             onSlideChangeEnd: function (swiper) {
-                console.log(swiper.activeIndex);
                 if(swiper.activeIndex != 2)
                     $(".home_icon").show();
                 else
                     $(".home_icon").hide();
             }
         });
-        swiperV = new Swiper('.swiper-container-v', {
-            pagination: '.swiper-pagination-v',
-            paginationClickable: true,
-            direction: 'vertical',
-            spaceBetween: 0,
-            nextButton: '.swiper-button-vnext',
-            prevButton: '.swiper-button-vprev',
-            keyboardControl: true
-        });
+        if($(".swiper-container-v").length > 1)
+        {
+            swiperV = [];
+            $(".swiper-container-v").each(function(k, v){
+                $(this).attr("data-index", k);
+                swiperV[k] = new Swiper(this, {
+                    pagination: '.swiper-pagination-v',
+                    paginationClickable: true,
+                    direction: 'vertical',
+                    spaceBetween: 0,
+                    nextButton: '.swiper-button-vnext',
+                    prevButton: '.swiper-button-vprev',
+                    keyboardControl: true
+                });
+            });
+        }
+        else
+        {
+            swiperV = new Swiper('.swiper-container-v', {
+                pagination: '.swiper-pagination-v',
+                paginationClickable: true,
+                direction: 'vertical',
+                spaceBetween: 0,
+                nextButton: '.swiper-button-vnext',
+                prevButton: '.swiper-button-vprev',
+                keyboardControl: true
+            });
+        }
 
         $(".home_icon").click(function(){
             swiperH.slideTo($(".page_3").index(), 1000, true);
@@ -331,7 +367,7 @@
             $(".social_icon").hide();
             $("ul.head_bar_icon ul").removeClass("show_share_links");
         });
-        $(".contact_floating_icon .fa-caret-right, .contact_floating_icon .fa-caret-left").click(function(){
+        $(".contact_floating_icon .contact_in, .contact_floating_icon .redo_link").click(function(){
             $(".contact_floating_icon").toggleClass("out");
         });
         $(".share_link").click(function(e){
@@ -358,6 +394,38 @@
         $(".social_wall_link").click(function(e){
             e.preventDefault();
             swiperH.slideTo($(".page_5").index(), 1000, true);
+        });
+        $(".fa-map-marker").click(function(e){
+            e.preventDefault();
+            swiperH.slideTo($(".page_6").index(), 1000, true);
+        });
+        $("span[data-link], span[data-external]").click(function(){
+            if($(this).data("external"))
+            {
+                window.open($(this).data("external"), '_blank');
+            }
+            else if($(this).data("link"))
+            {
+                links = $(this).data("link");
+                if($.isNumeric(links))
+                {
+                    swiperH.slideTo(links, 1000, true);
+                    return;
+                }
+
+                links = links.split("-");
+                swiperH.slideTo(parseInt(links[0]), 1000, true);
+                if(links.length == 2)
+                {
+                    if($(".swiper-container-v").length > 1)
+                    {
+                        iiind = $(".swiper-slide[data-index='"+links[0]+"'] .swiper-container-v").data("index");
+                        swiperV[iiind].slideTo(parseInt(links[1]) + 1, 1000, true);
+                    }
+                    else
+                        swiperV.slideTo(parseInt(links[1]) + 1, 1000, true);
+                }
+            }
         });
     });
     </script>

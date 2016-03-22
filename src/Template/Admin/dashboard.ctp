@@ -8,6 +8,12 @@ $('.carousel-sync').on('slid.bs.carousel', function(ev) {
 });
 
 </script>
+<script>
+$(document).ready(function(){
+    $("#myCarousel").carousel({interval: 300000});
+    $("#carousel-a").carousel({interval: 300000});
+});
+</script>
 <div class="theme_uplode clearfix">
           <h3 class="welcome_title">WELCOME <span>Name</span></h3>
           <div class="product_list_slider">
@@ -23,7 +29,7 @@ $('.carousel-sync').on('slid.bs.carousel', function(ev) {
                       <div class="span4" style="padding-left: 18px;"> 
                       <?php }?>
                         <div class="theme_list filter_<?= $bk->category; ?>"> 
-                          <?php if($this->Custom->getBookPreview($bk->id)){?><img src="<?= $this->Custom->getBookPreview($bk->id); ?>" class="img-responsive"><?php }?>
+                          <?php if($this->Custom->getBookPreview($bk->id)){?><img src="<?= $this->Url->build('/upload/template_image/').$this->Custom->getBookPreview($bk->id); ?>" class="img-responsive"><?php }?>
                           <span class="theme_label"><?= $bk->book_name;?></span>
                           <p class="hover_selecton">
                             <a target="_blank" href="<?= $this->Url->build(["controller" => "book", "action" => "view", base64_encode(base64_encode($bk->id)), $bk->slug]);?>" class="btn btn_preview">LIVE PREVIEW</a>
@@ -57,7 +63,7 @@ $('.carousel-sync').on('slid.bs.carousel', function(ev) {
                       <div class="span4" style="padding-left: 18px;"> 
                       <?php }?>
                         <div class="theme_list filter_<?= $bk->category; ?>"> 
-                          <?php if($this->Custom->getBookPreview($bk->id)){?><img src="<?= $this->Custom->getBookPreview($bk->id); ?>" class="img-responsive"><?php }?>
+                          <?php if($this->Custom->getBookPreview($bk->id)){?><img src="<?= $this->Url->build('/upload/template_image/').$this->Custom->getBookPreview($bk->id); ?>" class="img-responsive"><?php }?>
                           <span class="theme_label"><?= $bk->book_name;?></span>
                           <p class="hover_selecton">
                             <a target="_blank" href="<?= $this->Url->build(["controller" => "book", "action" => "view", base64_encode(base64_encode($bk->id)), $bk->slug]);?>" class="btn btn_publish">PUBLISH</a>

@@ -19,13 +19,13 @@
             <div class="selection_theme"> 
               <?php foreach($books as $bk){?>
               <div class="theme_list filter_<?= $bk->category; ?>"> 
-                <?php if($this->Custom->getBookPreview($bk->id)){?><img src="<?= $this->Custom->getBookPreview($bk->id); ?>" class="img-responsive"><?php }?>
+                <?php if($this->Custom->getBookPreview($bk->id)){?><img src="<?= $this->Url->build('/upload/template_image/').$this->Custom->getBookPreview($bk->id); ?>" class="img-responsive"><?php }?>
                 <span class="theme_label"><?= $bk->book_name;?></span>
                 <p class="hover_selecton">
                   <a href="<?= $this->Url->build(["controller" => "admin", "action" => "edit_book", $bk->id]);?>" class="btn btn_use">EDIT</a>
-                  <a href="<?= $this->Url->build(["controller" => "admin", "action" => "edit_book", $bk->id, 1]);?>" class="btn btn_use">CLONE</a>
+                  <!--<a href="<?= $this->Url->build(["controller" => "admin", "action" => "edit_book", $bk->id, 1]);?>" class="btn btn_use">CLONE</a>-->
                   <a target="_blank" href="<?= $this->Url->build(["controller" => "book", "action" => "view", base64_encode(base64_encode($bk->id)), $bk->slug]);?>" class="btn btn_preview">PREVIEW</a>
-                  <a class="delete_company btn btn_preview" data-href="<?= $this->Url->build(["controller" => "admin", "action" => "delete_book", $bk->id]);?>" data-toggle="modal" data-target="#myModal">DELETE</a>
+                  <a class="delete_company btn btn_delete" data-href="<?= $this->Url->build(["controller" => "admin", "action" => "delete_book", $bk->id]);?>" data-toggle="modal" data-target="#myModal">DELETE</a>
                 </p>
               </div>
               <?php }?> 

@@ -11,43 +11,43 @@ use Cake\Utility\Inflector;
 class AdminController extends UsersController
 {
 
-	public $paginate = [
-	    'limit' => 10
-	];
+    public $paginate = [
+        'limit' => 10
+    ];
 
-	public function beforeFilter(Event $event)
-	{
-		parent::beforeFilter($event);
-		$this->viewBuilder()->layout('buzztm_admin');
-		$this->set('loggedInUser', $this->Auth->user());
-	}
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        $this->viewBuilder()->layout('buzztm_admin');
+        $this->set('loggedInUser', $this->Auth->user());
+    }
 
 
-	public function dashboard()
-	{
-		$this->Books = TableRegistry::get('Books');
+    public function dashboard()
+    {
+        $this->Books = TableRegistry::get('Books');
 
         $books = $this->Books->find('all', ['order' => ['Books.id' => 'desc']])->all();
 
         $books2 = $this->Books->find('all', ['order' => ['Books.id' => 'asc']])->all();
 
         $this->set(compact('books', 'books2'));
-	}
+    }
 
-	public function company()
+    public function company()
     {
-    	$this->paginate['order'] = [
+        $this->paginate['order'] = [
             'Users.id' => 'desc'
         ];
 
         $conditions = [
-        	'role' => 'company'
+            'role' => 'company'
         ];
 
         $this->paginate['conditions'] = $conditions;
 
-    	$users = $this->paginate('Users');
-	    $this->set(compact('users'));
+        $users = $this->paginate('Users');
+        $this->set(compact('users'));
     }
 
     public function newCompany()
@@ -57,130 +57,130 @@ class AdminController extends UsersController
 
     public function editCompany($id)
     {
-    	$this->Users = TableRegistry::get('Users');
-    	$this->UserProfiles = TableRegistry::get('UserProfiles');
-    	$company = $this->Users->get($id);
-    	$profile = $this->UserProfiles->find('all', ['conditions' => ['UserProfiles.user_id' => $id]])->first();
-    	
+        $this->Users = TableRegistry::get('Users');
+        $this->UserProfiles = TableRegistry::get('UserProfiles');
+        $company = $this->Users->get($id);
+        $profile = $this->UserProfiles->find('all', ['conditions' => ['UserProfiles.user_id' => $id]])->first();
+        
 
-    	$company_array = array_values($this->objectToArray($company))[0];
-    	$company_array['user_name'] = $company_array['username'];
-    	$company_array['user_email'] = $company_array['email'];
-    	$profile_array = array_values($this->objectToArray($profile))[0];
-    	$profile_array['profile_id'] = $profile_array['id'];
-    	unset($profile_array['id']);
-    	$json_res = json_encode(array_merge($company_array, $profile_array));
-    	//echo $json_res; exit;
-    	$this->set(compact('json_res'));
+        $company_array = array_values($this->objectToArray($company))[0];
+        $company_array['user_name'] = $company_array['username'];
+        $company_array['user_email'] = $company_array['email'];
+        $profile_array = array_values($this->objectToArray($profile))[0];
+        $profile_array['profile_id'] = $profile_array['id'];
+        unset($profile_array['id']);
+        $json_res = json_encode(array_merge($company_array, $profile_array));
+        //echo $json_res; exit;
+        $this->set(compact('json_res'));
     }
 
     public function deleteCompany($id)
     {
-    	$this->Users = TableRegistry::get('Users');
-    	$this->UserProfiles = TableRegistry::get('UserProfiles');
-    	$company = $this->Users->get($id);
-    	$profile = $this->UserProfiles->find('all', ['conditions' => ['UserProfiles.user_id' => $id]])->first();
+        $this->Users = TableRegistry::get('Users');
+        $this->UserProfiles = TableRegistry::get('UserProfiles');
+        $company = $this->Users->get($id);
+        $profile = $this->UserProfiles->find('all', ['conditions' => ['UserProfiles.user_id' => $id]])->first();
 
-    	$this->Users->delete($company);
-    	$this->UserProfiles->delete($profile);
+        $this->Users->delete($company);
+        $this->UserProfiles->delete($profile);
 
-    	$this->Flash->success(__('Selected Company Deleted successfully!!'));
-    	return $this->redirect(array('controller' => 'admin', 'action' => 'company'));
+        $this->Flash->success(__('Selected Company Deleted successfully!!'));
+        return $this->redirect(array('controller' => 'admin', 'action' => 'company'));
     }
 
     public function createCompany()
     {
-    	$this->autoRender = false;
-    	
-    	$this->Users = TableRegistry::get('Users');
-    	$this->UserProfiles = TableRegistry::get('UserProfiles');
-    	$user = $this->Users->newEntity();
-    	if ($this->request->is('post')) {
+        $this->autoRender = false;
+        
+        $this->Users = TableRegistry::get('Users');
+        $this->UserProfiles = TableRegistry::get('UserProfiles');
+        $user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
             
             $data = $this->request->data;
 
             if(!isset($data['user_id']))
             {
-            	$hasher = new DefaultPasswordHasher();
-	            $password = '123456';
-	            $user_data = array('role' => 'company', 'username' => $data['user_name'], 'email' => $data['user_email'], 'password' => $hasher->hash($password));
-	            $user = $this->Users->patchEntity($user, $user_data);
-	            $res = $this->Users->save($user);
-	            if ($res) {
-	                $this->Flash->success(__('The user has been saved.'));
-	                $data['user_id'] = $res->id;
-	                $data['created'] = date("Y-m-d H:i:s");
-	                $data['modified'] = date("Y-m-d H:i:s");
-	                $user = $this->UserProfiles->newEntity();
-	                $user = $this->UserProfiles->patchEntity($user, $data);
-					$this->UserProfiles->save($user);
+                $hasher = new DefaultPasswordHasher();
+                $password = '123456';
+                $user_data = array('role' => 'company', 'username' => $data['user_name'], 'email' => $data['user_email'], 'password' => $hasher->hash($password));
+                $user = $this->Users->patchEntity($user, $user_data);
+                $res = $this->Users->save($user);
+                if ($res) {
+                    $this->Flash->success(__('The user has been saved.'));
+                    $data['user_id'] = $res->id;
+                    $data['created'] = date("Y-m-d H:i:s");
+                    $data['modified'] = date("Y-m-d H:i:s");
+                    $user = $this->UserProfiles->newEntity();
+                    $user = $this->UserProfiles->patchEntity($user, $data);
+                    $this->UserProfiles->save($user);
 
-	                echo $res->id;
-	                return;
-	            }
-	            echo 'error';
+                    echo $res->id;
+                    return;
+                }
+                echo 'error';
             }
             else
             {
-            	unset($data['id']);
-            	$profile = $this->UserProfiles->get($data['profile_id']);
-            	$data['modified'] = date("Y-m-d H:i:s");
-            	$profile = $this->UserProfiles->patchEntity($profile, $data);
-            	$res = $this->UserProfiles->save($profile);
-				if($res)
-					echo $data['user_id'];
-				else
-					echo 'error';
+                unset($data['id']);
+                $profile = $this->UserProfiles->get($data['profile_id']);
+                $data['modified'] = date("Y-m-d H:i:s");
+                $profile = $this->UserProfiles->patchEntity($profile, $data);
+                $res = $this->UserProfiles->save($profile);
+                if($res)
+                    echo $data['user_id'];
+                else
+                    echo 'error';
             }
         }
     }
 
     public function uploadlogo($id)
     {
-    	$this->autoRender = false;
-    	if(isset($this->request->data['file']) && !empty($this->request->data['file']))
-    	{
+        $this->autoRender = false;
+        if(isset($this->request->data['file']) && !empty($this->request->data['file']))
+        {
 
-    		$file = $this->request->data['file'];
-    		$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
-			$arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
-			$setNewFileName = 'logo-'.$id;
+            $file = $this->request->data['file'];
+            $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+            $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
+            $setNewFileName = 'logo-'.$id;
 
-			if (in_array($ext, $arr_ext)) {
-			    
-			    $imageFileName = $setNewFileName . '.' . $ext;
-			    move_uploaded_file($file['tmp_name'], WWW_ROOT . '/upload/logo/' . $imageFileName); 
+            if (in_array($ext, $arr_ext)) {
+                
+                $imageFileName = $setNewFileName . '.' . $ext;
+                move_uploaded_file($file['tmp_name'], WWW_ROOT . '/upload/logo/' . $imageFileName); 
 
-			}
+            }
 
-			$this->Users = TableRegistry::get('Users');
-			$user = $this->Users->get($id);
-			$user->logo = $imageFileName;
+            $this->Users = TableRegistry::get('Users');
+            $user = $this->Users->get($id);
+            $user->logo = $imageFileName;
             $this->Users->save($user);
-    	}
+        }
     }
 
     public function uploadimage()
     {
-    	$this->autoRender = false;
-    	if(isset($this->request->data['file']) && !empty($this->request->data['file']))
-    	{
+        $this->autoRender = false;
+        if(isset($this->request->data['file']) && !empty($this->request->data['file']))
+        {
 
-    		$file = $this->request->data['file'];
-    		$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
-			$arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
-			$setNewFileName = rand(11111,99999).strtotime("now");
+            $file = $this->request->data['file'];
+            $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+            $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
+            $setNewFileName = rand(11111,99999).strtotime("now");
 
-			if (in_array($ext, $arr_ext)) {
-			    
-			    $imageFileName = $setNewFileName . '.' . $ext;
-			    move_uploaded_file($file['tmp_name'], WWW_ROOT . '/upload/template/' . $imageFileName); 
+            if (in_array($ext, $arr_ext)) {
+                
+                $imageFileName = $setNewFileName . '.' . $ext;
+                move_uploaded_file($file['tmp_name'], WWW_ROOT . '/upload/template/' . $imageFileName); 
 
-			    echo $imageFileName;
-			    return;
-			}
-			echo 'error';
-    	}
+                echo $imageFileName;
+                return;
+            }
+            echo 'error';
+        }
     }
 
     public function template()
@@ -521,7 +521,7 @@ class AdminController extends UsersController
         $template = array_values($this->objectToArray($template))[0];
 
         $this->autoRender = false;
-        $attrlist = array('text' => [], 'image' => [], 'video' => [], 'template' => $template);
+        $attrlist = array('text' => [], 'image' => [], 'video' => [], 'map' => [], 'template' => $template);
         foreach($templateattr as $attr)
         {
             $attr->top = $attr->pos_top;
@@ -530,6 +530,7 @@ class AdminController extends UsersController
             $atttr = array_values($this->objectToArray($attr))[0];
             $atttr['width'] = $atttr['width'] ? $atttr['width'] : '20%';
             $atttr['text_align'] = $atttr['text_align'] ? $atttr['text_align'] : 'left';
+            $atttr['line_height'] = $atttr['line_height'] ? $atttr['line_height'] : 14;
             
             if($attr->field_type == 'text')
                 $attrlist['text'][] = $atttr;
@@ -539,6 +540,9 @@ class AdminController extends UsersController
 
             if($attr->field_type == 'video')
                 $attrlist['video'][] = $atttr;
+
+            if($attr->field_type == 'map')
+                $attrlist['map'][] = $atttr;
 
             if($attr->field_type == 'background')
                 $attrlist['background'] = $atttr;
@@ -593,6 +597,7 @@ class AdminController extends UsersController
                         {
                             $data['page'][$i]['sub_products'][$k]['book_id'] = $book_id;
                             $data['page'][$i]['sub_products'][$k]['parent'] = $bt_id;
+                            $data['page'][$i]['template_image'] = $this->createTemplateImage($data['page'][$i]['template_image'], rand(11111,99999).time());
                             $template = $this->BookTemplates->newEntity();
                             $template = $this->BookTemplates->patchEntity($template, $data['page'][$i]['sub_products'][$k]);
                             $res2 = $this->BookTemplates->save($template);
@@ -672,6 +677,25 @@ class AdminController extends UsersController
                         $this->TemplateAttributes->save($template);
                     }
 
+                    for($j=0; $j<count($template_attributes['map']); $j++)
+                    {
+                        $attr = $template_attributes['map'][$j];
+
+                        if(isset($attr['id']))
+                            unset($attr['id']);
+
+                        $attr['field_type'] = 'map';
+                        $attr['template_id'] = $template_id;
+                        $attr['pos_top'] = $attr['top'];
+                        $attr['pos_left'] = $attr['left'];
+                        $attr['book_id'] = $book_id;
+                        $attr['book_template_id'] = $bt_id;
+
+                        $template = $this->TemplateAttributes->newEntity();
+                        $template = $this->TemplateAttributes->patchEntity($template, $attr);
+                        $this->TemplateAttributes->save($template);
+                    }
+
                     $attr = $template_attributes['background'];
 
                     if(isset($attr['id']))
@@ -691,6 +715,7 @@ class AdminController extends UsersController
     {
 
         $this->autoRender = false;
+        echo "<pre>";
         if(isset($this->request->data['book']) && !empty($this->request->data['book']))
         {
             $this->Books = TableRegistry::get('Books');
@@ -717,6 +742,9 @@ class AdminController extends UsersController
                 for($i=0; $i<count($data['page']); $i++)
                 {
                     $data['page'][$i]['book_id'] = $book_id;
+                    if(is_numeric(strpos($data['page'][$i]['template_image'], 'data:image')))
+                        $data['page'][$i]['template_image'] = $this->createTemplateImage($data['page'][$i]['template_image'], rand(11111,99999).time());
+                    print_r($data['page'][$i]);
                     $template = $this->BookTemplates->newEntity();
                     $template = $this->BookTemplates->patchEntity($template, $data['page'][$i]);
                     $res2 = $this->BookTemplates->save($template);
@@ -811,7 +839,7 @@ class AdminController extends UsersController
 
             $template = [];
 
-            $attrlist = array('text' => [], 'image' => [], 'video' => [], 'template' => $template);
+            $attrlist = array('text' => [], 'image' => [], 'video' => [], 'map' => [], 'template' => $template);
             foreach($templateattr as $attr)
             {
                 $attr->top = $attr->pos_top;
@@ -820,6 +848,7 @@ class AdminController extends UsersController
                 $atttr = array_values($this->objectToArray($attr))[0];
                 $atttr['width'] = $atttr['width'] ? $atttr['width'] : '20%';
                 $atttr['text_align'] = $atttr['text_align'] ? $atttr['text_align'] : 'left';
+                $atttr['line_height'] = $atttr['line_height'] ? $atttr['line_height'] : 14;
                 
                 if($attr->field_type == 'text')
                     $attrlist['text'][] = $atttr;
@@ -829,6 +858,9 @@ class AdminController extends UsersController
 
                 if($attr->field_type == 'video')
                     $attrlist['video'][] = $atttr;
+
+                if($attr->field_type == 'map')
+                    $attrlist['map'][] = $atttr;
 
                 if($attr->field_type == 'background')
                     $attrlist['background'] = $atttr;
@@ -1043,5 +1075,96 @@ class AdminController extends UsersController
 
         echo json_encode($files);
     }
+    
+    public function resetBookTemplateImageDataToFile(){
+        
+        $this->BookTemplates = TableRegistry::get('BookTemplates');
+        $booktemplates = $this->BookTemplates->find('all')->all();
+        
+        foreach($booktemplates as $bk)
+        {
+            $data = array();
+            $bkt = $this->BookTemplates->get($bk->id);
+            if($bk->template_image && !is_numeric(strpos($bk->template_image, 'template_')))
+            {
+                $data['template_image'] = $this->createTemplateImage($bk->template_image, rand(11111,99999).time());
+                $data = $this->BookTemplates->patchEntity($bkt, $data);
+                $this->BookTemplates->save($data);
+            }   
+        }
+        exit;
+    }
 
+    public function text2image()
+    {
+        $this->autoRender = false;
+
+        header('Content-Type: image/png');
+
+        $font = (isset($_GET['bold']) && $_GET['bold']) ? WWW_ROOT.'arialbd.ttf' : WWW_ROOT.'arial.ttf';
+        $font_size = (isset($_GET['size']) && !empty($_GET['size'])) ? 0.75 * $_GET['size'] : 10;
+        $width = (isset($_GET['width']) && !empty($_GET['width'])) ? 400 * ((int)$_GET['width'] / 100) : 400;
+        $sw = (isset($_GET['sw']) && !empty($_GET['sw'])) ? $_GET['sw'] : $width;
+        $margin = 20;
+        $text = (isset($_GET['text']) && !empty($_GET['text'])) ? $_GET['text'] : "That is why where when why and how, and now why where when why and how?";
+        $halign =  (isset($_GET['align']) && !empty($_GET['align'])) ? $_GET['align'] : "left";
+
+        $left = 10;
+        $words = explode(' ', strip_tags($text));
+        $line = '';
+        while (count($words) > 0) {
+          $dimensions = imagettfbbox($font_size, 0, $font, $line.' '.$words[0]);
+          $lineWidth = $dimensions[2] - $dimensions[0];
+          if ($lineWidth > $width) {
+            $lines[] = $line;
+            $line = '';
+          }
+          $line .= ' '.$words[0];
+          $words = array_slice($words, 1);
+        }
+        if ($line != '') { $lines[] = $line; }
+        $lineHeight = $dimensions[1] - $dimensions[7];
+        $lineHeight = (isset($_GET['lheight']) && !empty($_GET['lheight'])) ? $_GET['lheight'] : $lineHeight;
+        $height = (count($lines) * $lineHeight) + $margin;
+
+        $color = (isset($_GET['color']) && !empty($_GET['color'])) ? '#'.$_GET['color'] : "#00000";
+        list($r, $g, $b) = sscanf($color, "#%02x%02x%02x");
+
+        $im = imagecreatetruecolor($sw, $height);
+         
+        imagesavealpha($im, true);
+        $color = imagecolorallocatealpha($im, 0, 0, 0, 127);
+        imagefill($im, 0, 0, $color);
+        $black = imagecolorallocate($im, $r, $g, $b);
+        $i = 0;
+        foreach ($lines as $line) {
+          if($halign=="center") {
+            $dimensions = imagettfbbox($font_size, 0, $font, $line);
+            $lineWidth = $dimensions[2] - $dimensions[0];
+            $center=floor($width/2);
+            if(isset($_GET['sw']) && $_GET['sw'] > 400)
+                $leftStart=$center-($lineWidth/2) + (($sw - $width)/2);
+            else
+                $leftStart=$center-$lineWidth/2;
+          } else if ($halign=="right") {
+            $dimensions = imagettfbbox($font_size, 0, $font, $line);
+            $lineWidth = $dimensions[2] - $dimensions[0];
+            if(isset($_GET['sw']) && $_GET['sw'] > 400)
+                $leftStart=$width-$lineWidth-$left + (($sw - $width)/2);
+            else
+                $leftStart=$width-$lineWidth-$left;
+          } else {
+            if(isset($_GET['sw']) && $_GET['sw'] > 400)
+                $leftStart=$left + (($sw - $width)/2);
+            else
+                $leftStart=$left;
+          }    
+          imagettftext($im, $font_size, 0, $leftStart, $margin + $lineHeight * $i, $black, $font, $line);
+          $i++;
+        }
+
+        imagepng($im);
+        imagedestroy($im);
+        exit;
+    }
 }

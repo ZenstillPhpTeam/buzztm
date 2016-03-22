@@ -154,6 +154,12 @@ ul{
 .list_menu_tag ul li a .icon_menu.icon5{
 	background:url(../images/icon5.png) no-repeat;
 }
+.list_menu_tag ul li a .icon_menu.iconupgrade{
+    background:url(../img/icn_upgrade.png) no-repeat;
+}
+.list_menu_tag ul li a .icon_menu.iconsettings{
+    background:url(../img/icn_settings.png) no-repeat;
+}
 .need_help a{
 	background:#5f9300;
 	padding:20px;
