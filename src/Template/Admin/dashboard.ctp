@@ -10,8 +10,8 @@ $('.carousel-sync').on('slid.bs.carousel', function(ev) {
 </script>
 <script>
 $(document).ready(function(){
-    $("#myCarousel").carousel({interval: 300000});
-    $("#carousel-a").carousel({interval: 300000});
+    $("#myCarousel").carousel({interval: false});
+    $("#carousel-a").carousel({interval: false});
 });
 </script>
 <div class="theme_uplode clearfix">

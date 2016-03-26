@@ -136,13 +136,16 @@
     .contact_floating_icon.out .contact_in{display: none;}
     ul.head_bar_icon {width: 100%; list-style: none;}
     .navbar_icon img{width: 35px; height: auto;}
-    ul.head_bar_icon ul{list-style: none; width:240px; position: absolute; overflow: hidden; display: block; margin: 0; padding: 0; transition: all 1s ease 0s; background: #ccc; left: 0; opacity:0; top:0; z-index: -1}
+    ul.head_bar_icon ul{list-style: none; width:260px; position: absolute; overflow: hidden; display: block; margin: 0; padding: 0; transition: all 1s ease 0s; background: #ccc; left: 0; opacity:0; top:0; z-index: -1; visibility: hidden;}
     ul.head_bar_icon > li{position: relative;}
     ul.head_bar_icon ul li{display: inline-block;}
-    ul.head_bar_icon ul.show_share_links{left:100%; opacity: 1;z-index: 9999;}
+    ul.head_bar_icon ul.show_share_links{left:100%; opacity: 1;z-index: 9999;visibility: visible;}
     .mail_form{display: none;}
     .cp{cursor: pointer;}
-    .text2image img{max-width: 100%;}
+    .text2image img{width: 100%;}
+    <?php if($is_mobile){?>
+    .page_background_image{position: absolute; width: 100%; height: auto; left: 0; top: 0;}
+    <?php }?>
     </style>
 </head>
 <body class="<?= $is_mobile ? 'mobile_view' : 'desktop_view'; ?> ">
@@ -219,7 +222,10 @@
                 <div class="swiper-container swiper-container-v">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
-                            <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p['template_attributes']['background']['value']; ?>">
+                            <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $is_mobile ? '#191919' : $p['template_attributes']['background']['value']; ?>">
+                                <?php if($is_mobile){?>
+                                <img class="page_background_image" src="<?= $this->Custom->bgtoimg($p['template_attributes']['background']['value']); ?>">
+                                <?php }?>
                                 <?php foreach($p['template_attributes']['text'] as $t){?>
                                     <span class="text2image <?= ($t['link'] || $t['external_link']) ? 'cp' : ''; ?>" data-link="<?= $t['link']; ?>" data-external="<?= $t['external_link']; ?>" style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= ((int)$t['font_size'] * 6.25).'%'; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;width:<?= $t['width']; ?>;">
                                         <img src="<?= $this->Url->build('/admin/text2image/');?>?text=<?= urlencode($t['value']); ?>&width=<?= $t['width']; ?>&color=<?= $t['color']; ?>&bold=<?= $t['bold']; ?>&size=<?= $t['font_size']; ?>&align=<?= $t['text_align']; ?>&lheight=<?= $t['line_height']; ?>" >
@@ -241,7 +247,12 @@
                         </div>
                         <?php foreach($p['sub_products'] as $p1){?>
                         <div class="swiper-slide">
-                            <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p1['template_attributes']['background']['value']; ?>">
+                            <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $is_mobile ? '#191919' : $p1['template_attributes']['background']['value']; ?>">
+                                
+                                <?php if($is_mobile){?>
+                                <img class="page_background_image" src="<?= $this->Custom->bgtoimg($p1['template_attributes']['background']['value']); ?>">
+                                <?php }?>
+
                                 <?php foreach($p1['template_attributes']['text'] as $t){?>
                                     <span class="text2image <?= ($t['link'] || $t['external_link']) ? 'cp' : ''; ?>" data-link="<?= $t['link']; ?>" data-external="<?= $t['external_link']; ?>" style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= ((int)$t['font_size'] * 6.25).'%'; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;width:<?= $t['width']; ?>;">
                                         <img src="<?= $this->Url->build('/admin/text2image/');?>?text=<?= urlencode($t['value']); ?>&width=<?= $t['width']; ?>&color=<?= $t['color']; ?>&bold=<?= $t['bold']; ?>&size=<?= $t['font_size']; ?>&align=<?= $t['text_align']; ?>&lheight=<?= $t['line_height']; ?>" >
@@ -266,7 +277,12 @@
                     <div class="swiper-pagination swiper-pagination-v"></div>
                 </div>
                 <?php }else{?>
-                <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $p['template_attributes']['background']['value']; ?>">
+                <div class="page_templates" style="position:relative;overflow:hidden; margin:0 auto;background:<?= $is_mobile ? '#191919' : $p['template_attributes']['background']['value']; ?>">
+                    
+                    <?php if($is_mobile){?>
+                        <img class="page_background_image" src="<?= $this->Custom->bgtoimg($p['template_attributes']['background']['value']); ?>">
+                    <?php }?>
+
                     <?php foreach($p['template_attributes']['text'] as $t){?>
                         <span class="text2image <?= ($t['link'] || $t['external_link']) ? 'cp' : ''; ?>" data-link="<?= $t['link']; ?>" data-external="<?= $t['external_link']; ?>" style="position:absolute;top:<?= $t['top']; ?>;left:<?= $t['left']; ?>;font-size:<?= $t['font_size'] ? ((int)$t['font_size'] * 6.25).'%' : '87.5%'; ?>;font-weight:<?= $t['bold'] ? 'bold' : 'normal'; ?>;text-align:<?= $t['text_align']; ?>;color:#<?= $t['color']; ?>;width:<?= $t['width']; ?>;">
                             <img src="<?= $this->Url->build('/admin/text2image/');?>?text=<?= urlencode($t['value']); ?>&width=<?= $t['width']; ?>&color=<?= $t['color']; ?>&bold=<?= $t['bold']; ?>&size=<?= $t['font_size']; ?>&align=<?= $t['text_align']; ?>&lheight=<?= $t['line_height']; ?>" >
@@ -312,6 +328,8 @@
             $(".page_templates").height('100%');
             $(".page_templates").width('100%');
         <?php }?>
+
+        $(window).on('resize',function(){window.location.href = window.location.href;});
 
         swiperH = new Swiper('.swiper-container-h', {
             pagination: '.swiper-pagination-h',
@@ -426,6 +444,13 @@
                         swiperV.slideTo(parseInt(links[1]) + 1, 1000, true);
                 }
             }
+        });
+
+        $(document).on('click', ".swiper-container", function(){
+            $(".social_icon").hide();
+            $("ul.head_bar_icon ul").removeClass("show_share_links");
+            $(".contact_floating_icon").removeClass("out");
+            $(".mail_form").slideUp();
         });
     });
     </script>

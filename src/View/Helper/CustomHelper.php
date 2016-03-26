@@ -62,4 +62,14 @@ class CustomHelper extends Helper
 
         return $template->template_image;
     }
+
+    public function bgtoimg($img)
+    {
+        if(!$img) return;
+        
+        $img = explode("('", $img);
+        $img = explode("')", $img[1]);
+
+        return $img[0];
+    }
 }

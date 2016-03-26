@@ -313,12 +313,12 @@
 								</div>
 							</div>
 							
-							<div class="page-menu-part col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="data['active_text'] != -1 || data['active_image'] != -1 || data['active_video'] != -1">
+							<div class="page-menu-part col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="data['active_text'] != -1 || data['active_image'] != -1 || data['active_video'] != -1 || data['active_map'] != -1">
 								<div>
 									<h4>Width Adjust</h4>
 									<div id="wslider"></div>
 								</div>
-								<div ng-show="data['active_image'] != -1 || data['active_video'] != -1">
+								<div ng-show="data['active_image'] != -1 || data['active_video'] != -1 || data['active_map'] != -1">
 									<h4>Height Adjust</h4>
 									<div id="hslider"></div>
 								</div>
@@ -328,7 +328,7 @@
 								<h4>Text Tools</h4>
 								<div class="page-menu list">
 									<select ng-model="font_size" ng-change="change_font_size();" ng-init="font_size = '14'">
-				                        <?php for($i=14; $i<=25;$i++){?>
+				                        <?php for($i=14; $i<=30;$i++){?>
 				                        <option value="<?= $i;?>"><?= $i;?></option>
 				                        <?php }?>
 				                    </select>
@@ -346,15 +346,15 @@
 								</div>
 							</div>
 
-							<div class="page-menu-part text_tools col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="data['active_image'] != -1 || data['active_video'] != -1" style="padding-top: 20px;">
+							<div class="page-menu-part text_tools col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="data['active_image'] != -1 || data['active_video'] != -1 || data['active_map'] != -1" style="padding-top: 20px;">
 								<div class="page-menu list">
 									<a ng-disabled="current_position == 0" ng-click="undo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-left"></i></a>
 									<a ng-disabled="max_position == current_position" ng-click="redo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-right"></i></a>
 								</div>
 							</div>
-							<div class="page-menu-part col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="data['active_text'] != -1 || data['active_image'] != -1 || data['active_video'] != -1">
+							<div class="page-menu-part col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="data['active_text'] != -1 || data['active_image'] != -1 || data['active_video'] != -1 || data['active_map'] != -1">
 								<h4>PROPERTIES</h4>
-								<div class="row" ng-show="data['active_text'] != -1 || data['active_image'] != -1 || data['active_video'] != -1">
+								<div class="row" ng-show="data['active_text'] != -1 || data['active_image'] != -1 || data['active_video'] != -1 || data['active_map'] != -1">
 									<div class="col-sm-6 padd0">
 										<label class="box">X:</label>
 										<input type="text" ng-enter-pos="top" class="profile" placeholder="X:" ng-model="position.t" />
@@ -385,36 +385,37 @@
 							
 							<h4>APP PREVIEW</h4>
 							<?= $this->Html->image('others/book-preview.png', ['class' => 'img-responsive', 'ng-if' => "page[active_page]['template_attributes'].length == 0 && page[active_page]['sub_products'][active_sub_page]['template_attributes'].length == 0"]);?>
+							<div class="book_preview_main_container">
 								<div class="book_preview_container" ng-show="active_sub_page == -1" style="position:relative;overflow:hidden; margin:0 auto;width:{{views[default_view].width}}px; height:{{views[default_view].height}}px;background:{{page[active_page]['template_attributes']['background']['value']}}">
-			                        <span ng-repeat="t in page[active_page]['template_attributes']['text']  track by $index" on-finish-text-render class="draggable_text" style="position:absolute;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['text'][$index]['top'], left: page[active_page]['template_attributes']['text'][$index]['left'], width: page[active_page]['template_attributes']['text'][$index]['width'], 'font-size': page[active_page]['template_attributes']['text'][$index]['font_size'], 'text-align': page[active_page]['template_attributes']['text'][$index]['text_align'], 'font-weight': page[active_page]['template_attributes']['text'][$index]['bold'] ? 'bold' : 'normal', 'color': page[active_page]['template_attributes']['text'][$index]['color'] ? '#'+page[active_page]['template_attributes']['text'][$index]['color'] : ''}">
-			                        	<img width="100%" height="100%" ng-src="{{'<?= $this->Url->build('/admin/text2image/');?>?text='+page[active_page]['template_attributes']['text'][$index]['value']+'&width='+page[active_page]['template_attributes']['text'][$index]['width']+'&color='+page[active_page]['template_attributes']['text'][$index]['color']+'&bold='+page[active_page]['template_attributes']['text'][$index]['bold']+'&size='+page[active_page]['template_attributes']['text'][$index]['font_size']+'&align='+page[active_page]['template_attributes']['text'][$index]['text_align']}}" >
+			                        <span ng-repeat="t in page[active_page]['template_attributes']['text']  track by $index" on-finish-text-render class="draggable_text" style="position:absolute;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['text'][$index]['top'], left: page[active_page]['template_attributes']['text'][$index]['left'], width: page[active_page]['template_attributes']['text'][$index]['width'], 'font-size': page[active_page]['template_attributes']['text'][$index]['font_size'], 'text-align': page[active_page]['template_attributes']['text'][$index]['text_align'], 'font-weight': page[active_page]['template_attributes']['text'][$index]['bold'] ? 'bold' : 'normal', 'color': page[active_page]['template_attributes']['text'][$index]['color'] ? '#'+page[active_page]['template_attributes']['text'][$index]['color'] : ''}" ng-click="change_active_text($index, page[active_page]['template_attributes']['text'][$index]['value'])">
+			                        	<img width="100%" height="100%" ng-src="{{'<?= $this->Url->build('/admin/text2image/');?>?text='+urlencode(page[active_page]['template_attributes']['text'][$index]['value'])+'&width='+page[active_page]['template_attributes']['text'][$index]['width']+'&color='+page[active_page]['template_attributes']['text'][$index]['color']+'&bold='+page[active_page]['template_attributes']['text'][$index]['bold']+'&size='+page[active_page]['template_attributes']['text'][$index]['font_size']+'&align='+page[active_page]['template_attributes']['text'][$index]['text_align']+'&lheight='+page[active_page]['template_attributes']['text'][$index]['line_height']}}" >
 			                        </span>
-			                        <span ng-repeat="t in page[active_page]['template_attributes']['image']  track by $index" on-finish-image-render class="draggable_image" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:{{$index*40}}px; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['image'][$index]['top'], left: page[active_page]['template_attributes']['image'][$index]['left'], width: page[active_page]['template_attributes']['image'][$index]['width'], height: page[active_page]['template_attributes']['image'][$index]['height']}">
+			                        <span ng-repeat="t in page[active_page]['template_attributes']['image']  track by $index" on-finish-image-render class="draggable_image" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:{{$index*40}}px; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['image'][$index]['top'], left: page[active_page]['template_attributes']['image'][$index]['left'], width: page[active_page]['template_attributes']['image'][$index]['width'], height: page[active_page]['template_attributes']['image'][$index]['height']}" ng-click="change_active_image($index)">
 			                          <img width="100%" height="100%" src="{{page[active_page]['template_attributes']['image'][$index]['value']}}" >
 			                        </span>
-			                        <div ng-repeat="t in page[active_page]['template_attributes']['video']  track by $index" on-finish-video-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['video'][$index]['top'], left: page[active_page]['template_attributes']['video'][$index]['left'], width: page[active_page]['template_attributes']['video'][$index]['width'], height: page[active_page]['template_attributes']['video'][$index]['height']}">
+			                        <div ng-repeat="t in page[active_page]['template_attributes']['video']  track by $index" on-finish-video-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['video'][$index]['top'], left: page[active_page]['template_attributes']['video'][$index]['left'], width: page[active_page]['template_attributes']['video'][$index]['width'], height: page[active_page]['template_attributes']['video'][$index]['height']}" ng-click="change_active_video($index, page[active_page]['template_attributes']['video'][$index]['value'])">
 			                          <iframe width="100%" height="100%" ng-src="{{page[active_page]['template_attributes']['video'][$index]['value'] | trustAsResourceUrl}}" ></iframe>
 			                        </div>
-			                        <div ng-repeat="t in page[active_page]['template_attributes']['map']  track by $index" on-finish-map-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['map'][$index]['top'], left: page[active_page]['template_attributes']['map'][$index]['left'], width: page[active_page]['template_attributes']['map'][$index]['width'], height: page[active_page]['template_attributes']['map'][$index]['height']}">
+			                        <div ng-repeat="t in page[active_page]['template_attributes']['map']  track by $index" on-finish-map-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['map'][$index]['top'], left: page[active_page]['template_attributes']['map'][$index]['left'], width: page[active_page]['template_attributes']['map'][$index]['width'], height: page[active_page]['template_attributes']['map'][$index]['height']}" ng-click="change_active_map($index, page[active_page]['template_attributes']['map'][$index]['value'])" >
 			                          <iframe width="100%" height="100%" ng-src="{{'https://www.google.com/maps/embed/v1/place?key=AIzaSyAj5h09edjQhvZCnTutWyo18UQpJvcR75U&q='+page[active_page]['template_attributes']['map'][$index]['value'] | trustAsResourceUrl}}" ></iframe>
 			                        </div>
 			                    </div>
 
 			                    <div class="book_preview_container" ng-show="active_sub_page != -1" style="position:relative;overflow:hidden; margin:0 auto;width:{{views[default_view].width}}px; height:{{views[default_view].height}}px;background:{{page[active_page]['sub_products'][active_sub_page]['template_attributes']['background']['value']}}">
-			                        <span ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['text']  track by $index" on-finish-text-render class="draggable_text" style="position:absolute;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['width'], 'font-size': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['font_size'], 'font-weight': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['bold'] ? 'bold' : 'normal', 'text-align': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['text_align'], 'color': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color'] ? '#'+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color'] : ''}">
-			                          <img width="100%" height="100%" ng-src="{{'<?= $this->Url->build('/admin/text2image/');?>?text='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['value']+'&width='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['width']+'&color='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color']+'&bold='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['bold']+'&size='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['font_size']+'&align='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['text_align']}}" >
+			                        <span ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['text']  track by $index" on-finish-text-render class="draggable_text" style="position:absolute;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['width'], 'font-size': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['font_size'], 'font-weight': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['bold'] ? 'bold' : 'normal', 'text-align': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['text_align'], 'color': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color'] ? '#'+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color'] : ''}" ng-click="change_active_text($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['value'])" ng-click="change_active_image($index)">
+			                          <img width="100%" height="100%" ng-src="{{'<?= $this->Url->build('/admin/text2image/');?>?text='+urlencode(page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['value'])+'&width='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['width']+'&color='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color']+'&bold='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['bold']+'&size='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['font_size']+'&align='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['text_align']+'&lheight='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['line_height']}}" >
 			                        </span>
-			                        <span ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['image']  track by $index" on-finish-image-render class="draggable_image" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:{{$index*40}}px; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['height']}">
+			                        <span ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['image']  track by $index" on-finish-image-render class="draggable_image" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:{{$index*40}}px; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['height']}" ng-click="change_active_image($index)">
 			                          <img width="100%" height="100%" src="{{page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['value']}}" >
 			                        </span>
-			                        <div ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['video']  track by $index" on-finish-video-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['height']}">
+			                        <div ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['video']  track by $index" on-finish-video-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['height']}" ng-click="change_active_video($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['value'])">
 			                          <iframe width="100%" height="100%" ng-src="{{page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['value'] | trustAsResourceUrl}}" ></iframe>
 			                        </div>
-			                        <div ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['map']  track by $index" on-finish-video-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['height']}">
+			                        <div ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['map']  track by $index" on-finish-video-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['height']}" ng-click="change_active_map($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['value'])">
 			                          <iframe width="100%" height="100%" ng-src="{{'https://www.google.com/maps/embed/v1/place?key=AIzaSyAj5h09edjQhvZCnTutWyo18UQpJvcR75U&q='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['value'] | trustAsResourceUrl}}" ></iframe>
 			                        </div>
 			                    </div>
-
+			                </div>
 						</div>
 					</div>
 					<div class="col-sm-2">
@@ -505,7 +506,7 @@
 	          <div class="modal-body">
 	            
 		          <ul class="image_library_list">
-		          	<li ng-repeat="img in image_library" ng-click="select_image($index)" ng-class="{selected:is_selected($index)}">
+		          	<li ng-repeat="img in image_library track by $index" ng-click="select_image($index)" ng-class="{selected:is_selected($index)}">
 		          		<img ng-src="{{'<?= $this->Url->build('/upload/template/');?>'+img}}">
 		          	</li>
 		          </ul>
@@ -985,7 +986,7 @@ buzztm.directive('ngEnterPos', function() {
 
 				wwidth = $(this).slider( "value" );
 				
-				if($scope.data['active_image'] == -1)
+				if($scope.data['active_video'] != -1)
 				{
 					ind = $scope.data['active_video'];
 					ttype = 'video';
@@ -1138,12 +1139,26 @@ buzztm.directive('ngEnterPos', function() {
         $scope.change_background_image = function(ind)
         {
           $scope.reset();
-
+          $scope.data['background_st'] = 1;
           $('#uploadimageModal').modal("show");
         };
 
         $('#uploadimageModal').on('hidden.bs.modal', function () {
             $scope.$apply(function(){
+              if($scope.attribute_tab == 2)
+              {
+              		if($scope.active_sub_page == -1)
+              		{	
+              			if($scope.page[$scope.active_page]['template_attributes']['image'][$scope.data['active_image']]['value'] == default_img)
+              				$scope.page[$scope.active_page]['template_attributes']['image'].splice($scope.data['active_image'], 1);
+              		}
+              		else
+              		{
+              			if($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['image'][$scope.data['active_image']]['value'] == default_img)
+              				$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['image'].splice($scope.data['active_image'], 1);
+              		}
+              }
+
               $scope.reset();
               $scope.data['background_st'] = 0;
               $scope.upload_button_text = 'Upload';
@@ -1326,7 +1341,7 @@ buzztm.directive('ngEnterPos', function() {
           	if($scope.active_page != -1 && $scope.active_sub_page != -1)
           	{
           		$scope.preloader = 2;
-          		html2canvas([$(".book_preview_container")[0]], {
+          		html2canvas([$(".book_preview_main_container")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
                           	  $scope.preloader = false;
@@ -1348,7 +1363,7 @@ buzztm.directive('ngEnterPos', function() {
           	else if($scope.active_page != -1)
           	{
           		$scope.preloader = 2;
-          		html2canvas([$(".book_preview_container")[0]], {
+          		html2canvas([$(".book_preview_main_container")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
                           	  $scope.preloader = false;
@@ -1390,7 +1405,7 @@ buzztm.directive('ngEnterPos', function() {
           if($scope.active_sub_page == -1)
           	{
           		$scope.preloader = 2;
-          		html2canvas([$(".book_preview_container")[0]], {
+          		html2canvas([$(".book_preview_main_container")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
                           	  $scope.preloader = false;
@@ -1411,7 +1426,7 @@ buzztm.directive('ngEnterPos', function() {
             else if($scope.active_sub_page != -1)
           	{
           		$scope.preloader = 2;
-          		html2canvas([$(".book_preview_container")[0]], {
+          		html2canvas([$(".book_preview_main_container")[0]], {
                     onrendered: function (canvas) {
                           $scope.$apply(function(){
                           	  $scope.preloader = false;
@@ -1489,7 +1504,7 @@ buzztm.directive('ngEnterPos', function() {
         $scope.save = function()
         {
         	$scope.preloader = 1;
-        	html2canvas([$(".book_preview_container")[0]], {
+        	html2canvas([$(".book_preview_main_container")[0]], {
                     onrendered: function (canvas) {
 			        	
                     	$scope.$apply(function(){
@@ -1589,6 +1604,9 @@ buzztm.directive('ngEnterPos', function() {
 					ddata = {"field_type":"image","value":default_img,"pos_top":ttop,"pos_left":"50%","link":"","top":ttop,"left":"50%", width: "20%", height: "auto"};
 					$scope.page[$scope.active_page]['template_attributes']['image'].push(ddata);
 					$scope.change_active_image($scope.page[$scope.active_page]['template_attributes']['image'].length - 1);
+					$timeout(function(){
+						$('#uploadimageModal').modal("show");
+					});
 					
 				}
 				else if($scope.attribute_tab == 4)
@@ -1626,7 +1644,9 @@ buzztm.directive('ngEnterPos', function() {
 					ddata = {"field_type":"image","value":default_img,"pos_top":ttop,"pos_left":"50%","link":"","top":ttop,"left":"50%", width: "20%", height: "auto"};
 					$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['image'].push(ddata);
 					$scope.change_active_image($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['image'].length - 1);
-					
+					$timeout(function(){
+						$('#uploadimageModal').modal("show");
+					});
 				}
 				else if($scope.attribute_tab == 4)
 				{
@@ -2164,6 +2184,10 @@ buzztm.directive('ngEnterPos', function() {
 	    		$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind]['line_height']--;
 	    	}
 		};
+
+		$(".colorpicker_container img").click(function(){
+		  $(this).parent().find("input").focus().trigger('click');
+		});
     }
   ]);
 </script> 

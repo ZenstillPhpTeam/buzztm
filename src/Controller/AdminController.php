@@ -1103,7 +1103,7 @@ class AdminController extends UsersController
 
         $font = (isset($_GET['bold']) && $_GET['bold']) ? WWW_ROOT.'arialbd.ttf' : WWW_ROOT.'arial.ttf';
         $font_size = (isset($_GET['size']) && !empty($_GET['size'])) ? 0.75 * $_GET['size'] : 10;
-        $width = (isset($_GET['width']) && !empty($_GET['width'])) ? 400 * ((int)$_GET['width'] / 100) : 400;
+        $width = (isset($_GET['width']) && !empty($_GET['width'])) ? 700 * ((int)$_GET['width'] / 100) : 700;
         $sw = (isset($_GET['sw']) && !empty($_GET['sw'])) ? $_GET['sw'] : $width;
         $margin = 20;
         $text = (isset($_GET['text']) && !empty($_GET['text'])) ? $_GET['text'] : "That is why where when why and how, and now why where when why and how?";
@@ -1145,7 +1145,7 @@ class AdminController extends UsersController
             if(isset($_GET['sw']) && $_GET['sw'] > 400)
                 $leftStart=$center-($lineWidth/2) + (($sw - $width)/2);
             else
-                $leftStart=$center-$lineWidth/2;
+                $leftStart=$center - $lineWidth/2;
           } else if ($halign=="right") {
             $dimensions = imagettfbbox($font_size, 0, $font, $line);
             $lineWidth = $dimensions[2] - $dimensions[0];
@@ -1157,7 +1157,7 @@ class AdminController extends UsersController
             if(isset($_GET['sw']) && $_GET['sw'] > 400)
                 $leftStart=$left + (($sw - $width)/2);
             else
-                $leftStart=$left;
+                $leftStart=$left - 10;
           }    
           imagettftext($im, $font_size, 0, $leftStart, $margin + $lineHeight * $i, $black, $font, $line);
           $i++;

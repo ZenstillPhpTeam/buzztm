@@ -609,7 +609,7 @@ p.forgetmenot {
     float: left;
 }
 
-.header_section-login{ background:url(../images/bg.jpg);}
+.header_section-login{ background:rgba(0, 0, 0, 0) url("../images/bg.jpg") repeat scroll 0 0 / 100% 100%;}
 .login{ background:#fff; border-radius:10px;}
 .mrg-top{margin:135px 0;}
 .mrg-top1{ margin-top:20x !important;}
