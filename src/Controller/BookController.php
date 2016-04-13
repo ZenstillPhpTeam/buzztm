@@ -26,7 +26,7 @@ class BookController extends AppController
         
         $page = [];
         
-        $template = $this->BookTemplates->find('all', ['conditions' => ['BookTemplates.book_id' => $id, 'BookTemplates.parent' => 0], 'order' => ['BookTemplates.page' => 'asc']])->all();
+        $template = $this->BookTemplates->find('all', ['conditions' => ['BookTemplates.book_id' => $id, 'BookTemplates.parent' => 0], 'order' => ['BookTemplates.page' => 'asc', 'BookTemplates.id' => 'asc']])->all();
 
         foreach($template as $k=>$tmp){
             

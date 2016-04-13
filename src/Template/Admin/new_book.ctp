@@ -33,60 +33,59 @@
     </div>
 
 		<header>
-			<div class="header-top">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-sm-5">
-							<div class="col-sm-6">
-								<input autofocus type="text" class="form-control book_title" ng-model="company.book_name" value="Book Name Here" />
-							</div>
-							<div class="col-sm-6">
-								<select class="form-control" name="company" ng-model="company.category" >
-			                        <option value="">Select Category</option>
-			                        <?php foreach($categories as $cat){?>
-			                        <option value="<?= $cat->id; ?>"><?= $cat->name; ?></option>
-			                        <?php }?>
-			                    </select>
-							</div>
-						</div>
-						
-						<div class="col-sm-2">
-							<div class="logo text-center">
-								<?= $this->Html->image('logo.png', ['class' => 'img-responsive', 'url' => ['controller' => 'admin', 'action' => 'dashboard']]);?>
-							</div>
-						</div>
-						<div class="col-sm-5">
-							<div class="right-menu">
-								<ul class="list-inline">
-									<li>Support</li>
+			<div class="fixed_header">
+				<div class="header-top">
+    				<div class="container-fluid">
+      					<div class="row">
+					        <div class="col-sm-3">
+					          <input autofocus type="text" ng-model="company.book_name" value="APP TITLE" class="form-control book2">
+					        </div>
+        					<div class="col-sm-2">
+	      						<select class="category" ng-model="company.category">
+	      							<option value="">Select Category</option>
+				                    <?php foreach($categories as $cat){?>
+				                    <option value="<?= $cat->id; ?>"><?= $cat->name; ?></option>
+				                    <?php }?>
+	      						</select>
+	      					</div>
+					        <div class="col-sm-2">
+					          <div class="logo text-center"> <?= $this->Html->image('logo-white.png', ['class' => 'img-responsive', 'alt' => 'Logo', 'url' => ['controller' => 'admin', 'action' => 'dashboard']]);?></div>
+					        </div>
+					        <div class="col-sm-5">
+					          <div class="right-menu">
+					            <ul class="list-inline">
+					              	<li>Support</li>
 									<li><a href='<?= $this->Url->build(["controller" => "admin", "action" => "dashboard"]);?>' class="btn btn-1">Dashboard</a></li>
-									<li><a href="#" ng-disabled="progress() != 100" ng-click="save();" class="btn btn-2">Save</a></li>
-									<!-- <li><a href="#" class="btn btn-3">Preview</a></li>
-									<li><a href="#" class="btn btn-4">Publish</a></li> -->
-								</ul>
-							</div>
-						</div>
+									<li><a ng-if="progress() == 100" href="#" ng-click="save();" class="btn btn-2">Save</a></li>
+									<li><a ng-disabled="progress() == 0" ng-if="progress() != 100" data-toggle="modal" data-target="#saveModal" href="#" class="btn btn-2">Save</a></li>
+					            </ul>
+					          </div>
+					        </div>
+					    </div>
 					</div>
 				</div>
-			</div>
-			<div class="header-middle">
-				<div class="container-fluid level-indicator-panel">
-                    <div class="level-indicator" style="width:{{progress()}}%;">
-                        <p>{{progress()}}% Done</p>
-                    </div>
+				<div class="header-middle">
+					<div class="container-fluid level-indicator-panel">
+	                    <div class="level-indicator" style="width:{{progress()}}%;">
+	                        <p>{{progress()}}% <span ng-if="progress()">Done</span></p>
+	                    </div>
+					</div>
 				</div>
 			</div>
 			<div class="header-bottom clearfix">
 				<a href="#" class="page-btn create-page" ng-click="create_new_page($event);"><i class="fa fa-plus"></i><br/>Create New Page</a>
 				
-				<a ng-repeat="pa in page" href="#" class="page-btn live-page" ng-class="{active: active_page == $index}" ng-click="select_active_page($index, $event)">
+				<a ng-repeat="pa in page" href="#" class="page-btn live-page" ng-class="{active: active_page == $index, social_wall_page:pa.page == 5, social_wall_page_selected:(pa.page == 5 && company.social_wall == 1)}" ng-click="select_active_page($index, $event)">
 					<span class="live-page-id">{{$index+1}}a</span>
 					<span ng-if="pa.page == 4 && page.length != 5" ng-click="remove_page($index)" class="live-page-id trash_icon"><i class="fa fa-trash"></i></span>
-					<span ng-if="pa.template" ng-click="remove_page_template($index)" class="live-page-id remove_icon"><i class="fa fa-times"></i></span>
+					<!--<span ng-if="pa.template" ng-click="remove_page_template($index)" class="live-page-id remove_icon"><i class="fa fa-times"></i></span>-->
 					<span class="live-page-caption">{{pa.name}}</span>
-					<span class="preview_templates">
+					<span ng-show="pa.page != 5" class="preview_templates">
 						<img ng-if="pa.template && pa.template != -1 && pa.template_image == undefined" width="100" src="<?= $this->Url->build('/upload/template_image/template_');?>{{pa.template}}.png" >
 						<img ng-if="pa.template == -1 || pa.template_image != undefined" width="100" src="{{return_template_image(pa.template_image)}}" >
+					</span>
+					<span ng-show="pa.page == 5" class="preview_templates">
+						<img width="100" src="<?= $this->Url->build('/img/social_wall_gadget.jpg');?>" >
 					</span>
 					<ul class="sub_product_indication" ng-if="pa.sub_products.length" ng-style="{height: pa.sub_products.length < 5 ? pa.sub_products.length * 20 : 100}">
 						<li ng-repeat="sp in pa.sub_products" ng-if="$index < 5">{{$index}}</li>
@@ -114,6 +113,135 @@
 			</div>
 		</div>
 
+		<div class="content" ng-show="active_page == -1">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-4"></div>
+					<div class="col-md-2 col-lg-2 col-sm-4 col-xs-12 tool_box_container">
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg">
+					    <div class="page-menu-panel">
+					      <div class="page-menu-part">
+					        <h4>BOOK SETTINGS</h4>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel-bg">
+					    <div class="page-menu-panel">
+					      <div class="book text-left">
+					        <ul>
+					          <li>
+					          	<a href="#">THEME COLOR <span style="float:right;"><span ng-click="$event.preventDefault(); theme_color_floating = 1" class="colors" ng-style="{background:company.color}"></span><span class="qst-right"><?= $this->Html->image('qst.png');?></span></span></a>
+					          	<div class="floating_dock_input theme_color_floating" ng-show="theme_color_floating">
+					          		<i class="fa fa-times-circle-o" ng-click="theme_color_floating=0"></i>
+					          		<div class="floating_dock_input_box">
+					          			<label>Choose your theme color</label>
+					          			<div class="theme_colors">
+					          				<span class="colors" ng-repeat="cl in theme_colors" ng-style="{background:cl}" ng-class="{active_color:cl == company.color}" ng-click="company.color=cl"></span>
+					          			</div>
+					          			<p>OR</p>
+					          			<div class="color_input_box">
+					          				Enter Your Custom color <input ng-model="company.color">
+					          			</div>
+					          			<div class="text-center">
+					          				<button ng-click="theme_color_floating=0">OK</button>
+					          			</div>
+					          		</div>
+					          	</div>
+					          </li>
+					          <li><a href="#">HOME BUTTON<span style="float:right;"><i ng-class="{sel:company.home_icon}" ng-click="$event.preventDefault(); company.home_icon = !company.home_icon" class="fa fa-power-off"></i> <span class="qst-right"><?= $this->Html->image('qst.png');?></span></span></a></li>
+					          <li>
+					          	<a href="#">FLOATING DOCK <span style="float:right;"><i ng-show="company.floating_dock" class="fa fa-pencil" ng-class="{dock_open:dock_open}" ng-click="$event.preventDefault(); dock_open = 1"></i> <i ng-class="{sel:company.floating_dock}" ng-click="$event.preventDefault(); company.floating_dock = !company.floating_dock" class="fa fa-power-off"></i> <span class="qst-right"><?= $this->Html->image('qst.png');?></span></span></a>
+					          	<div class="floating_dock_input" ng-show="dock_open">
+					          		<i class="fa fa-times-circle-o" ng-click="dock_open=0"></i>
+					          		<div class="floating_dock_input_box">
+					          			<label>Enter Support/Sales phone number</label>
+					          			<input class="form-control" ng-model="company.contact">
+					          			<div class="text-right">
+					          				<button ng-click="dock_open=0">Save</button>
+					          			</div>
+					          		</div>
+					          	</div>
+					          </li>
+					          <li><a href="#">SOCIAL WALL <span style="float:right;"><i ng-class="{sel:company.social_wall}" ng-click="$event.preventDefault(); company.social_wall = !company.social_wall" class="fa fa-power-off"></i><span class="qst-right"><?= $this->Html->image('qst.png');?></span></span></a></li>
+					        </ul>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="half_hide_toolboars">
+						  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg">
+						    <div class="page-menu-panel">
+						      <div class="page-menu-part">
+						        <h4>PAGE INDICATORS</h4>
+						      </div>
+						    </div>
+						  </div>
+						  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel-bg">
+						    <div class="book text-left">
+						      <ul>
+						        <li><a href="#">Swipe Left<span style="float:right;"><span style="float:right;"><i class="fa fa-pencil"></i> <i class="fa fa-power-off"></i> <span class="qst-right"><?= $this->Html->image('qst.png');?></span></span></a></li>
+						        <li><a href="#">Swipe Up <span style="float:right;"><i class="fa fa-pencil"></i> <i class="fa fa-power-off"></i><span class="qst-right"> <?= $this->Html->image('qst.png');?></span></span></a></li>
+						      </ul>
+						    </div>
+						  </div>
+						  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg">
+						    <div class="page-menu-part">
+						      <h4>PAGE EDITOR</h4>
+						    </div>
+						  </div>
+						  
+						  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel-bg">
+						    <div class="undo">
+						      <div class="col-sm-6 col-xs-6">
+						        <p>UNDO<a ng-class="{disabled_button:current_position == 0}" ng-click="undo($event)" href="#" class="undo1"><?= $this->Html->image('buzz_undo.png');?></a></p>
+						      </div>
+						      <div class="col-sm-6 col-xs-6 ">
+						        <p>REDO<a ng-class="{disabled_button:max_position == current_position}" ng-click="redo($event)" href="#" class="undo1"><?= $this->Html->image('buzz_redo.png');?></a></p>
+						      </div>
+						      <div class="col-sm-12 col-xs-12 ">
+						        <p ng-if="active_sub_page == -1" ng-click="remove_page_template(active_page)" class="text-center lesr cp">Clear the Page</p>
+						        <p ng-if="active_sub_page != -1" ng-click="remove_product_template(active_sub_page)" class="text-center lesr">Clear the Page</p>
+						      </div>
+						    </div>
+						  </div>
+						  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg">
+						    <div class="page-menu-part">
+						      <h4>ITEM PROPERTIES</h4>
+						    </div>
+						  </div>
+						  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel-bg">
+						    <div class="editer">
+						      <p>Scaling</p>
+						    </div>
+						    <div class="progress">
+						    	<div id="wslider1"></div>
+						    </div>
+						  </div>
+						  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel-bg">
+						    <div class="editer">
+						      <p>Position Editor</p>
+						    </div>
+						    <div class="row">
+						      <div class="col-sm-6 padd0">
+			                    <label class="box">X:</label>
+			                    <input type="text" ng-enter-pos="top" class="profile" placeholder="X:" ng-model="position.t" />
+			                  </div>
+			                  <div class="col-sm-6 padd0">
+			                    <label class="box">Y:</label>
+			                    <input type="text" ng-enter-pos="left" class="profile" placeholder="Y:" ng-model="position.l"  />
+			                  </div>
+						    </div>
+						    <ul class="list-inline align-icon">
+						      <li><a ng-click="item_alignment($event, 'left');" href="#" class="lesr1"><?= $this->Html->image('buzz_align_left.png');?></a></li>
+						      <li><a ng-click="item_alignment($event, 'center');" href="#" class="lesr1 lesssr2"><?= $this->Html->image('buzz_align_center.png');?></a></li>
+						      <li><a ng-click="item_alignment($event, 'right');" href="#" class="lesr1"><?= $this->Html->image('buzz_align_right.png');?></a></li>
+						    </ul>
+						  </div>
+						 </div>
+					</div>
+					<div class="col-sm-4"></div>
+				</div>
+			</div>
+		</div>
 		<div class="content" ng-show="active_page != -1">
 			<div class="container-fluid">
 				<div class="row">
@@ -133,7 +261,186 @@
 									</div>
 								</div>
 							</div>
-							<div class="tools-box-content">
+							<div class="tools-box-content tools-box-content-new">
+								<div class="row">
+									<div class="col-sm-4">
+										<div class="tools-box-content-left">
+											<ul class="tools-menu">
+												<li ng-class="{active:attribute_tab == 1}" ng-click="attribute_tab = 1; $event.preventDefault(); reset();">
+													<a href="#">
+														<span class="qst-left"><?= $this->Html->image('qst.png');?> </span>
+														<ul class="arrow">
+														  <li><i class="fa fa-angle-up"></i></li>
+														  <li><i class="fa fa-angle-down"></i></li>
+														</ul>  
+									  					<span class="side-menu">Text</span>
+								  					</a>
+								  				</li>
+												<li ng-class="{active:attribute_tab == 2}" ng-click="attribute_tab = 2; $event.preventDefault(); reset();">
+													<a href="#">
+														<span class="qst-left"><?= $this->Html->image('qst.png');?> </span>
+														<ul class="arrow">
+														  <li><i class="fa fa-angle-up"></i></li>
+														  <li><i class="fa fa-angle-down"></i></li>
+														</ul>
+									  					<span class="side-menu">Image</span>
+									  				</a>
+								  				</li>
+								  				<li ng-class="{active:attribute_tab == 3}" ng-click="attribute_tab = 3; $event.preventDefault(); reset();">
+								  					<a href="#">
+								  						<span class="qst-left"><?= $this->Html->image('qst.png');?> </span> 
+								  						<ul class="arrow">
+														  <li><i class="fa fa-angle-up"></i></li>
+														  <li><i class="fa fa-angle-down"></i></li>
+														</ul> 
+														<span class="side-menu">Background</span>
+													</a>
+												</li>
+								  				<li ng-class="{active:attribute_tab == 4}" ng-click="attribute_tab = 4; $event.preventDefault(); reset();">
+								  					<a href="#">
+								  						<span class="qst-left"><?= $this->Html->image('qst.png');?> </span> 
+								  						<ul class="arrow">
+														  <li><i class="fa fa-angle-up"></i></li>
+														  <li><i class="fa fa-angle-down"></i></li>
+														</ul> 
+														<span class="side-menu">Video</span>
+													</a>
+												</li>
+												<li ng-class="{active:attribute_tab == 5}" ng-click="attribute_tab = 5; $event.preventDefault(); reset();">
+													<a href="#">
+														<span class="qst-left"><?= $this->Html->image('qst.png');?> </span>
+														<ul class="arrow">
+														  <li><i class="fa fa-angle-up"></i></li>
+														  <li><i class="fa fa-angle-down"></i></li>
+														</ul> 
+														<span class="side-menu">Button</span>
+													</a>
+												</li>
+												<li ng-class="{active:attribute_tab == 6}" ng-click="attribute_tab = 6; $event.preventDefault(); reset();">
+													<a href="#">
+														<span class="qst-left"><?= $this->Html->image('qst.png');?> </span>
+														<ul class="arrow">
+														  <li><i class="fa fa-angle-up"></i></li>
+														  <li><i class="fa fa-angle-down"></i></li>
+														</ul> 
+														<span class="side-menu">Map</span>
+													</a>
+												</li>
+												<li ng-class="{active:attribute_tab == 7}" ng-click="attribute_tab = 7; $event.preventDefault(); reset();">
+													<a href="#">
+														<span class="qst-left"><?= $this->Html->image('qst.png');?> </span>
+														<ul class="arrow">
+														  <li><i class="fa fa-angle-up"></i></li>
+														  <li><i class="fa fa-angle-down"></i></li>
+														</ul> 
+														<span class="side-menu">Header</span>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 left-padd">
+								  		<div class="tools-box-content-stage" ng-if="attribute_tab == 1">
+											<div class="tools"><h5 class="add-btn cp" ng-click="new_attribute($event);"><i class="fa fa-plus"></i> Add Text</h5></div>
+											<div class="tools-box-content-stage-bottom text_list">
+												<ul ng-if="active_sub_page == -1" class="list-inline">
+													<li ng-repeat="t in page[active_page]['template_attributes']['text']  track by $index" ng-click="change_active_text($index, page[active_page]['template_attributes']['text'][$index]['value'])" class="btn" ng-class="{'active': data['active_text'] == $index}"  >	{{short_text(page[active_page]['template_attributes']['text'][$index]['value'], 20)}}
+														<span class="delete_attributes" ng-click="delete_attribute($event, $index)"><?= $this->Html->image('delete.png');?></span>
+													</li>
+												</ul>
+												<ul ng-if="active_sub_page != -1" class="list-inline">
+													<li ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['text']  track by $index" ng-click="change_active_text($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['value'])" class="btn" ng-class="{'active': data['active_text'] == $index}"  >{{short_text(page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['value'], 20)}}
+														<span class="delete_attributes" ng-click="delete_attribute($event, $index)"><?= $this->Html->image('delete.png');?></span>
+													</li>
+												</ul>
+												<p class="no_items" ng-hide="page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'].length || page[active_page]['template_attributes']['text'].length">No Items here</p>
+											</div>
+										</div>
+										<div class="tools-box-content-stage image_attribute_container" ng-if="attribute_tab == 2">
+											<div class="tools"><h5 class="add-btn cp" ng-click="new_attribute($event);"><i class="fa fa-plus"></i> Add Image</h5></div>
+											<div class="tools-box-content-stage-bottom image_list">
+												<ul ng-if="active_sub_page == -1" class="list-inline">
+													<li ng-click="change_active_image($index)" ng-class="{gally: data['active_image'] == $index, gally2: data['active_image'] != $index}"  ng-repeat="t in page[active_page]['template_attributes']['image']  track by $index">
+														<img width="100" src="{{page[active_page]['template_attributes']['image'][$index]['value']}}" >
+														<span ng-show="data['active_image'] == $index" class="delete_attributes" ng-click="delete_attribute($event, $index)"><i class="fa fa-trash"></i></span>
+														<span ng-show="data['active_image'] == $index" class="delete_attributes edit_attributes_text btn-success1" data-target="#uploadimageModal" data-toggle="modal">Change Image</span>
+													</li>
+												</ul>
+												<ul ng-if="active_sub_page != -1" class="list-inline">
+													<li ng-click="change_active_image($index)" ng-class="{gally: data['active_image'] == $index, gally2: data['active_image'] != $index}"  ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['image']  track by $index">
+														<img width="100" src="{{page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['value']}}" >
+														<span ng-show="data['active_image'] == $index" class="delete_attributes" ng-click="delete_attribute($event, $index)"><i class="fa fa-trash"></i></span>
+														<span ng-show="data['active_image'] == $index" class="delete_attributes edit_attributes_text btn-success1" data-target="#uploadimageModal" data-toggle="modal">Change Image</span>
+													</li>
+												</ul>
+												<p class="no_items"  ng-hide="page[active_page]['template_attributes']['image'].length || page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'].length">No Items here</p>
+											</div>
+										</div>
+										<div class="tools-box-content-stage background_attribute" ng-if="attribute_tab == 3">
+											<div ng-if="active_sub_page == -1" class="img-preview text-center" ng-style="{background:page[active_page]['template_attributes']['background']['value']}">
+											</div>
+											<div ng-if="active_sub_page != -1" class="img-preview text-center" ng-style="{background:page[active_page]['sub_products'][active_sub_page]['template_attributes']['background']['value']}">
+											</div>
+											<div class="library_list">
+												<h3 class="btn btn-5" ng-click="change_background_image()">Change Background</h3>
+											</div>
+										</div>
+										<div class="tools-box-content-stage" ng-if="attribute_tab == 5">
+									  		<div class="tools"><h5 class="add-btn cp"><i class="fa fa-plus"></i> Add Button</h5></div>
+									  		<div class="button-part">
+										  		<ul>
+												  <li><?= $this->Html->image('gallery.png', ['class' => 'gally']);?></li>
+												  <li>
+												  	<div class="button-images">
+												  		<?= $this->Html->image('gallery.png', ['class' => 'gally1']);?>
+												  		<div class="img-icon">
+												  			<span class="edit"><i class="fa fa-pencil"></i></span>
+															<span class="del"><i class="fa fa-trash"></i></span>
+														</div>
+													</div>
+												  </li>
+												  <li><?= $this->Html->image('gallery.png', ['class' => 'gally2']);?></li>
+												  <li><?= $this->Html->image('gallery.png', ['class' => 'gally2']);?></li>
+												  <li><?= $this->Html->image('gallery.png', ['class' => 'gally2']);?></li>
+												  <li><?= $this->Html->image('gallery.png', ['class' => 'gally2']);?></li>
+										  		</ul>
+										  	</div>
+										</div>
+										<div class="tools-box-content-stage" ng-if="attribute_tab == 4">
+											<div class="tools"><h5 class="add-btn cp" ng-click="new_attribute($event);"><i class="fa fa-plus"></i> Add Video</h5></div>
+											<div class="tools-box-content-stage-bottom template_video_attributes">
+												<ul ng-if="active_sub_page == -1" class="list-inline">
+													<li ng-repeat="t in page[active_page]['template_attributes']['video']  track by $index" ng-click="change_active_video($index, page[active_page]['template_attributes']['video'][$index]['value'])" ng-class="{gally: data['active_video'] == $index, gally2: data['active_video'] != $index}">
+														<i class="fa fa-youtube-play"></i>
+														<span ng-show="data['active_video'] == $index" class="delete_attributes" ng-click="delete_attribute($event, $index)"><i class="fa fa-trash"></i></span>
+														<span ng-show="data['active_video'] == $index" class="delete_attributes edit_attributes_text btn-success1">Change Video</span>
+													</li>
+												</ul>
+												<ul ng-if="active_sub_page != -1" class="list-inline">
+													<li ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['video']  track by $index" ng-click="change_active_video($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['value'])" ng-class="{gally: data['active_video'] == $index, gally2: data['active_video'] != $index}">
+														<i class="fa fa-youtube-play"></i>
+														<span ng-show="data['active_video'] == $index" class="delete_attributes" ng-click="delete_attribute($event, $index)"><i class="fa fa-trash"></i></span>
+														<span ng-show="data['active_video'] == $index" class="delete_attributes edit_attributes_text btn-success1">Change Video</span>
+													</li>
+												</ul>
+												<p class="no_items"  ng-hide="page[active_page]['template_attributes']['video'].length || page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'].length">No Items here</p>
+											</div>
+										</div>
+										<div class="tools-box-content-stage" ng-show="attribute_tab == 6">
+											<div class="tools"></div>
+											<div class="map-part">
+											  <h4>Enter your location</h4>
+											  <input ng-enter-map type="text" id="change_map_val" class=" form-control locat" placeholder="Adyar, Chennai">
+											  <h4>Pinned Locations:</h4>
+											  <p class="clearfix" ng-repeat="t in page[active_page]['template_attributes']['map']  track by $index" ng-if="active_sub_page == -1" ><span ng-click="change_active_map($index, page[active_page]['template_attributes']['map'][$index]['value'])">{{short_text(t.value, 10)}}</span> <span  class="pull-right"><a ng-click="delete_attribute($event, $index)" href="#">&nbsp;&nbsp;Remove Pin</a></span></p>
+											  <p class="clearfix" ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['map']  track by $index" ng-if="active_sub_page == -1" ><span ng-click="change_active_map($index, page[active_page]['template_attributes']['map'][$index]['value'])">{{short_text(t.value, 10)}}</span> <span class="pull-right"><a ng-click="delete_attribute($event, $index)" href="#">&nbsp;&nbsp;Remove Pin</a></span></p>
+											</div>
+											<p class="no_items"  ng-hide="page[active_page]['template_attributes']['map'].length || page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'].length">No Items here</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tools-box-content hide">
 								<div class="row">
 									<div class="col-sm-4">
 										<div class="tools-box-content-left">
@@ -226,7 +533,7 @@
 										<div class="tools-box-content-stage" ng-if="attribute_tab == 4">
 											<div class="img-preview text-center">
 												<h4>Enter your video url</h4>
-												<textarea class="form-control" rows="5" ng-show="data['active_video'] != -1" ng-enter-map type="text" id="change_video_val"></textarea>
+												<textarea class="form-control" rows="5" ng-show="data['active_video'] != -1" ng-enter-video type="text" id="change_video_val"></textarea>
 											</div>
 											<div class="library_list">
 												<h3>Item Library</h3>
@@ -283,7 +590,126 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-2 tool_box_container">
+					<div class="col-md-2 col-lg-2 col-sm-4 col-xs-12 tool_box_container">
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg">
+					    <div class="page-menu-panel">
+					      <div class="page-menu-part">
+					        <h4>BOOK SETTINGS</h4>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel-bg">
+					    <div class="page-menu-panel">
+					      <div class="book text-left">
+					        <ul>
+					          <li>
+					          	<a href="#">THEME COLOR <span style="float:right;"><span ng-click="$event.preventDefault(); theme_color_floating = 1" class="colors" ng-style="{background:company.color}"></span><span class="qst-right"><?= $this->Html->image('qst.png');?></span></span></a>
+					          	<div class="floating_dock_input theme_color_floating" ng-show="theme_color_floating">
+					          		<i class="fa fa-times-circle-o" ng-click="theme_color_floating=0"></i>
+					          		<div class="floating_dock_input_box">
+					          			<label>Choose your theme color</label>
+					          			<div class="theme_colors">
+					          				<span class="colors" ng-repeat="cl in theme_colors" ng-style="{background:cl}" ng-class="{active_color:cl == company.color}" ng-click="company.color=cl"></span>
+					          			</div>
+					          			<p>OR</p>
+					          			<div class="color_input_box">
+					          				Enter Your Custom color <input ng-model="company.color">
+					          			</div>
+					          			<div class="text-center">
+					          				<button ng-click="theme_color_floating=0">OK</button>
+					          			</div>
+					          		</div>
+					          	</div>
+					          </li>
+					          <li><a href="#">HOME BUTTON<span style="float:right;"><i ng-class="{sel:company.home_icon}" ng-click="$event.preventDefault(); company.home_icon = !company.home_icon" class="fa fa-power-off"></i> <span class="qst-right"><?= $this->Html->image('qst.png');?></span></span></a></li>
+					          <li>
+					          	<a href="#">FLOATING DOCK <span style="float:right;"><i ng-show="company.floating_dock" class="fa fa-pencil" ng-class="{dock_open:dock_open}" ng-click="$event.preventDefault(); dock_open = 1"></i> <i ng-class="{sel:company.floating_dock}" ng-click="$event.preventDefault(); company.floating_dock = !company.floating_dock" class="fa fa-power-off"></i> <span class="qst-right"><?= $this->Html->image('qst.png');?></span></span></a>
+					          	<div class="floating_dock_input" ng-show="dock_open">
+					          		<i class="fa fa-times-circle-o" ng-click="dock_open=0"></i>
+					          		<div class="floating_dock_input_box">
+					          			<label>Enter Support/Sales phone number</label>
+					          			<input class="form-control" ng-model="company.contact">
+					          			<div class="text-right">
+					          				<button ng-click="dock_open=0">Save</button>
+					          			</div>
+					          		</div>
+					          	</div>
+					          </li>
+					          <li><a href="#">SOCIAL WALL <span style="float:right;"><i ng-class="{sel:company.social_wall}" ng-click="$event.preventDefault(); company.social_wall = !company.social_wall" class="fa fa-power-off"></i><span class="qst-right"><?= $this->Html->image('qst.png');?></span></span></a></li>
+					        </ul>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg">
+					    <div class="page-menu-panel">
+					      <div class="page-menu-part">
+					        <h4>PAGE INDICATORS</h4>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel-bg">
+					    <div class="book text-left">
+					      <ul>
+					        <li><a href="#">Swipe Left<span style="float:right;"><span style="float:right;"><i class="fa fa-pencil"></i> <i class="fa fa-power-off"></i> <span class="qst-right"><?= $this->Html->image('qst.png');?></span></span></a></li>
+					        <li><a href="#">Swipe Up <span style="float:right;"><i class="fa fa-pencil"></i> <i class="fa fa-power-off"></i><span class="qst-right"> <?= $this->Html->image('qst.png');?></span></span></a></li>
+					      </ul>
+					    </div>
+					  </div>
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg">
+					    <div class="page-menu-part">
+					      <h4>PAGE EDITOR</h4>
+					    </div>
+					  </div>
+					  
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel-bg">
+					    <div class="undo">
+					      <div class="col-sm-6 col-xs-6">
+					        <p>UNDO<a ng-class="{disabled_button:current_position == 0}" ng-click="undo($event)" href="#" class="undo1"><?= $this->Html->image('buzz_undo.png');?></a></p>
+					      </div>
+					      <div class="col-sm-6 col-xs-6 ">
+					        <p>REDO<a ng-class="{disabled_button:max_position == current_position}" ng-click="redo($event)" href="#" class="undo1"><?= $this->Html->image('buzz_redo.png');?></a></p>
+					      </div>
+					      <div class="col-sm-12 col-xs-12 ">
+					        <p ng-if="active_sub_page == -1" ng-click="remove_page_template(active_page)" class="text-center lesr cp">Clear the Page</p>
+					        <p ng-if="active_sub_page != -1" ng-click="remove_product_template(active_sub_page)" class="text-center lesr">Clear the Page</p>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-class="{half_hide_toolboars:(data['active_text'] == -1 && data['active_image'] == -1 && data['active_video'] == -1 && data['active_map'] == -1)}">
+					    <div class="page-menu-part">
+					      <h4>ITEM PROPERTIES</h4>
+					    </div>
+					  </div>
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel-bg" ng-class="{half_hide_toolboars:(data['active_text'] == -1 && data['active_image'] == -1 && data['active_video'] == -1 && data['active_map'] == -1)}">
+					    <div class="editer">
+					      <p>Scaling</p>
+					    </div>
+					    <div class="progress">
+					    	<div id="wslider"></div>
+					    </div>
+					  </div>
+					  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 panel-bg" ng-class="{half_hide_toolboars:(data['active_text'] == -1 && data['active_image'] == -1 && data['active_video'] == -1 && data['active_map'] == -1)}">
+					    <div class="editer">
+					      <p>Position Editor</p>
+					    </div>
+					    <div class="row">
+					      <div class="col-sm-6 padd0">
+		                    <label class="box">X:</label>
+		                    <input type="text" ng-enter-pos="top" class="profile" placeholder="X:" ng-model="position.t" />
+		                  </div>
+		                  <div class="col-sm-6 padd0">
+		                    <label class="box">Y:</label>
+		                    <input type="text" ng-enter-pos="left" class="profile" placeholder="Y:" ng-model="position.l"  />
+		                  </div>
+					    </div>
+					    <ul class="list-inline align-icon">
+					      <li><a ng-click="item_alignment($event, 'left');" href="#" class="lesr1"><?= $this->Html->image('buzz_align_left.png');?></a></li>
+					      <li><a ng-click="item_alignment($event, 'center');" href="#" class="lesr1 lesssr2"><?= $this->Html->image('buzz_align_center.png');?></a></li>
+					      <li><a ng-click="item_alignment($event, 'right');" href="#" class="lesr1"><?= $this->Html->image('buzz_align_right.png');?></a></li>
+					    </ul>
+					  </div>
+					</div>
+					<div class="col-sm-2 tool_box_container hide">
 						<div class="page-menu-panel">
 							<div class="page-menu-part col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg">
 								<h4>Switch View</h4>
@@ -324,34 +750,34 @@
 								</div>
 							</div>
 
-							<div class="page-menu-part text_tools col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="attribute_tab == 1 && data['active_text'] != -1">
-								<h4>Text Tools</h4>
-								<div class="page-menu list">
-									<select ng-model="font_size" ng-change="change_font_size();" ng-init="font_size = '14'">
-				                        <?php for($i=14; $i<=30;$i++){?>
-				                        <option value="<?= $i;?>"><?= $i;?></option>
-				                        <?php }?>
-				                    </select>
-									<a ng-class="{'active': ((active_sub_page == -1 && page[active_page]['template_attributes']['text'][data['active_text']]['bold']) || page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][data['active_text']]['bold']) }"  ng-click="change_bold($event)" class="btn btn-6 bold_icon">
-										<i class="fa fa-bold"></i>
-									</a>
-									<div class="colorpicker_container">
-										<input type="text" maxlength="6" size="6" id="colorpicker" value="00ff00" />
-										<?= $this->Html->image('color_icn.png');?>
+							<div class="page-menu-part text_tools col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" >
+								<div ng-show="attribute_tab == 1 && data['active_text'] != -1">
+									<h4>Text Tools</h4>
+									<div class="page-menu list">
+										<select ng-model="font_size" ng-change="change_font_size();" ng-init="font_size = '14'">
+					                        <?php for($i=14; $i<=30;$i++){?>
+					                        <option value="<?= $i;?>"><?= $i;?></option>
+					                        <?php }?>
+					                    </select>
+										<a ng-class="{'active': ((active_sub_page == -1 && page[active_page]['template_attributes']['text'][data['active_text']]['bold']) || page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][data['active_text']]['bold']) }"  ng-click="change_bold($event)" class="btn btn-6 bold_icon">
+											<i class="fa fa-bold"></i>
+										</a>
+										<div class="colorpicker_container">
+											<input type="text" maxlength="6" size="6" id="colorpicker" value="00ff00" />
+											<?= $this->Html->image('color_icn.png');?>
+										</div>
+										<a ng-click="increase_line_height($event)" href="#" class="btn btn-6"><i class="fa fa-plus"></i></a>
+										<a ng-click="decrease_line_height($event)" href="#" class="btn btn-6"><i class="fa fa-minus"></i></a>
 									</div>
-									<a ng-click="increase_line_height($event)" href="#" class="btn btn-6"><i class="fa fa-plus"></i></a>
-									<a ng-click="decrease_line_height($event)" href="#" class="btn btn-6"><i class="fa fa-minus"></i></a>
-									<a ng-disabled="current_position == 0" ng-click="undo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-left"></i></a>
-									<a ng-disabled="max_position == current_position" ng-click="redo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-right"></i></a>
+								</div>
+								<div class="clearfix undoredobox" ng-class="{undoredobox: !(attribute_tab == 1 && data['active_text'] != -1)}">
+									<div class="page-menu list">
+										<a ng-disabled="current_position == 0" ng-click="undo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-left"></i></a>
+										<a ng-disabled="max_position == current_position" ng-click="redo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-right"></i></a>
+									</div>
 								</div>
 							</div>
 
-							<div class="page-menu-part text_tools col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="data['active_image'] != -1 || data['active_video'] != -1 || data['active_map'] != -1" style="padding-top: 20px;">
-								<div class="page-menu list">
-									<a ng-disabled="current_position == 0" ng-click="undo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-left"></i></a>
-									<a ng-disabled="max_position == current_position" ng-click="redo($event)" href="#" class="btn btn-6"><i class="fa fa-rotate-right"></i></a>
-								</div>
-							</div>
 							<div class="page-menu-part col-lg-12 col-md-12 col-sm-12 col-xs-12 border panel-bg" ng-show="data['active_text'] != -1 || data['active_image'] != -1 || data['active_video'] != -1 || data['active_map'] != -1">
 								<h4>PROPERTIES</h4>
 								<div class="row" ng-show="data['active_text'] != -1 || data['active_image'] != -1 || data['active_video'] != -1 || data['active_map'] != -1">
@@ -386,33 +812,49 @@
 							<h4>APP PREVIEW</h4>
 							<?= $this->Html->image('others/book-preview.png', ['class' => 'img-responsive', 'ng-if' => "page[active_page]['template_attributes'].length == 0 && page[active_page]['sub_products'][active_sub_page]['template_attributes'].length == 0"]);?>
 							<div class="book_preview_main_container">
-								<div class="book_preview_container" ng-show="active_sub_page == -1" style="position:relative;overflow:hidden; margin:0 auto;width:{{views[default_view].width}}px; height:{{views[default_view].height}}px;background:{{page[active_page]['template_attributes']['background']['value']}}">
-			                        <span ng-repeat="t in page[active_page]['template_attributes']['text']  track by $index" on-finish-text-render class="draggable_text" style="position:absolute;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['text'][$index]['top'], left: page[active_page]['template_attributes']['text'][$index]['left'], width: page[active_page]['template_attributes']['text'][$index]['width'], 'font-size': page[active_page]['template_attributes']['text'][$index]['font_size'], 'text-align': page[active_page]['template_attributes']['text'][$index]['text_align'], 'font-weight': page[active_page]['template_attributes']['text'][$index]['bold'] ? 'bold' : 'normal', 'color': page[active_page]['template_attributes']['text'][$index]['color'] ? '#'+page[active_page]['template_attributes']['text'][$index]['color'] : ''}" ng-click="change_active_text($index, page[active_page]['template_attributes']['text'][$index]['value'])">
+								<div class="book_preview_container" ng-if="active_sub_page == -1 && !preloader" style="position:relative;overflow:hidden; margin:0 auto;width:{{views[default_view].width}}px; height:{{views[default_view].height}}px;background:{{page[active_page]['template_attributes']['background']['value']}}">
+			                        <span ng-repeat="t in page[active_page]['template_attributes']['text']  track by $index" on-finish-text-render class="preview_attributes draggable_text" style="position:absolute;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['text'][$index]['top'], left: page[active_page]['template_attributes']['text'][$index]['left'], width: page[active_page]['template_attributes']['text'][$index]['width'], 'font-size': page[active_page]['template_attributes']['text'][$index]['font_size'], 'text-align': page[active_page]['template_attributes']['text'][$index]['text_align'], 'font-weight': page[active_page]['template_attributes']['text'][$index]['bold'] ? 'bold' : 'normal', 'color': page[active_page]['template_attributes']['text'][$index]['color'] ? '#'+page[active_page]['template_attributes']['text'][$index]['color'] : ''}" ng-click="change_active_text($index, page[active_page]['template_attributes']['text'][$index]['value'])" ng-class="{active: data['active_text'] == $index}">
 			                        	<img width="100%" height="100%" ng-src="{{'<?= $this->Url->build('/admin/text2image/');?>?text='+urlencode(page[active_page]['template_attributes']['text'][$index]['value'])+'&width='+page[active_page]['template_attributes']['text'][$index]['width']+'&color='+page[active_page]['template_attributes']['text'][$index]['color']+'&bold='+page[active_page]['template_attributes']['text'][$index]['bold']+'&size='+page[active_page]['template_attributes']['text'][$index]['font_size']+'&align='+page[active_page]['template_attributes']['text'][$index]['text_align']+'&lheight='+page[active_page]['template_attributes']['text'][$index]['line_height']}}" >
+			                        	<i ng-click="increase_decrease_scale(true, $event)" class="fa fa-plus"></i>
+			                        	<i ng-click="increase_decrease_scale(false, $event)" class="fa fa-minus"></i>
 			                        </span>
-			                        <span ng-repeat="t in page[active_page]['template_attributes']['image']  track by $index" on-finish-image-render class="draggable_image" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:{{$index*40}}px; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['image'][$index]['top'], left: page[active_page]['template_attributes']['image'][$index]['left'], width: page[active_page]['template_attributes']['image'][$index]['width'], height: page[active_page]['template_attributes']['image'][$index]['height']}" ng-click="change_active_image($index)">
-			                          <img width="100%" height="100%" src="{{page[active_page]['template_attributes']['image'][$index]['value']}}" >
+			                        <span ng-repeat="t in page[active_page]['template_attributes']['image']  track by $index" on-finish-image-render class="preview_attributes draggable_image" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:{{$index*40}}px; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['image'][$index]['top'], left: page[active_page]['template_attributes']['image'][$index]['left'], width: page[active_page]['template_attributes']['image'][$index]['width'], height: page[active_page]['template_attributes']['image'][$index]['height']}" ng-click="change_active_image($index)">
+				                        <img width="100%" height="100%" src="{{page[active_page]['template_attributes']['image'][$index]['value']}}" >
+				                        <i ng-click="increase_decrease_scale(true, $event)" class="fa fa-plus"></i>
+			                        	<i ng-click="increase_decrease_scale(false, $event)" class="fa fa-minus"></i>
 			                        </span>
-			                        <div ng-repeat="t in page[active_page]['template_attributes']['video']  track by $index" on-finish-video-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['video'][$index]['top'], left: page[active_page]['template_attributes']['video'][$index]['left'], width: page[active_page]['template_attributes']['video'][$index]['width'], height: page[active_page]['template_attributes']['video'][$index]['height']}" ng-click="change_active_video($index, page[active_page]['template_attributes']['video'][$index]['value'])">
-			                          <iframe width="100%" height="100%" ng-src="{{page[active_page]['template_attributes']['video'][$index]['value'] | trustAsResourceUrl}}" ></iframe>
+			                        <div ng-repeat="t in page[active_page]['template_attributes']['video']  track by $index" on-finish-video-render class="preview_attributes draggable_video" ng-class="{active: data['active_video'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['video'][$index]['top'], left: page[active_page]['template_attributes']['video'][$index]['left'], width: page[active_page]['template_attributes']['video'][$index]['width'], height: page[active_page]['template_attributes']['video'][$index]['height']}" ng-click="change_active_video($index, page[active_page]['template_attributes']['video'][$index]['value'])">
+			                          	<iframe width="100%" height="100%" ng-src="{{page[active_page]['template_attributes']['video'][$index]['value'] | trustAsResourceUrl}}" ></iframe>
+			                          	<i ng-click="increase_decrease_scale(true, $event)" class="fa fa-plus"></i>
+			                        	<i ng-click="increase_decrease_scale(false, $event)" class="fa fa-minus"></i>
 			                        </div>
-			                        <div ng-repeat="t in page[active_page]['template_attributes']['map']  track by $index" on-finish-map-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['map'][$index]['top'], left: page[active_page]['template_attributes']['map'][$index]['left'], width: page[active_page]['template_attributes']['map'][$index]['width'], height: page[active_page]['template_attributes']['map'][$index]['height']}" ng-click="change_active_map($index, page[active_page]['template_attributes']['map'][$index]['value'])" >
-			                          <iframe width="100%" height="100%" ng-src="{{'https://www.google.com/maps/embed/v1/place?key=AIzaSyAj5h09edjQhvZCnTutWyo18UQpJvcR75U&q='+page[active_page]['template_attributes']['map'][$index]['value'] | trustAsResourceUrl}}" ></iframe>
+			                        <div ng-repeat="t in page[active_page]['template_attributes']['map']  track by $index" on-finish-map-render class="preview_attributes draggable_map" ng-class="{active: data['active_map'] != -1}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['template_attributes']['map'][$index]['top'], left: page[active_page]['template_attributes']['map'][$index]['left'], width: page[active_page]['template_attributes']['map'][$index]['width'], height: page[active_page]['template_attributes']['map'][$index]['height']}" ng-click="change_active_map($index, page[active_page]['template_attributes']['map'][$index]['value'])" ng-if="$index == 0">
+			                          	<iframe width="100%" height="100%" ng-src="{{'<?= $this->Url->build('/admin/map/');?>'+get_map_url(page[active_page]['template_attributes']['map']) | trustAsResourceUrl}}" ></iframe>
+			                          	<i ng-click="increase_decrease_scale(true, $event)" class="fa fa-plus"></i>
+			                        	<i ng-click="increase_decrease_scale(false, $event)" class="fa fa-minus"></i>
 			                        </div>
 			                    </div>
 
-			                    <div class="book_preview_container" ng-show="active_sub_page != -1" style="position:relative;overflow:hidden; margin:0 auto;width:{{views[default_view].width}}px; height:{{views[default_view].height}}px;background:{{page[active_page]['sub_products'][active_sub_page]['template_attributes']['background']['value']}}">
-			                        <span ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['text']  track by $index" on-finish-text-render class="draggable_text" style="position:absolute;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['width'], 'font-size': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['font_size'], 'font-weight': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['bold'] ? 'bold' : 'normal', 'text-align': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['text_align'], 'color': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color'] ? '#'+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color'] : ''}" ng-click="change_active_text($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['value'])" ng-click="change_active_image($index)">
-			                          <img width="100%" height="100%" ng-src="{{'<?= $this->Url->build('/admin/text2image/');?>?text='+urlencode(page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['value'])+'&width='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['width']+'&color='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color']+'&bold='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['bold']+'&size='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['font_size']+'&align='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['text_align']+'&lheight='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['line_height']}}" >
+			                    <div class="book_preview_container" ng-show="active_sub_page != -1 && !preloader" style="position:relative;overflow:hidden; margin:0 auto;width:{{views[default_view].width}}px; height:{{views[default_view].height}}px;background:{{page[active_page]['sub_products'][active_sub_page]['template_attributes']['background']['value']}}">
+			                        <span ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['text']  track by $index" on-finish-text-render class="draggable_text preview_attributes" style="position:absolute;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['width'], 'font-size': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['font_size'], 'font-weight': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['bold'] ? 'bold' : 'normal', 'text-align': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['text_align'], 'color': page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color'] ? '#'+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color'] : ''}" ng-click="change_active_text($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['value'])" ng-click="change_active_image($index)" ng-class="{active: data['active_text'] == $index}">
+			                          	<img width="100%" height="100%" ng-src="{{'<?= $this->Url->build('/admin/text2image/');?>?text='+urlencode(page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['value'])+'&width='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['width']+'&color='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['color']+'&bold='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['bold']+'&size='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['font_size']+'&align='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['text_align']+'&lheight='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['text'][$index]['line_height']}}" >
+			                          	<i ng-click="increase_decrease_scale(true, $event)" class="fa fa-plus"></i>
+			                        	<i ng-click="increase_decrease_scale(false, $event)" class="fa fa-minus"></i>
 			                        </span>
-			                        <span ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['image']  track by $index" on-finish-image-render class="draggable_image" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:{{$index*40}}px; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['height']}" ng-click="change_active_image($index)">
-			                          <img width="100%" height="100%" src="{{page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['value']}}" >
+			                        <span ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['image']  track by $index" on-finish-image-render class="draggable_image preview_attributes" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:{{$index*40}}px; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['height']}" ng-click="change_active_image($index)">
+			                          	<img width="100%" height="100%" src="{{page[active_page]['sub_products'][active_sub_page]['template_attributes']['image'][$index]['value']}}" >
+			                          	<i ng-click="increase_decrease_scale(true, $event)" class="fa fa-plus"></i>
+			                        	<i ng-click="increase_decrease_scale(false, $event)" class="fa fa-minus"></i>
 			                        </span>
-			                        <div ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['video']  track by $index" on-finish-video-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['height']}" ng-click="change_active_video($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['value'])">
-			                          <iframe width="100%" height="100%" ng-src="{{page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['value'] | trustAsResourceUrl}}" ></iframe>
+			                        <div ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['video']  track by $index" on-finish-video-render class="draggable_video preview_attributes" ng-class="{active: data['active_video'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['height']}" ng-click="change_active_video($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['value'])">
+			                          	<iframe width="100%" height="100%" ng-src="{{page[active_page]['sub_products'][active_sub_page]['template_attributes']['video'][$index]['value'] | trustAsResourceUrl}}" ></iframe>
+			                          	<i ng-click="increase_decrease_scale(true, $event)" class="fa fa-plus"></i>
+			                        	<i ng-click="increase_decrease_scale(false, $event)" class="fa fa-minus"></i>
 			                        </div>
-			                        <div ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['map']  track by $index" on-finish-video-render class="draggable_video" ng-class="{active: data['active_image'] == $index}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['height']}" ng-click="change_active_map($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['value'])">
-			                          <iframe width="100%" height="100%" ng-src="{{'https://www.google.com/maps/embed/v1/place?key=AIzaSyAj5h09edjQhvZCnTutWyo18UQpJvcR75U&q='+page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['value'] | trustAsResourceUrl}}" ></iframe>
+			                        <div ng-repeat="t in page[active_page]['sub_products'][active_sub_page]['template_attributes']['map']  track by $index" on-finish-map-render class="draggable_map preview_attributes" ng-class="{active: data['active_map'] != -1}" style="position:absolute; top:50%; left:50%;" data-index="{{$index}}" ng-style="{top: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['top'], left: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['left'], width: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['width'], height: page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['height']}" ng-click="change_active_map($index, page[active_page]['sub_products'][active_sub_page]['template_attributes']['map'][$index]['value'])" ng-if="$index == 0">
+			                          	<iframe width="100%" height="100%" ng-src="{{'<?= $this->Url->build('/admin/map/');?>'+get_map_url(page[active_page]['sub_products'][active_sub_page]['template_attributes']['map']) | trustAsResourceUrl}}" ></iframe>
+			                          	<i ng-click="increase_decrease_scale(true, $event)" class="fa fa-plus"></i>
+			                        	<i ng-click="increase_decrease_scale(false, $event)" class="fa fa-minus"></i>
 			                        </div>
 			                    </div>
 			                </div>
@@ -425,7 +867,7 @@
 							<a ng-repeat="pa in page[active_page].sub_products" href="#" class="page-btn live-page" ng-class="{active: active_sub_page == $index}" ng-click="select_active_sub_page($index, $event)" ng-init="tmp_letter = $index == 0 ? 'b' : nextletter(); $parent.tmp_letter_data = ($index == 0) ? [] : $parent.tmp_letter_data ; $parent.tmp_letter_data[$index] = tmp_letter; $parent.tmp_letter = tmp_letter" data-id="{{tmp_letter}}">
 								<span class="live-page-id">{{active_page+1}}{{tmp_letter_data[$index]}}</span>
 								<span ng-click="remove_product($index)" class="live-page-id trash_icon"><i class="fa fa-trash"></i></span>
-								<span ng-if="pa.template" ng-click="remove_product_template($index)" class="live-page-id remove_icon"><i class="fa fa-times"></i></span>
+								<!--<span ng-if="pa.template" ng-click="remove_product_template($index)" class="live-page-id remove_icon"><i class="fa fa-times"></i></span>-->
 								<span class="live-page-caption">{{pa.name}}</span>
 								<span class="preview_templates">
 									<img ng-if="pa.template && pa.template != -1 && pa.template_image == undefined" width="65" src="<?= $this->Url->build('/upload/template_image/template_');?>{{pa.template}}.png" >
@@ -439,6 +881,23 @@
 		</div>
     
 
+		<div id="saveModal" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Are you sure you want to save in progress {{progress()}}%?</h4>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" ng-click="save()" class="btn btn-primary" data-dismiss="modal">Yes</button>
+		        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
 		<a data-toggle="modal" data-target="#myModal" class="hide modal_image_upload"></a>
 
 		<div id="uploadimageModal" class="modal fade" role="dialog">
@@ -577,7 +1036,6 @@ buzztm.directive('ngEnter', function() {
             element.bind("keydown keypress", function(event) {
                 if(event.which === 13) {
                         scope.$apply(function(){
-                                scope.track_first_changes('text', scope.data['active_text']);
                                 if(scope.active_sub_page == -1)
                                 {
                                 	scope.page[scope.active_page]['template_attributes']['text'][scope.data['active_text']]['value'] = element.val();
@@ -605,7 +1063,6 @@ buzztm.directive('ngEnterVideo', function() {
             element.bind("keydown keypress", function(event) {
                 if(event.which === 13) {
                         scope.$apply(function(){
-                                scope.track_first_changes('video', scope.data['active_video']);
                                 if(scope.active_sub_page == -1)
                                 {
                                 	scope.page[scope.active_page]['template_attributes']['video'][scope.data['active_video']]['value'] = element.val();
@@ -632,21 +1089,35 @@ buzztm.directive('ngEnterMap', function() {
         return function(scope, element, attrs) {
             element.bind("keydown keypress", function(event) {
                 if(event.which === 13) {
+                        if(!element.val()) return;
                         scope.$apply(function(){
-                                scope.track_first_changes('map', scope.data['active_map']);
                                 if(scope.active_sub_page == -1)
                                 {
-                                	scope.page[scope.active_page]['template_attributes']['map'][scope.data['active_map']]['value'] = element.val();
+                                	if(scope.data['active_map'] != -1)
+                                		scope.page[scope.active_page]['template_attributes']['map'][scope.data['active_map']]['value'] = element.val();
+                                	else
+                                	{
+                                		ddata = {"field_type":"map","value":element.val(),"pos_top":"0","pos_left":"50%","link":"","top":"30%","left":"0", width: "100%", height: "46%"};
+										scope.page[scope.active_page]['template_attributes']['map'].push(ddata);
+										//scope.change_active_map(scope.page[scope.active_page]['template_attributes']['map'].length - 1, default_map);
+                                	}
                                 }
                                 else
                                 {
-                                	scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['map'][scope.data['active_map']]['value'] = element.val();
+                                	if(scope.data['active_map'] != -1)
+                                		scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['map'][scope.data['active_map']]['value'] = element.val();
+                                	else
+                                	{
+                                		ddata = {"field_type":"map","value":element.val(),"pos_top":"0","pos_left":"50%","link":"","top":"30%","left":"0", width: "100%", height: "46%"};
+										scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['map'].push(ddata);
+										//scope.change_active_map(scope.page[scope.active_page]['sub_products'][scope.active_sub_page]['template_attributes']['map'].length - 1, default_map);
+                                	}
                                 }
                                 scope.data['active_text'] = -1;
                                 scope.data['active_video'] = -1;
                                 scope.data['active_map'] = -1;
                                 scope.data['background_st'] = 0;
-
+                                setTimeout(function(){$("#change_map_val").val('');}, 1000);
                                 scope.track_changes();
                         });
                         
@@ -779,7 +1250,7 @@ buzztm.directive('ngEnterPos', function() {
                           });
                         }
                       }
-                      );
+                    );
                 });
             }
         }
@@ -831,13 +1302,13 @@ buzztm.directive('ngEnterPos', function() {
     return {
         restrict: 'A',
         link: function (scope, element, attr) {
-            if (scope.$last === true) {
+            if (scope.$first === true) {
                 $timeout(function () {
-                    $(".draggable_video").draggable(
+                    $(".draggable_map").draggable(
                       {
                         containment: "parent",
                         stop: function( event, ui ) { 
-                          ind = $(this).data("index");
+                          ind = 0; //$(this).data("index");
                           scope.$apply(function(){
                             scope.track_first_changes('map', ind);
                             if(scope.active_sub_page == -1)
@@ -887,7 +1358,6 @@ buzztm.directive('ngEnterPos', function() {
 				$('#colorpicker').val(hex);
 
 				$scope.$apply(function(){
-					$scope.track_first_changes('text', $scope.data['active_text']);
 					if($scope.active_sub_page == -1)
 		            {
 		                $scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['color'] = hex;
@@ -915,6 +1385,7 @@ buzztm.directive('ngEnterPos', function() {
     	$("#change_map_val").geocomplete()
 	          .bind("geocode:result", function(event, result){
 	            console.log("Result: " + result.formatted_address);
+	            $("#change_map_val").val('');
 	          })
 	          .bind("geocode:error", function(event, status){
 	            console.log("ERROR: " + status);
@@ -951,12 +1422,11 @@ buzztm.directive('ngEnterPos', function() {
 				}
 				else if($scope.data['active_map'] != -1)
 				{
-					ind = $scope.data['active_map'];
+					ind = 0; //$scope.data['active_map'];
 					ttype = 'map';
 				}
 
 				$scope.$apply(function(){
-					$scope.track_first_changes(ttype, ind);
 					if($scope.active_sub_page == -1)
 	                {
 	                    $scope.page[$scope.active_page]['template_attributes'][ttype][ind]['width'] = wwidth+'%';
@@ -998,13 +1468,12 @@ buzztm.directive('ngEnterPos', function() {
 				}
 				else
 				{
-					ind = $scope.data['active_image'];
+					ind = 0; //$scope.data['active_image'];
 					ttype = 'image';
 				}
 
 
 				$scope.$apply(function(){
-					$scope.track_first_changes(ttype, ind);
 					if($scope.active_sub_page == -1)
 	                {
 	                    $scope.page[$scope.active_page]['template_attributes'][ttype][ind]['height'] = wwidth ? wwidth+'%' : 'auto';
@@ -1027,7 +1496,7 @@ buzztm.directive('ngEnterPos', function() {
     		sub_page_length = 0;
 
     		angular.forEach($scope.page, function(value, key) {
-			  if(value.template)cnt++;
+			  if(value.template && value.page != 5)cnt++;
 
 			  if(value.page == 4)
 			  {
@@ -1038,7 +1507,10 @@ buzztm.directive('ngEnterPos', function() {
 			  }
 			});
 
-    		return Math.round((100/($scope.page.length + sub_page_length)) * cnt);
+    		if($scope.company.social_wall)
+    			return Math.round((100/($scope.page.length + sub_page_length)) * (cnt + 1));
+    		else
+    			return Math.round((100/(($scope.page.length - 1) + sub_page_length)) * cnt);
     	};
 
     	$scope.getNumber = function(num) {
@@ -1165,10 +1637,11 @@ buzztm.directive('ngEnterPos', function() {
             });
         });
 
-        $scope.views = {'mobile': {width: 200, height:300}, 'desktop': {width: 400, height: 500}};
+        $scope.views = {'mobile': {width: 200, height:300}, 'desktop': {width: 400, height: 533}};
         $scope.default_view = 'desktop';
+        post_url = '<?= $this->Url->build(["controller" => "admin", "action" => "create_book"]);?>';
         $scope.page = [];
-        $scope.company = {book_name: 'App Title', no_of_page:1, page_type: ""};
+        $scope.company = {book_name: 'App Title', no_of_page:1, page_type: "", color:"#FF9900", social_wall:0, home_icon:0, contact:"", floating_dock:0};
         $scope.tab = 1;
         $scope.clicked = false;
         $scope.attribute_tab = 1;
@@ -1183,7 +1656,7 @@ buzztm.directive('ngEnterPos', function() {
         $scope.themes = []; 
         $scope.selected_theme = {};
         $scope.position = {t:0, l:0, w:0, h:0};
-
+        $scope.theme_colors = ['#FF9900', '#8AFF00', '#0189FF', '#6B00FE', '#E300FF', '#FE0000', '#FF7200', '#252525', '#000000', '#ffffff']; 
 
         var formData = 0;
         $i = 0;
@@ -1192,7 +1665,7 @@ buzztm.directive('ngEnterPos', function() {
         $scope.page[$i++] = {name: 'About us', template: 0, template_attributes: [], page: 2};
                 
         if($scope.company.no_of_page == 1)
-            $scope.page[$i++] = {name: 'Product Page 1', template: 0, template_attributes: [], page: 4, sub_products: []};
+            $scope.page[$i++] = {name: 'Product 1', template: 0, template_attributes: [], page: 4, sub_products: []};
         else
         {
             $scope.page[$i++] = {name: 'Navigation', template: 0, template_attributes: [], page: 3};
@@ -1200,7 +1673,7 @@ buzztm.directive('ngEnterPos', function() {
             for(j=0;j<$scope.company.no_of_page;j++)
             {
 
-                $scope.page[$i++] = {name: 'Product Page ' + (j+1), template: 0, template_attributes: [], page: 4, sub_products: []};
+                $scope.page[$i++] = {name: 'Product ' + (j+1), template: 0, template_attributes: [], page: 4, sub_products: []};
                     
             }
         }
@@ -1226,19 +1699,19 @@ buzztm.directive('ngEnterPos', function() {
         			$http.get('<?= $this->Url->build(["controller" => "admin", "action" => "get_template_attributes"]);?>/'+$scope.selected_theme['page_3']).
 			          then(function(res){
 			            $scope.page.splice(2, 0, {name: 'Navigation', template: $scope.selected_theme['page_3'], template_attributes: res['data'], page: 3});
-			            $scope.page.splice(4, 0, {name: 'Product Page 2', template: $scope.defaultproductpage['template'], template_attributes: $scope.defaultproductpage['template_attributes'], page: 4, sub_products: []});
+			            $scope.page.splice(4, 0, {name: 'Product 2', template: $scope.defaultproductpage['template'], template_attributes: $scope.defaultproductpage['template_attributes'], page: 4, sub_products: []});
 			          });
 			    }
 			    else
 			    {	
 			    	$scope.page.splice(2, 0, {name: 'Navigation', template: 0, template_attributes: [], page: 3});
 
-        			$scope.page.splice(4, 0, {name: 'Product Page 2', template: $scope.defaultproductpage['template'], template_attributes: $scope.defaultproductpage['template_attributes'], page: 4, sub_products: []});
+        			$scope.page.splice(4, 0, {name: 'Product 2', template: $scope.defaultproductpage['template'], template_attributes: $scope.defaultproductpage['template_attributes'], page: 4, sub_products: []});
         		}
         	}
         	else
         	{
-        		$scope.page.splice((3 + page_cnt), 0, {name: 'Product Page '+(page_cnt + 1), template: $scope.defaultproductpage['template'], template_attributes: $scope.defaultproductpage['template_attributes'], page: 4, sub_products: []});
+        		$scope.page.splice((3 + page_cnt), 0, {name: 'Product '+(page_cnt + 1), template: $scope.defaultproductpage['template'], template_attributes: $scope.defaultproductpage['template_attributes'], page: 4, sub_products: []});
         	}
 
         	$scope.linklist = $scope.list_page();
@@ -1291,6 +1764,8 @@ buzztm.directive('ngEnterPos', function() {
         };
 
         $scope.upload_image = function(){
+          if(!formData) return;
+          
           $scope.upload_button_text = 'Uploading...';
           $.ajax({
                         url : '<?= $this->Url->build(["controller" => "admin", "action" => "upload_image"]);?>/',
@@ -1320,6 +1795,8 @@ buzztm.directive('ngEnterPos', function() {
                             
                             $('#uploadimageModal').modal('hide');
                             $(".file_uploaded").val('');
+                            formData = 0;
+                            $scope.track_changes();
                           }
                           else
                           {
@@ -1356,6 +1833,7 @@ buzztm.directive('ngEnterPos', function() {
 					          {
 					          	$('#templateconfirmationModal').modal('show');
 					          }
+					          $scope.set_undoredo_page_objects(1);
                           });
                     }
            		});
@@ -1378,6 +1856,7 @@ buzztm.directive('ngEnterPos', function() {
 					          {
 					          	$('#templateconfirmationModal').modal('show');
 					          }
+					          $scope.set_undoredo_page_objects(1);
                           });
                     }
            		});
@@ -1394,9 +1873,38 @@ buzztm.directive('ngEnterPos', function() {
 				{
 				    $('#templateconfirmationModal').modal('show');
 				}
+				$scope.set_undoredo_page_objects(1);
           	}
+        };
 
-          
+
+        $scope.set_undoredo_page_objects = function(pa){
+        	if(pa)
+        	{
+        		pars = localStorage.getItem("attrchange");
+		        pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
+		        if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
+		            pars[$scope.active_page] = {};
+		        if(pars[$scope.active_page]['ta'] === undefined || pars[$scope.active_page]['ta'] === null)
+		            pars[$scope.active_page]['ta'] = [];
+		        $scope.current_position = pars[$scope.active_page]['ta'].length ? pars[$scope.active_page]['ta'].length - 1 : 0;
+		        $scope.max_position = pars[$scope.active_page]['ta'].length ? pars[$scope.active_page]['ta'].length - 1 : 0;
+        	}
+        	else
+        	{
+        		pars = localStorage.getItem("attrchange");
+		        pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
+		        if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
+		           	pars[$scope.active_page] = {};
+		        if(pars[$scope.active_page]['ta'] === undefined || pars[$scope.active_page] === null)
+		           	pars[$scope.active_page]['ta'] = [];
+		        if(pars[$scope.active_page]['sub_products'] === undefined || pars[$scope.active_page] === null)
+		           	pars[$scope.active_page]['sub_products'] = [];
+		        if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === null)
+		           	pars[$scope.active_page]['sub_products'][$scope.active_sub_page] = [];
+		        $scope.current_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page].length ? pars[$scope.active_page]['sub_products'][$scope.active_sub_page].length - 1 : 0;
+		        $scope.max_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page].length ? pars[$scope.active_page]['sub_products'][$scope.active_sub_page].length - 1 : 0;
+        	}
         };
 
         $scope.select_active_sub_page = function(id, e){
@@ -1419,6 +1927,7 @@ buzztm.directive('ngEnterPos', function() {
 					          {
 					          	$('#templateconfirmationModal').modal('show');
 					          }
+					          $scope.set_undoredo_page_objects(0);
                           });
                     }
            		});
@@ -1440,6 +1949,7 @@ buzztm.directive('ngEnterPos', function() {
 					          {
 					          	$('#templateconfirmationModal').modal('show');
 					          }
+					          $scope.set_undoredo_page_objects(0);
                           });
                     }
            		});
@@ -1455,6 +1965,7 @@ buzztm.directive('ngEnterPos', function() {
 				{
 				    $('#templateconfirmationModal').modal('show');
 				}
+				$scope.set_undoredo_page_objects(0);
           	}
         };
 
@@ -1501,24 +2012,32 @@ buzztm.directive('ngEnterPos', function() {
           });
         };
 
-        $scope.save = function()
+        $scope.save = function(st)
         {
+        	st = st === undefined ? false : st;
+
         	$scope.preloader = 1;
         	html2canvas([$(".book_preview_main_container")[0]], {
                     onrendered: function (canvas) {
 			        	
                     	$scope.$apply(function(){
-                          	$scope.page[$scope.active_page]['template_image'] = canvas.toDataURL('image/png');
+                          	if($scope.active_sub_page == -1)
+                          		$scope.page[$scope.active_page]['template_image'] = canvas.toDataURL('image/png');
+                          	else
+                          		$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_image'] = canvas.toDataURL('image/png');
                         });
 
                     	book_data = {book: $scope.company, page: $scope.page};
 
-			        	$http.post('<?= $this->Url->build(["controller" => "admin", "action" => "create_book"]);?>', book_data)
+			        	$http.post(post_url, book_data)
 
 			              .then(function(res){
 			                if(res['data'] != 'error')
 			                {
-			                  window.location.assign('<?= $this->Url->build(["controller" => "admin", "action" => "new-book-template"]);?>');
+			                  if(st)
+			                  	window.location.assign('<?= $this->Url->build(["controller" => "admin", "action" => "new-book-template"]);?>');
+			                  else
+			                  	window.location.reload();
 			                }
 			                else
 			                {
@@ -1555,11 +2074,13 @@ buzztm.directive('ngEnterPos', function() {
 		$scope.remove_page_template = function(ind){
 			$scope.page[ind]['template'] = 0;
 			$scope.page[ind]['template_attributes'] = [];
+			$scope.active_page = -1;
 		};
 
 		$scope.remove_product_template = function(ind){
 			$scope.page[$scope.active_page]['sub_products'][ind]['template'] = 0;
 			$scope.page[$scope.active_page]['sub_products'][ind]['template_attributes'] = [];
+			$scope.active_sub_page = -1;
 		};
 
 		$scope.select_theme = function(theme){
@@ -1583,7 +2104,6 @@ buzztm.directive('ngEnterPos', function() {
 
 		$scope.new_attribute = function(e){
 			e.preventDefault();
-
 			if($scope.active_sub_page == -1)
 			{
 				if($scope.attribute_tab == 1)
@@ -1663,12 +2183,12 @@ buzztm.directive('ngEnterPos', function() {
 					
 				}
 			}
+			$scope.track_changes();
 		};
 
 		$scope.delete_attribute = function(e, ind){
 			e.preventDefault();
 			e.stopPropagation();
-
 			if($scope.active_sub_page == -1)
 			{
 				if($scope.attribute_tab == 1)
@@ -1707,12 +2227,11 @@ buzztm.directive('ngEnterPos', function() {
 					$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['map'].splice(ind === undefined ? $scope.data['active_map'] : ind, 1);
 				}
 			}
-
+			$scope.track_changes();
 			$scope.reset();
 		};
 
 		$scope.change_font_size = function(){
-			$scope.track_first_changes('text', $scope.data['active_text']);
 
 			if($scope.active_sub_page == -1)
 				$scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['font_size'] = $scope.font_size+'px';
@@ -1724,7 +2243,6 @@ buzztm.directive('ngEnterPos', function() {
 
 		$scope.change_bold = function($e){
 			$e.preventDefault();
-			$scope.track_first_changes('text', $scope.data['active_text']);
 
 			if($scope.active_sub_page == -1)
 				$scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['bold'] = $scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['bold'] ? 0 : 1;
@@ -1736,7 +2254,6 @@ buzztm.directive('ngEnterPos', function() {
 
 		$scope.change_text_position = function($e, pos){
 			$e.preventDefault();
-			$scope.track_first_changes('text', $scope.data['active_text']);
 
 			if($scope.active_sub_page == -1)
 				$scope.page[$scope.active_page]['template_attributes']['text'][$scope.data['active_text']]['text_align'] = pos;
@@ -1758,23 +2275,32 @@ buzztm.directive('ngEnterPos', function() {
 				$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'] = {'text': [], 'image': [], 'video': [], 'map': [], 'background': {'value': $scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['page'] == 5 ? socialwall_img : '#fff'}};
 			}
 			$('#templateconfirmationModal').modal('hide');
+			$scope.track_changes();
 		};
 
 		$scope.image_library = [];
 		$scope.selected_image = [];
-		$http.get('<?= $this->Url->build(["controller" => "admin", "action" => "image_library"]);?>/').
+		/*$http.get('<?= $this->Url->build(["controller" => "admin", "action" => "image_library"]);?>/').
 	          then(function(res){
 	            $scope.image_library = res['data'];
-	          });
+	          });*/
 
 	    $scope.select_image = function(ind){
 	    	if($scope.attribute_tab == 2)
 	    	{
-	    		index = $scope.selected_image.indexOf(ind)
-		    	if(index == -1)
-		    		$scope.selected_image.push(ind);
-		    	else
-		    		$scope.selected_image.splice(index, 1);
+	    		if($scope.data.active_image == -1)
+	    		{
+	    			index = $scope.selected_image.indexOf(ind)
+			    	if(index == -1)
+			    		$scope.selected_image.push(ind);
+			    	else
+			    		$scope.selected_image.splice(index, 1);
+	    		}
+	    		else
+	    		{
+	    			$scope.selected_image = [];
+	    			$scope.selected_image.push(ind);
+	    		}
 	    	}
 	    	else
 	    	{
@@ -1792,17 +2318,41 @@ buzztm.directive('ngEnterPos', function() {
 	    	{
 	    		if($scope.active_sub_page == -1)
 				{
-					angular.forEach($scope.selected_image, function(v,k){
-						ddata = {"field_type":"image","value":'<?= $this->Url->build('/upload/template/');?>'+$scope.image_library[v],"pos_top":"0","pos_left":"50%","link":"","top":"0","left":"50%", width: "20%", height: "auto"};
-						$scope.page[$scope.active_page]['template_attributes']['image'].push(ddata);
-					});
+					if($scope.data.active_image == -1)
+	    			{
+						angular.forEach($scope.selected_image, function(v,k){
+							ddata = {"field_type":"image","value":'<?= $this->Url->build('/upload/template/');?>'+$scope.image_library[v],"pos_top":"0","pos_left":"50%","link":"","top":"0","left":"50%", width: "20%", height: "auto"};
+							$scope.page[$scope.active_page]['template_attributes']['image'].push(ddata);
+
+							$scope.track_changes();
+						});
+					}
+					else
+					{
+						$scope.page[$scope.active_page]['template_attributes']['image'][$scope.data.active_image]['value'] = '<?= $this->Url->build('/upload/template/');?>'+$scope.image_library[$scope.selected_image[0]];
+
+						$scope.active_tab_image = '<?= $this->Url->build('/upload/template/');?>'+$scope.image_library[$scope.selected_image[0]];
+
+						$scope.track_changes();
+					}
 				}
 				else
 				{
-					angular.forEach($scope.selected_image, function(v,k){
-						ddata = {"field_type":"image","value":'<?= $this->Url->build('/upload/template/');?>'+$scope.image_library[v],"pos_top":"0","pos_left":"50%","link":"","top":"0","left":"50%", width: "20%", height: "auto"};
-						$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['image'].push(ddata);
-					});
+					if($scope.data.active_image == -1)
+	    			{
+	    				angular.forEach($scope.selected_image, function(v,k){
+							ddata = {"field_type":"image","value":'<?= $this->Url->build('/upload/template/');?>'+$scope.image_library[v],"pos_top":"0","pos_left":"50%","link":"","top":"0","left":"50%", width: "20%", height: "auto"};
+							$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['image'].push(ddata);
+							$scope.track_changes();
+						});
+	    			}
+	    			else
+	    			{
+	    				$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['image'][$scope.data.active_image]['value'] = '<?= $this->Url->build('/upload/template/');?>'+$scope.image_library[$scope.selected_image[0]];
+
+						$scope.active_tab_image = '<?= $this->Url->build('/upload/template/');?>'+$scope.image_library[$scope.selected_image[0]];
+						$scope.track_changes();
+	    			}
 				}
 	    	}
 	    	else
@@ -1815,6 +2365,7 @@ buzztm.directive('ngEnterPos', function() {
 				{
 					$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes']['background']['value'] = "url('<?= $this->Url->build('/upload/template/');?>"+$scope.image_library[$scope.selected_image[0]]+"')  no-repeat scroll 0 0 / 100% 100% ";
 				}
+				$scope.track_changes();
 	    	}
 	    	$scope.selected_image = [];
 	    };
@@ -1866,51 +2417,46 @@ buzztm.directive('ngEnterPos', function() {
 	    $scope.current_position = 0;
 	    $scope.max_position = 0;
 
-	    $scope.track_first_changes = function(ttype, ind){
+	    $scope.track_first_changes = function(){
 	    	
 	    	pars = localStorage.getItem("attrchange");
 	        pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
 
 	        if($scope.active_sub_page == -1)
 	        {
-	        	if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null || pars[$scope.active_page][ttype] === undefined || pars[$scope.active_page][ttype][ind] === undefined)
+	        	if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
 	        	{
 	        		if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
 		            	pars[$scope.active_page] = {};
-		            if(pars[$scope.active_page][ttype] === undefined || pars[$scope.active_page][ttype] === null)
-		            	pars[$scope.active_page][ttype] =  [];
-		            if(pars[$scope.active_page][ttype][ind] === undefined || pars[$scope.active_page][ttype][ind] === null)
-		            	pars[$scope.active_page][ttype][ind] =  [];
-		            attrch = pars[$scope.active_page][ttype][ind].push($scope.page[$scope.active_page]['template_attributes'][ttype][ind])
+		            if(pars[$scope.active_page]['ta'] === undefined || pars[$scope.active_page]['ta'] === null)
+		            	pars[$scope.active_page]['ta'] = [];
+		            attrch = pars[$scope.active_page]['ta'].push($scope.page[$scope.active_page])
 		            attrch = JSON.stringify(pars);
 		            localStorage.setItem("attrchange", attrch);
 
-		            $scope.current_position = pars[$scope.active_page][ttype][ind].length - 1;
-		            $scope.max_position = pars[$scope.active_page][ttype][ind].length - 1;
+		            $scope.current_position = pars[$scope.active_page]['ta'].length - 1;
+		            $scope.max_position = pars[$scope.active_page]['ta'].length - 1;
 	        	}
 				else
 					return;
 	        }
 	        else
 	        {
-	        	if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null || pars[$scope.active_page]['sub_products'] === undefined || pars[$scope.active_page]['sub_products'] === null || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === null || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === null || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === null)
+	        	if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null || pars[$scope.active_page]['sub_products'] === undefined || pars[$scope.active_page]['sub_products'] === null || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === null)
 	        	{
 	        		if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
 		            	pars[$scope.active_page] = {};
-		            if(pars[$scope.active_page]['sub_products'] === undefined || pars[$scope.active_page] === null)
+		            if(pars[$scope.active_page]['sub_products'] === undefined || pars[$scope.active_page]['sub_products'] === null)
 		            	pars[$scope.active_page]['sub_products'] = [];
 		            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === null)
-		            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page] = {};
-		            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === null)
-		            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] =  [];
-		            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === null)
-		            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] =  [];
-		            attrch = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].push($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind])
+		            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page] = [];
+		            
+		            attrch = pars[$scope.active_page]['sub_products'][$scope.active_sub_page].push($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page])
 		            attrch = JSON.stringify(pars);
 		            localStorage.setItem("attrchange", attrch);
 
-		            $scope.current_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].length - 1;
-		            $scope.max_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].length - 1;
+		            $scope.current_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page].length - 1;
+		            $scope.max_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page].length - 1;
 	        	}
 				else
 					return;
@@ -1918,43 +2464,20 @@ buzztm.directive('ngEnterPos', function() {
 	    };
 
 	    $scope.track_changes = function(){
-	    	if($scope.data['active_video'] != -1)
-			{
-				ind = $scope.data['active_video'];
-				ttype = 'video';
-			}
-			else if($scope.data['active_image'] != -1)
-			{
-				ind = $scope.data['active_image'];
-				ttype = 'image';
-			}
-			else if($scope.data['active_text'] != -1)
-			{
-				ind = $scope.data['active_text'];
-				ttype = 'text';
-			}
-			else if($scope.data['active_map'] != -1)
-			{
-				ind = $scope.data['active_map'];
-				ttype = 'map';
-			}
-
-			if($scope.active_sub_page == -1)
+	    	if($scope.active_sub_page == -1)
 	        {
 	            pars = localStorage.getItem("attrchange");
 	            pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
 	            if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
 	            	pars[$scope.active_page] = {};
-	            if(pars[$scope.active_page][ttype] === undefined || pars[$scope.active_page][ttype] === null)
-	            	pars[$scope.active_page][ttype] =  [];
-	            if(pars[$scope.active_page][ttype][ind] === undefined || pars[$scope.active_page][ttype][ind] === null)
-	            	pars[$scope.active_page][ttype][ind] =  [];
-	            attrch = pars[$scope.active_page][ttype][ind].push($scope.page[$scope.active_page]['template_attributes'][ttype][ind])
+	            if(pars[$scope.active_page]['ta'] === undefined || pars[$scope.active_page]['ta'] === null)
+	            	pars[$scope.active_page]['ta'] = [];
+	            attrch = pars[$scope.active_page]['ta'].push($scope.page[$scope.active_page]);
 	            attrch = JSON.stringify(pars);
 	            localStorage.setItem("attrchange", attrch);
 
-	            $scope.current_position = pars[$scope.active_page][ttype][ind].length - 1;
-	            $scope.max_position = pars[$scope.active_page][ttype][ind].length - 1;
+	            $scope.current_position = pars[$scope.active_page]['ta'].length - 1;
+	            $scope.max_position = pars[$scope.active_page]['ta'].length - 1;
 	        }
 	        else
 	        {
@@ -1962,95 +2485,48 @@ buzztm.directive('ngEnterPos', function() {
 	            pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
 	            if(pars[$scope.active_page] === undefined || pars[$scope.active_page] === null)
 	            	pars[$scope.active_page] = {};
-	            if(pars[$scope.active_page]['sub_products'] === undefined || pars[$scope.active_page] === null)
+	            if(pars[$scope.active_page]['sub_products'] === undefined || pars[$scope.active_page]['sub_products'] === null)
 	            	pars[$scope.active_page]['sub_products'] = [];
 	            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page] === null)
-	            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page] = {};
-	            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] === null)
-	            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype] =  [];
-	            if(pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === undefined || pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] === null)
-	            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind] =  [];
-	            attrch = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].push($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind])
+	            	pars[$scope.active_page]['sub_products'][$scope.active_sub_page] = [];
+	            attrch = pars[$scope.active_page]['sub_products'][$scope.active_sub_page].push($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page])
 	            attrch = JSON.stringify(pars);
 	            localStorage.setItem("attrchange", attrch);
 
-	            $scope.current_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].length - 1;
-	            $scope.max_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind].length - 1;
-	            console.log(pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind]);
+	            $scope.current_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page].length - 1;
+	            $scope.max_position = pars[$scope.active_page]['sub_products'][$scope.active_sub_page].length - 1;
 	        }
 	    };
 
 	    $scope.undo = function(e){
 	    	e.preventDefault();
 
-	    	if($scope.data['active_video'] != -1)
-			{
-				ind = $scope.data['active_video'];
-				ttype = 'video';
-			}
-			else if($scope.data['active_image'] != -1)
-			{
-				ind = $scope.data['active_image'];
-				ttype = 'image';
-			}
-			else if($scope.data['active_text'] != -1)
-			{
-				ind = $scope.data['active_text'];
-				ttype = 'text';
-			}
-			else if($scope.data['active_map'] != -1)
-			{
-				ind = $scope.data['active_map'];
-				ttype = 'map';
-			}
-
 	    	$scope.current_position -= 1;
 	    	pars = localStorage.getItem("attrchange");
 	        pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
 	    	if($scope.active_sub_page == -1)
 	        {
-	    		$scope.page[$scope.active_page]['template_attributes'][ttype][ind] = pars[$scope.active_page][ttype][ind][$scope.current_position];
+	    		$scope.page[$scope.active_page] = pars[$scope.active_page]['ta'][$scope.current_position];
 	    	}
 	    	else
 	    	{
-	    		$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind] = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind][$scope.current_position];
+	    		$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page] = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][$scope.current_position];
 	    	}
 	    };
 
 	    $scope.redo = function(e){
 	    	e.preventDefault();
 
-	    	if($scope.data['active_video'] != -1)
-			{
-				ind = $scope.data['active_video'];
-				ttype = 'video';
-			}
-			else if($scope.data['active_image'] != -1)
-			{
-				ind = $scope.data['active_image'];
-				ttype = 'image';
-			}
-			else if($scope.data['active_text'] != -1)
-			{
-				ind = $scope.data['active_text'];
-				ttype = 'text';
-			}
-			else if($scope.data['active_map'] != -1)
-			{
-				ind = $scope.data['active_map'];
-				ttype = 'map';
-			}
-
 	    	$scope.current_position += 1;
 	    	pars = localStorage.getItem("attrchange");
 	        pars = (pars === null || pars == "null") ? [] : JSON.parse(pars) ;
 	    	if($scope.active_sub_page == -1)
 	        {
-	    		$scope.page[$scope.active_page]['template_attributes'][ttype][ind] = pars[$scope.active_page][ttype][ind][$scope.current_position];
+	    		$scope.page[$scope.active_page] = pars[$scope.active_page]['ta'][$scope.current_position];
 	    	}
 	    	else
 	    	{
-	    		$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind] = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][ttype][ind][$scope.current_position];
+	    		$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page] = pars[$scope.active_page]['sub_products'][$scope.active_sub_page][$scope.current_position];
 	    	}
 	    };
 
@@ -2109,10 +2585,12 @@ buzztm.directive('ngEnterPos', function() {
 
 	    	if(str === undefined)
 	    		return;
+	    	imgresizeurl = "<?= $this->Url->build(["controller" => "admin", "action" => "imageResize"], true);?>";
+
 			if(str.indexOf("template_") == -1)
 				return str;
 			else
-				return "<?= $this->Url->build('/upload/template_image/');?>"+str;
+				return imgresizeurl+'?src='+encodeURIComponent("<?= $this->Url->build('/upload/template_image/');?>"+str);
 		};
 
 		$scope.urlencode = function(url){
@@ -2188,6 +2666,216 @@ buzztm.directive('ngEnterPos', function() {
 		$(".colorpicker_container img").click(function(){
 		  $(this).parent().find("input").focus().trigger('click');
 		});
+
+		$(window).scroll(function(){
+		  if($(this).scrollTop() > 110)
+		  	$(".fixed_header").addClass("ready_state");
+		  else
+		  	$(".fixed_header").removeClass("ready_state");
+		});
+
+		$scope.get_map_url = function(map){
+			str = '?';
+			angular.forEach(map, function(v,k){
+				str += str == '?' ? 'q[]='+v.value : '&q[]='+v.value ;
+			});
+
+			return str+'&width='+( parseFloat(map[0].width) * (400/100) )+'&height='+( parseFloat(map[0].height) * (500/100) );
+		};
+
+
+		$(document).keydown(function(event){    
+		    
+		    var key = event.which;                
+		        switch(key) {
+		              case 37:
+		                  $scope.set_position_by_keyboard("left", -1, event);
+		                  break;
+		              case 38:
+		                  $scope.set_position_by_keyboard("top", -1, event);
+		                  break;
+		              case 39:
+		                  $scope.set_position_by_keyboard("left", 1, event);
+		                  break;
+		              case 40:
+		                  $scope.set_position_by_keyboard("top", 1, event);
+		                  break;
+		        }   
+		});
+
+		$scope.set_position_by_keyboard = function(pos, inc, event){
+
+			if($scope.data['active_video'] == -1 && $scope.data['active_image'] == -1 && $scope.data['active_text'] == -1 && $scope.data['active_map'] == -1)
+		    	return;
+		    else
+		    	event.preventDefault();
+		    
+			if($scope.data['active_video'] != -1)
+			{
+				ind = $scope.data['active_video'];
+				ttype = 'video';
+			}
+			else if($scope.data['active_image'] != -1)
+			{
+				ind = $scope.data['active_image'];
+				ttype = 'image';
+			}
+			else if($scope.data['active_text'] != -1)
+			{
+				ind = $scope.data['active_text'];
+				ttype = 'text';
+			}
+			else if($scope.data['active_map'] != -1)
+			{
+				ind = $scope.data['active_map'];
+				ttype = 'map';
+			}
+
+			if($scope.active_sub_page == -1)
+	        {
+	    		valll = parseFloat($scope.page[$scope.active_page]['template_attributes'][ttype][ind][pos]) + inc;
+
+	    		if(valll > 98 || valll < 0)
+	    			return;
+
+	    		$scope.$apply(function(){
+	    			$scope.page[$scope.active_page]['template_attributes'][ttype][ind][pos] = valll.toFixed(2)+'%';
+	    		});
+	    	}
+	    	else
+	    	{
+	    		valll = parseFloat($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind][pos]) + inc;
+
+	    		if(valll > 98 || valll < 0)
+	    			return;
+
+				$scope.$apply(function(){
+	    			$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind][pos] = valll.toFixed(2)+'%';
+	    		});
+	    	}
+	    	
+	    	$scope.$apply(function(){
+		    	if(pos == "top")
+		    		$scope.position.t = valll.toFixed(2)+'%';
+		    	else
+		    		$scope.position.l = valll.toFixed(2)+'%';
+
+		    	$scope.track_changes();
+		    });
+		};
+
+		$scope.increase_decrease_scale = function(id, e){
+
+			if($scope.data['active_video'] == -1 && $scope.data['active_image'] == -1 && $scope.data['active_text'] == -1 && $scope.data['active_map'] == -1)
+		    	return;
+		    
+		    e.stopPropagation();
+
+			if($scope.data['active_video'] != -1)
+			{
+				ind = $scope.data['active_video'];
+				ttype = 'video';
+			}
+			else if($scope.data['active_image'] != -1)
+			{
+				ind = $scope.data['active_image'];
+				ttype = 'image';
+			}
+			else if($scope.data['active_text'] != -1)
+			{
+				ind = $scope.data['active_text'];
+				ttype = 'text';
+			}
+			else if($scope.data['active_map'] != -1)
+			{
+				ind = $scope.data['active_map'];
+				ttype = 'map';
+			}
+
+			if($scope.active_sub_page == -1)
+	        {
+	    		if(id)
+	    			valll = parseFloat($scope.page[$scope.active_page]['template_attributes'][ttype][ind]['width']) + 2;
+	    		else
+	    			valll = parseFloat($scope.page[$scope.active_page]['template_attributes'][ttype][ind]['width']) - 2;
+
+	    		if(valll > 100 || valll < 5)
+	    			return;
+
+	    		$scope.page[$scope.active_page]['template_attributes'][ttype][ind]['width'] = valll.toFixed(2)+'%';
+	    	}
+	    	else
+	    	{
+	    		if(id)
+	    			valll = parseFloat($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind]['width']) + inc;
+	    		valll = parseFloat($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind]['width']) - inc;
+
+	    		if(valll > 100 || valll < 5)
+	    			return;
+
+				$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind]['width'] = valll.toFixed(2)+'%';
+	    	}
+
+	    	$( "#wslider" ).addClass('new_attribute').slider("value", valll);
+	    	$scope.track_changes();
+		};
+
+		$scope.item_alignment = function(e, pos){
+			e.preventDefault();
+			if($scope.data['active_video'] == -1 && $scope.data['active_image'] == -1 && $scope.data['active_text'] == -1 && $scope.data['active_map'] == -1)
+		    	return;
+		    
+			if($scope.data['active_video'] != -1)
+			{
+				ind = $scope.data['active_video'];
+				ttype = 'video';
+			}
+			else if($scope.data['active_image'] != -1)
+			{
+				ind = $scope.data['active_image'];
+				ttype = 'image';
+			}
+			else if($scope.data['active_text'] != -1)
+			{
+				ind = $scope.data['active_text'];
+				ttype = 'text';
+			}
+			else if($scope.data['active_map'] != -1)
+			{
+				ind = $scope.data['active_map'];
+				ttype = 'map';
+			}
+
+			if($scope.active_sub_page == -1)
+	        {	
+	        	wwidth = parseFloat($scope.page[$scope.active_page]['template_attributes'][ttype][ind]['width']);
+
+				if(pos == 'left')
+					vval = 0;
+				else if(pos == 'center')
+					vval = 50 - (wwidth / 2);
+				else if(pos == 'right')
+					vval = 100 - wwidth;
+
+				$scope.page[$scope.active_page]['template_attributes'][ttype][ind]['left'] = vval.toFixed(2)+'%';
+			}
+			else
+			{
+				wwidth = parseFloat($scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind]['width']);
+
+				if(pos == 'left')
+					vval = 0;
+				else if(pos == 'center')
+					vval = 50 - (wwidth / 2);
+				else if(pos == 'right')
+					vval = 100 - wwidth;
+
+				$scope.page[$scope.active_page]['sub_products'][$scope.active_sub_page]['template_attributes'][ttype][ind]['left'] = vval.toFixed(2)+'%';
+			}
+
+			$scope.position.l = vval.toFixed(2)+'%';
+			$scope.track_changes();
+		};
     }
   ]);
 </script> 

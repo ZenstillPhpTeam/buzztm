@@ -23,7 +23,7 @@
                 <span class="theme_label"><?= $bk->book_name;?></span>
                 <p class="hover_selecton">
                   <a href="<?= $this->Url->build(["controller" => "admin", "action" => "edit_book", $bk->id]);?>" class="btn btn_use">EDIT</a>
-                  <!--<a href="<?= $this->Url->build(["controller" => "admin", "action" => "edit_book", $bk->id, 1]);?>" class="btn btn_use">CLONE</a>-->
+                  <a href="<?= $this->Url->build(["controller" => "admin", "action" => "edit_book", $bk->id, 1]);?>" class="btn btn_use">CLONE</a>
                   <a target="_blank" href="<?= $this->Url->build(["controller" => "book", "action" => "view", base64_encode(base64_encode($bk->id)), $bk->slug]);?>" class="btn btn_preview">PREVIEW</a>
                   <a class="delete_company btn btn_delete" data-href="<?= $this->Url->build(["controller" => "admin", "action" => "delete_book", $bk->id]);?>" data-toggle="modal" data-target="#myModal">DELETE</a>
                 </p>
@@ -86,10 +86,15 @@
       filter = $(this).data('filter');
       $('.selection_theme .theme_list').hide();
       $('.filter_'+filter).show();
+
+      $(".app_templates ul li a").removeClass("show_all");
+      $(this).addClass("show_all");
     });
     $(".app_templates ul li a.show_all").click(function(e){
       e.preventDefault();
       $('.selection_theme .theme_list').show();
+      $(".app_templates ul li a").removeClass("show_all");
+      $(this).addClass("show_all");
     });
   });
 </script>
